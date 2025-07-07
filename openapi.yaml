@@ -1,0 +1,377 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: EasService API
+    version: 0.0.1
+paths:
+    /v1/eas/login:
+        post:
+            tags:
+                - EasService
+            description: 登录
+            operationId: EasService_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.LoginResponse'
+    /v1/user/create:
+        post:
+            tags:
+                - EasService
+            description: |-
+                ===============================用户模块=========================================
+                创建用户
+            operationId: EasService_CreateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.CreateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.CreateUserResponse'
+    /v1/user/delete:
+        post:
+            tags:
+                - EasService
+            description: 删除
+            operationId: EasService_DeleteUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.DeleteUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.DeleteUserResponse'
+    /v1/user/detail:
+        get:
+            tags:
+                - EasService
+            description: 用户详情
+            operationId: EasService_GetUserDetail
+            parameters:
+                - name: user_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetUserDetailResponse'
+    /v1/user/detail_self:
+        get:
+            tags:
+                - EasService
+            description: 查询用户个人信息
+            operationId: EasService_GetUserSelfDetail
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetUserSelfDetailResponse'
+    /v1/user/page_list:
+        get:
+            tags:
+                - EasService
+            description: 用户列表
+            operationId: EasService_GetPageList
+            parameters:
+                - name: key_word
+                  in: query
+                  schema:
+                    type: string
+                - name: user_status
+                  in: query
+                  schema:
+                    type: string
+                - name: user_type
+                  in: query
+                  schema:
+                    type: string
+                - name: pageIndex
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetPageListResponse'
+    /v1/user/reset_password:
+        post:
+            tags:
+                - EasService
+            description: 重置用户密码
+            operationId: EasService_ResetUserPassWord
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.ResetUserPassWordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.ResetUserPassWordResponse'
+    /v1/user/set_status:
+        post:
+            tags:
+                - EasService
+            description: 禁用/启用用户
+            operationId: EasService_SetUserStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.SetUserStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.SetUserStatusResponse'
+    /v1/user/update_password:
+        post:
+            tags:
+                - EasService
+            description: 修改密码
+            operationId: EasService_UpdateUserPassWord
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.UpdateUserPassWordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.UpdateUserPassWordResponse'
+    /v1/user/update_user:
+        post:
+            tags:
+                - EasService
+            description: 修改用户信息
+            operationId: EasService_UpdateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.UpdateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.UpdateUserResponse'
+    /v1/user/update_user_self:
+        post:
+            tags:
+                - EasService
+            description: 修改用户个人信息
+            operationId: EasService_UpdateUserSelf
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.UpdateUserSelfRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.UpdateUserSelfResponse'
+components:
+    schemas:
+        eas_api.v1.CreateUserRequest:
+            type: object
+            properties:
+                user_name:
+                    type: string
+                login_account:
+                    type: string
+                pass_word:
+                    type: string
+                email:
+                    type: string
+                user_status:
+                    type: integer
+                    format: enum
+                user_type:
+                    type: integer
+                    format: enum
+        eas_api.v1.CreateUserResponse:
+            type: object
+            properties: {}
+        eas_api.v1.DeleteUserRequest:
+            type: object
+            properties:
+                user_id:
+                    type: string
+        eas_api.v1.DeleteUserResponse:
+            type: object
+            properties: {}
+        eas_api.v1.GetPageListResponse:
+            type: object
+            properties:
+                user_list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.UserData'
+                total:
+                    type: string
+        eas_api.v1.GetUserDetailResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/eas_api.v1.UserData'
+        eas_api.v1.GetUserSelfDetailResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/eas_api.v1.UserData'
+        eas_api.v1.LoginRequest:
+            type: object
+            properties:
+                login_account:
+                    type: string
+                pass_word:
+                    type: string
+        eas_api.v1.LoginResponse:
+            type: object
+            properties:
+                user_name:
+                    type: string
+                user_type:
+                    type: integer
+                    format: enum
+                token=:
+                    type: string
+        eas_api.v1.ResetUserPassWordRequest:
+            type: object
+            properties:
+                user_id:
+                    type: string
+                pass_word:
+                    type: string
+        eas_api.v1.ResetUserPassWordResponse:
+            type: object
+            properties: {}
+        eas_api.v1.SetUserStatusRequest:
+            type: object
+            properties:
+                user_id:
+                    type: string
+                user_status:
+                    type: integer
+                    format: enum
+        eas_api.v1.SetUserStatusResponse:
+            type: object
+            properties: {}
+        eas_api.v1.UpdateUserPassWordRequest:
+            type: object
+            properties:
+                old_pass_word:
+                    type: string
+                new_pass_word:
+                    type: string
+        eas_api.v1.UpdateUserPassWordResponse:
+            type: object
+            properties: {}
+        eas_api.v1.UpdateUserRequest:
+            type: object
+            properties:
+                user_id:
+                    type: string
+                user_name:
+                    type: string
+                login_account:
+                    type: string
+                email:
+                    type: string
+                user_status:
+                    type: integer
+                    format: enum
+                user_type:
+                    type: integer
+                    format: enum
+        eas_api.v1.UpdateUserResponse:
+            type: object
+            properties: {}
+        eas_api.v1.UpdateUserSelfRequest:
+            type: object
+            properties:
+                user_name:
+                    type: string
+                login_account:
+                    type: string
+                email:
+                    type: string
+        eas_api.v1.UpdateUserSelfResponse:
+            type: object
+            properties: {}
+        eas_api.v1.UserData:
+            type: object
+            properties:
+                user_name:
+                    type: string
+                user_name:
+                    type: string
+                login_account:
+                    type: string
+                email:
+                    type: string
+                user_status:
+                    type: integer
+                    format: enum
+                user_type:
+                    type: integer
+                    format: enum
+tags:
+    - name: EasService

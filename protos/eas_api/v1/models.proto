@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package eas_api.v1;
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "eas_api/api/v1;v1";
+
+
+message LoginRequest {
+  string login_account=1 [json_name="login_account",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名",required:["login_account"], max_length:10, min_length:6}];
+  string pass_word=2 [json_name="pass_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"密码",required:["pass_word"], max_length:10, min_length:6}];
+}
+
+
+message LoginResponse {
+  string user_name=1 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名"}];
+  UserType user_type=2 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"0.管理员;1.普通用户"}];
+  string token=3 [json_name="token=",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"token"}];
+}
+
+message CreateUserRequest {
+  string user_name=1 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名",required:["user_name"], max_length:10, min_length:1}];
+  string login_account=2 [json_name="login_account",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名",required:["login_account"], max_length:10, min_length:6}];
+  string pass_word=3 [json_name="pass_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"密码",required:["pass_word"], max_length:10, min_length:6}];
+  string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱",required:["email"]}];
+  AccountStatus user_status=5 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活",required:["user_status"]}];
+  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户",required:["user_type"]}];
+}
+message CreateUserResponse {
+
+}
+
+message UserData {
+  string user_id=1 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"id"}];
+  string user_name=2 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名"}];
+  string login_account=3 [json_name="login_account",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名"}];
+  string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱"}];
+  AccountStatus user_status=5 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活"}];
+  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户"}];
+}
+
+message GetPageListRequest {
+  string key_word=1 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名搜索"}];
+  int64 user_status=2 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活；-1全部", default:"-1"}];
+  int64 user_type=3 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户；-1全部", default:"-1"}];
+  int32 pageIndex=4 [json_name="pageIndex",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
+  int32 pageSize=5 [json_name="pageSize",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
+}
+message GetPageListResponse {
+  repeated UserData user_list=1 [json_name="user_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户列表"}];
+  int64 total=2 [json_name="total",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"总数"}];
+}
+
+message GetUserDetailRequest {
+  string user_id=1 [json_name="user_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户id"}];
+}
+message GetUserDetailResponse {
+  UserData user=1 [json_name="user",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户信息"}];
+}
+
+
+message GetUserSelfDetailRequest {
+}
+message GetUserSelfDetailResponse {
+  UserData user=1 [json_name="user",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户信息"}];
+}
+
+message SetUserStatusRequest {
+  string user_id=1 [json_name="user_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户id"}];
+  AccountStatus user_status=2 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活"}];
+}
+message SetUserStatusResponse {
+}
+
+message UpdateUserRequest {
+  string user_id=1 [json_name="user_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户id",required:["user_id"]}];
+  string user_name=2 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名",required:["user_name"], max_length:10, min_length:1}];
+  string login_account=3 [json_name="login_account",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名",required:["login_account"], max_length:10, min_length:6}];
+  string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱",required:["email"]}];
+  AccountStatus user_status=5 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活",required:["user_status"]}];
+  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户",required:["user_type"]}];
+
+}
+message UpdateUserResponse {
+}
+
+
+message UpdateUserSelfRequest {
+  string user_name=1 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名",required:["user_name"], max_length:10, min_length:1}];
+  string login_account=2 [json_name="login_account",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名",required:["login_account"], max_length:10, min_length:6}];
+  string email=3 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱",required:["email"]}];
+
+}
+message UpdateUserSelfResponse {
+}
+
+
+message ResetUserPassWordRequest {
+  string user_id=1 [json_name="user_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户id",required:["user_id"]}];
+  string pass_word=2 [json_name="pass_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"密码",required:["pass_word"], max_length:10, min_length:6}];
+}
+message ResetUserPassWordResponse {
+}
+
+message UpdateUserPassWordRequest {
+  string old_pass_word=1 [json_name="old_pass_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"原密码",required:["old_pass_word"], max_length:10, min_length:6}];
+  string new_pass_word=2 [json_name="new_pass_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"新密码",required:["new_pass_word"], max_length:10, min_length:6}];
+}
+message UpdateUserPassWordResponse {
+}
+
+message DeleteUserRequest {
+  string user_id=1 [json_name="user_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户id", required:["user_id"]}];
+}
+message DeleteUserResponse {
+
+}
+
+enum AccountStatus {
+  AccountStatus_NotActive=0;  // 未激活
+  AccountStatus_Active=1;     // 已激活
+}
+enum UserType {
+  Admin=0;    //管理员
+  User=1;     //普通用户
+}
