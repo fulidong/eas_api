@@ -3,25 +3,27 @@ package biz
 import (
 	"context"
 	v1 "eas_api/api/eas_api/v1"
+	"eas_api/internal/data/entity"
 	"eas_api/internal/middleware"
 	"eas_api/internal/pkg/isecurity"
+	"eas_api/internal/pkg/isnowflake"
 	"errors"
 	"fmt"
-
 	"github.com/go-kratos/kratos/v2/log"
 )
 
-//type LoginRepo interface {
-//	GetByLoginAccount(ctx context.Context, login_account string) (*model.Administrator, error)
-//}
-
-type LoginUseCase struct {
-	repo UserRepo
-	log  *log.Helper
+type SysLoginRepo interface {
+	Create(ctx context.Context, entity *entity.SysLoginRecord) error
 }
 
-func NewLoginUseCase(repo UserRepo, logger log.Logger) *LoginUseCase {
-	return &LoginUseCase{repo: repo, log: log.NewHelper(logger)}
+type LoginUseCase struct {
+	repo     UserRepo
+	sysLogin SysLoginRepo
+	log      *log.Helper
+}
+
+func NewLoginUseCase(repo UserRepo, sysLogin SysLoginRepo, logger log.Logger) *LoginUseCase {
+	return &LoginUseCase{repo: repo, sysLogin: sysLogin, log: log.NewHelper(logger)}
 }
 
 func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *v1.LoginResponse, err error) {
@@ -43,9 +45,15 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 			return
 		}
 	}
-	if user.Status != int32(v1.AccountStatus_AccountStatus_Active) {
+	if user.Status != int32(v1.AccountStatus_Active) {
 		err = errors.New("用户未激活")
 	}
+	id, _ := isnowflake.SnowFlake.NextID()
+	uc.sysLogin.Create(ctx, &entity.SysLoginRecord{
+		ID:            id,
+		UserID:        user.ID,
+		LoginPlatform: int32(v1.LoginPlatform_Management),
+	})
 	// 生成jwt
 	accessJWT, err := middleware.JWT.GenerateAccessToken(fmt.Sprintf("%d", user.ID), user.UserName, fmt.Sprintf("%d", user.UserType))
 	if err != nil {

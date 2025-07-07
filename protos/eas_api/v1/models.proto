@@ -116,9 +116,15 @@ message DeleteUserResponse {
 
 }
 
+enum LoginPlatform {
+  NoKnow = 0;
+  Management = 1;
+  Exam=2;
+}
+
 enum AccountStatus {
-  AccountStatus_NotActive=0;  // 未激活
-  AccountStatus_Active=1;     // 已激活
+  NotActive=0;  // 未激活
+  Active=1;     // 已激活
 }
 enum UserType {
   Admin=0;    //管理员

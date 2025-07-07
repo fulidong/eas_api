@@ -13,7 +13,9 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewAdministratorRepo)
+var ProviderSet = wire.NewSet(NewData,
+	NewAdministratorRepo,
+	NewSysLoginRepo)
 
 type Data struct {
 	db *gorm.DB

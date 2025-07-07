@@ -21,7 +21,7 @@ type Dimension struct {
 	Description      string         `gorm:"column:description;comment:描述" json:"description"`                                    // 描述
 	MaxScore         int32          `gorm:"column:max_score;comment:最高分数上限" json:"max_score"`                                    // 最高分数上限
 	MinScore         int32          `gorm:"column:min_score;comment:最低分数下限" json:"min_score"`                                    // 最低分数下限
-	IsLeaf           bool           `gorm:"column:is_leaf;not null;default:1;comment:是否叶子节点" json:"is_leaf"`                     // 是否叶子节点
+	IsChoose         bool           `gorm:"column:is_choose;not null;comment:是否可选择该维度" json:"is_choose"`                         // 是否可选择该维度
 	QuestionUIModeID int32          `gorm:"column:question_ui_mode_id;comment:问题UI模式ID" json:"question_ui_mode_id"`              // 问题UI模式ID
 	Type             int32          `gorm:"column:type;comment:维度类型：1.能力型 2.性格型" json:"type"`                                    // 维度类型：1.能力型 2.性格型
 	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间

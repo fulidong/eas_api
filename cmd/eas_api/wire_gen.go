@@ -29,7 +29,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 		return nil, nil, err
 	}
 	userRepo := data.NewAdministratorRepo(dataData, logger)
-	loginUseCase := biz.NewLoginUseCase(userRepo, logger)
+	sysLoginRepo := data.NewSysLoginRepo(dataData, logger)
+	loginUseCase := biz.NewLoginUseCase(userRepo, sysLoginRepo, logger)
 	userUseCase := biz.NewUserUseCase(userRepo, logger)
 	easService := service.NewEasService(loginUseCase, userUseCase)
 	grpcServer := server.NewGRPCServer(confServer, easService, logger)

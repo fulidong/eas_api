@@ -21,22 +21,71 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type LoginPlatform int32
+
+const (
+	LoginPlatform_NoKnow     LoginPlatform = 0
+	LoginPlatform_Management LoginPlatform = 1
+	LoginPlatform_Exam       LoginPlatform = 2
+)
+
+// Enum value maps for LoginPlatform.
+var (
+	LoginPlatform_name = map[int32]string{
+		0: "NoKnow",
+		1: "Management",
+		2: "Exam",
+	}
+	LoginPlatform_value = map[string]int32{
+		"NoKnow":     0,
+		"Management": 1,
+		"Exam":       2,
+	}
+)
+
+func (x LoginPlatform) Enum() *LoginPlatform {
+	p := new(LoginPlatform)
+	*p = x
+	return p
+}
+
+func (x LoginPlatform) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (LoginPlatform) Descriptor() protoreflect.EnumDescriptor {
+	return file_eas_api_v1_models_proto_enumTypes[0].Descriptor()
+}
+
+func (LoginPlatform) Type() protoreflect.EnumType {
+	return &file_eas_api_v1_models_proto_enumTypes[0]
+}
+
+func (x LoginPlatform) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use LoginPlatform.Descriptor instead.
+func (LoginPlatform) EnumDescriptor() ([]byte, []int) {
+	return file_eas_api_v1_models_proto_rawDescGZIP(), []int{0}
+}
+
 type AccountStatus int32
 
 const (
-	AccountStatus_AccountStatus_NotActive AccountStatus = 0 // 未激活
-	AccountStatus_AccountStatus_Active    AccountStatus = 1 // 已激活
+	AccountStatus_NotActive AccountStatus = 0 // 未激活
+	AccountStatus_Active    AccountStatus = 1 // 已激活
 )
 
 // Enum value maps for AccountStatus.
 var (
 	AccountStatus_name = map[int32]string{
-		0: "AccountStatus_NotActive",
-		1: "AccountStatus_Active",
+		0: "NotActive",
+		1: "Active",
 	}
 	AccountStatus_value = map[string]int32{
-		"AccountStatus_NotActive": 0,
-		"AccountStatus_Active":    1,
+		"NotActive": 0,
+		"Active":    1,
 	}
 )
 
@@ -51,11 +100,11 @@ func (x AccountStatus) String() string {
 }
 
 func (AccountStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_eas_api_v1_models_proto_enumTypes[0].Descriptor()
+	return file_eas_api_v1_models_proto_enumTypes[1].Descriptor()
 }
 
 func (AccountStatus) Type() protoreflect.EnumType {
-	return &file_eas_api_v1_models_proto_enumTypes[0]
+	return &file_eas_api_v1_models_proto_enumTypes[1]
 }
 
 func (x AccountStatus) Number() protoreflect.EnumNumber {
@@ -64,7 +113,7 @@ func (x AccountStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AccountStatus.Descriptor instead.
 func (AccountStatus) EnumDescriptor() ([]byte, []int) {
-	return file_eas_api_v1_models_proto_rawDescGZIP(), []int{0}
+	return file_eas_api_v1_models_proto_rawDescGZIP(), []int{1}
 }
 
 type UserType int32
@@ -97,11 +146,11 @@ func (x UserType) String() string {
 }
 
 func (UserType) Descriptor() protoreflect.EnumDescriptor {
-	return file_eas_api_v1_models_proto_enumTypes[1].Descriptor()
+	return file_eas_api_v1_models_proto_enumTypes[2].Descriptor()
 }
 
 func (UserType) Type() protoreflect.EnumType {
-	return &file_eas_api_v1_models_proto_enumTypes[1]
+	return &file_eas_api_v1_models_proto_enumTypes[2]
 }
 
 func (x UserType) Number() protoreflect.EnumNumber {
@@ -110,7 +159,7 @@ func (x UserType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UserType.Descriptor instead.
 func (UserType) EnumDescriptor() ([]byte, []int) {
-	return file_eas_api_v1_models_proto_rawDescGZIP(), []int{1}
+	return file_eas_api_v1_models_proto_rawDescGZIP(), []int{2}
 }
 
 type LoginRequest struct {
@@ -308,7 +357,7 @@ func (x *CreateUserRequest) GetUserStatus() AccountStatus {
 	if x != nil {
 		return x.UserStatus
 	}
-	return AccountStatus_AccountStatus_NotActive
+	return AccountStatus_NotActive
 }
 
 func (x *CreateUserRequest) GetUserType() UserType {
@@ -433,7 +482,7 @@ func (x *UserData) GetUserStatus() AccountStatus {
 	if x != nil {
 		return x.UserStatus
 	}
-	return AccountStatus_AccountStatus_NotActive
+	return AccountStatus_NotActive
 }
 
 func (x *UserData) GetUserType() UserType {
@@ -808,7 +857,7 @@ func (x *SetUserStatusRequest) GetUserStatus() AccountStatus {
 	if x != nil {
 		return x.UserStatus
 	}
-	return AccountStatus_AccountStatus_NotActive
+	return AccountStatus_NotActive
 }
 
 type SetUserStatusResponse struct {
@@ -926,7 +975,7 @@ func (x *UpdateUserRequest) GetUserStatus() AccountStatus {
 	if x != nil {
 		return x.UserStatus
 	}
-	return AccountStatus_AccountStatus_NotActive
+	return AccountStatus_NotActive
 }
 
 func (x *UpdateUserRequest) GetUserType() UserType {
@@ -1566,15 +1615,17 @@ var file_eas_api_v1_models_proto_rawDesc = []byte{
 	0x08, 0xe7, 0x94, 0xa8, 0xe6, 0x88, 0xb7, 0x69, 0x64, 0xd2, 0x01, 0x07, 0x75, 0x73, 0x65, 0x72,
 	0x5f, 0x69, 0x64, 0x52, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x22, 0x14, 0x0a, 0x12,
 	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x2a, 0x46, 0x0a, 0x0d, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x12, 0x1b, 0x0a, 0x17, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x53, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x5f, 0x4e, 0x6f, 0x74, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x10, 0x00,
-	0x12, 0x18, 0x0a, 0x14, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x5f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x10, 0x01, 0x2a, 0x1f, 0x0a, 0x08, 0x55, 0x73,
-	0x65, 0x72, 0x54, 0x79, 0x70, 0x65, 0x12, 0x09, 0x0a, 0x05, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x10,
-	0x00, 0x12, 0x08, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x10, 0x01, 0x42, 0x13, 0x5a, 0x11, 0x65,
-	0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x65, 0x2a, 0x35, 0x0a, 0x0d, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x50, 0x6c, 0x61, 0x74, 0x66,
+	0x6f, 0x72, 0x6d, 0x12, 0x0a, 0x0a, 0x06, 0x4e, 0x6f, 0x4b, 0x6e, 0x6f, 0x77, 0x10, 0x00, 0x12,
+	0x0e, 0x0a, 0x0a, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x10, 0x01, 0x12,
+	0x08, 0x0a, 0x04, 0x45, 0x78, 0x61, 0x6d, 0x10, 0x02, 0x2a, 0x2a, 0x0a, 0x0d, 0x41, 0x63, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0d, 0x0a, 0x09, 0x4e, 0x6f,
+	0x74, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x63, 0x74,
+	0x69, 0x76, 0x65, 0x10, 0x01, 0x2a, 0x1f, 0x0a, 0x08, 0x55, 0x73, 0x65, 0x72, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x09, 0x0a, 0x05, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04,
+	0x55, 0x73, 0x65, 0x72, 0x10, 0x01, 0x42, 0x13, 0x5a, 0x11, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70,
+	0x69, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1589,47 +1640,48 @@ func file_eas_api_v1_models_proto_rawDescGZIP() []byte {
 	return file_eas_api_v1_models_proto_rawDescData
 }
 
-var file_eas_api_v1_models_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_eas_api_v1_models_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_eas_api_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_eas_api_v1_models_proto_goTypes = []interface{}{
-	(AccountStatus)(0),                 // 0: eas_api.v1.AccountStatus
-	(UserType)(0),                      // 1: eas_api.v1.UserType
-	(*LoginRequest)(nil),               // 2: eas_api.v1.LoginRequest
-	(*LoginResponse)(nil),              // 3: eas_api.v1.LoginResponse
-	(*CreateUserRequest)(nil),          // 4: eas_api.v1.CreateUserRequest
-	(*CreateUserResponse)(nil),         // 5: eas_api.v1.CreateUserResponse
-	(*UserData)(nil),                   // 6: eas_api.v1.UserData
-	(*GetPageListRequest)(nil),         // 7: eas_api.v1.GetPageListRequest
-	(*GetPageListResponse)(nil),        // 8: eas_api.v1.GetPageListResponse
-	(*GetUserDetailRequest)(nil),       // 9: eas_api.v1.GetUserDetailRequest
-	(*GetUserDetailResponse)(nil),      // 10: eas_api.v1.GetUserDetailResponse
-	(*GetUserSelfDetailRequest)(nil),   // 11: eas_api.v1.GetUserSelfDetailRequest
-	(*GetUserSelfDetailResponse)(nil),  // 12: eas_api.v1.GetUserSelfDetailResponse
-	(*SetUserStatusRequest)(nil),       // 13: eas_api.v1.SetUserStatusRequest
-	(*SetUserStatusResponse)(nil),      // 14: eas_api.v1.SetUserStatusResponse
-	(*UpdateUserRequest)(nil),          // 15: eas_api.v1.UpdateUserRequest
-	(*UpdateUserResponse)(nil),         // 16: eas_api.v1.UpdateUserResponse
-	(*UpdateUserSelfRequest)(nil),      // 17: eas_api.v1.UpdateUserSelfRequest
-	(*UpdateUserSelfResponse)(nil),     // 18: eas_api.v1.UpdateUserSelfResponse
-	(*ResetUserPassWordRequest)(nil),   // 19: eas_api.v1.ResetUserPassWordRequest
-	(*ResetUserPassWordResponse)(nil),  // 20: eas_api.v1.ResetUserPassWordResponse
-	(*UpdateUserPassWordRequest)(nil),  // 21: eas_api.v1.UpdateUserPassWordRequest
-	(*UpdateUserPassWordResponse)(nil), // 22: eas_api.v1.UpdateUserPassWordResponse
-	(*DeleteUserRequest)(nil),          // 23: eas_api.v1.DeleteUserRequest
-	(*DeleteUserResponse)(nil),         // 24: eas_api.v1.DeleteUserResponse
+	(LoginPlatform)(0),                 // 0: eas_api.v1.LoginPlatform
+	(AccountStatus)(0),                 // 1: eas_api.v1.AccountStatus
+	(UserType)(0),                      // 2: eas_api.v1.UserType
+	(*LoginRequest)(nil),               // 3: eas_api.v1.LoginRequest
+	(*LoginResponse)(nil),              // 4: eas_api.v1.LoginResponse
+	(*CreateUserRequest)(nil),          // 5: eas_api.v1.CreateUserRequest
+	(*CreateUserResponse)(nil),         // 6: eas_api.v1.CreateUserResponse
+	(*UserData)(nil),                   // 7: eas_api.v1.UserData
+	(*GetPageListRequest)(nil),         // 8: eas_api.v1.GetPageListRequest
+	(*GetPageListResponse)(nil),        // 9: eas_api.v1.GetPageListResponse
+	(*GetUserDetailRequest)(nil),       // 10: eas_api.v1.GetUserDetailRequest
+	(*GetUserDetailResponse)(nil),      // 11: eas_api.v1.GetUserDetailResponse
+	(*GetUserSelfDetailRequest)(nil),   // 12: eas_api.v1.GetUserSelfDetailRequest
+	(*GetUserSelfDetailResponse)(nil),  // 13: eas_api.v1.GetUserSelfDetailResponse
+	(*SetUserStatusRequest)(nil),       // 14: eas_api.v1.SetUserStatusRequest
+	(*SetUserStatusResponse)(nil),      // 15: eas_api.v1.SetUserStatusResponse
+	(*UpdateUserRequest)(nil),          // 16: eas_api.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),         // 17: eas_api.v1.UpdateUserResponse
+	(*UpdateUserSelfRequest)(nil),      // 18: eas_api.v1.UpdateUserSelfRequest
+	(*UpdateUserSelfResponse)(nil),     // 19: eas_api.v1.UpdateUserSelfResponse
+	(*ResetUserPassWordRequest)(nil),   // 20: eas_api.v1.ResetUserPassWordRequest
+	(*ResetUserPassWordResponse)(nil),  // 21: eas_api.v1.ResetUserPassWordResponse
+	(*UpdateUserPassWordRequest)(nil),  // 22: eas_api.v1.UpdateUserPassWordRequest
+	(*UpdateUserPassWordResponse)(nil), // 23: eas_api.v1.UpdateUserPassWordResponse
+	(*DeleteUserRequest)(nil),          // 24: eas_api.v1.DeleteUserRequest
+	(*DeleteUserResponse)(nil),         // 25: eas_api.v1.DeleteUserResponse
 }
 var file_eas_api_v1_models_proto_depIdxs = []int32{
-	1,  // 0: eas_api.v1.LoginResponse.user_type:type_name -> eas_api.v1.UserType
-	0,  // 1: eas_api.v1.CreateUserRequest.user_status:type_name -> eas_api.v1.AccountStatus
-	1,  // 2: eas_api.v1.CreateUserRequest.user_type:type_name -> eas_api.v1.UserType
-	0,  // 3: eas_api.v1.UserData.user_status:type_name -> eas_api.v1.AccountStatus
-	1,  // 4: eas_api.v1.UserData.user_type:type_name -> eas_api.v1.UserType
-	6,  // 5: eas_api.v1.GetPageListResponse.user_list:type_name -> eas_api.v1.UserData
-	6,  // 6: eas_api.v1.GetUserDetailResponse.user:type_name -> eas_api.v1.UserData
-	6,  // 7: eas_api.v1.GetUserSelfDetailResponse.user:type_name -> eas_api.v1.UserData
-	0,  // 8: eas_api.v1.SetUserStatusRequest.user_status:type_name -> eas_api.v1.AccountStatus
-	0,  // 9: eas_api.v1.UpdateUserRequest.user_status:type_name -> eas_api.v1.AccountStatus
-	1,  // 10: eas_api.v1.UpdateUserRequest.user_type:type_name -> eas_api.v1.UserType
+	2,  // 0: eas_api.v1.LoginResponse.user_type:type_name -> eas_api.v1.UserType
+	1,  // 1: eas_api.v1.CreateUserRequest.user_status:type_name -> eas_api.v1.AccountStatus
+	2,  // 2: eas_api.v1.CreateUserRequest.user_type:type_name -> eas_api.v1.UserType
+	1,  // 3: eas_api.v1.UserData.user_status:type_name -> eas_api.v1.AccountStatus
+	2,  // 4: eas_api.v1.UserData.user_type:type_name -> eas_api.v1.UserType
+	7,  // 5: eas_api.v1.GetPageListResponse.user_list:type_name -> eas_api.v1.UserData
+	7,  // 6: eas_api.v1.GetUserDetailResponse.user:type_name -> eas_api.v1.UserData
+	7,  // 7: eas_api.v1.GetUserSelfDetailResponse.user:type_name -> eas_api.v1.UserData
+	1,  // 8: eas_api.v1.SetUserStatusRequest.user_status:type_name -> eas_api.v1.AccountStatus
+	1,  // 9: eas_api.v1.UpdateUserRequest.user_status:type_name -> eas_api.v1.AccountStatus
+	2,  // 10: eas_api.v1.UpdateUserRequest.user_type:type_name -> eas_api.v1.UserType
 	11, // [11:11] is the sub-list for method output_type
 	11, // [11:11] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name
@@ -1925,7 +1977,7 @@ func file_eas_api_v1_models_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_eas_api_v1_models_proto_rawDesc,
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   0,
