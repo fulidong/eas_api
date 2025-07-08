@@ -322,5 +322,188 @@ service EasService {
       };
     };
   };
+
+  //===============================试卷模块=========================================
+  //创建试卷
+  rpc CreateSalesPaper(CreateSalesPaperRequest) returns (CreateSalesPaperResponse){
+    option (google.api.http)={post:"/v1/sales_pager/create", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
+
+  //试卷列表
+  rpc GetSalesPaperPageList(GetSalesPaperPageListRequest) returns (GetSalesPaperPageListResponse){
+    option (google.api.http)={get:"/v1/sales_pager/page_list"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷列表",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
+  //可用试卷列表
+  rpc GetUsableSalesPaperPageList(GetUsableSalesPaperPageListRequest) returns (GetUsableSalesPaperPageListResponse){
+    option (google.api.http)={get:"/v1/sales_pager/usable_page_list"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "可用试卷列表",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
+
+  //试卷详情
+  rpc GetSalesPaperDetail(GetSalesPaperDetailRequest) returns (GetSalesPaperDetailResponse){
+    option (google.api.http)={get:"/v1/sales_pager/detail"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷详情",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
+
+
+  //修改试卷信息
+  rpc UpdateSalesPaper(UpdateSalesPaperRequest) returns (UpdateSalesPaperResponse){
+    option (google.api.http)={post:"/v1/user/update_sales_paper", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷信息",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
+
+  //禁用/启用试卷
+  rpc SetSalesPaperStatus(SetSalesPaperStatusRequest) returns (SetSalesPaperStatusResponse){
+    option (google.api.http)={post:"/v1/sales_pager/set_status", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "禁用/启用试卷",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
+
+  //删除试卷
+  rpc DeleteSalesPaper(DeleteSalesPaperRequest) returns (DeleteSalesPaperResponse){
+    option (google.api.http)={post:"/v1/sales_pager/delete", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷",tags: ["试卷模块"],
+      parameters: {
+        headers: [
+          {
+            name: "X-Forwarded-For"
+            type: STRING,
+            description: "客户端IP"
+          },
+          {
+            name: "UserKey"
+            type: STRING,
+            description: "用户token"
+          },
+          {
+            name: "X-Request-Id"
+            type: STRING,
+            description: "request_id"
+          }
+        ]
+      };
+    };
+  };
 }
 

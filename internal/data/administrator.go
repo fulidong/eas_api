@@ -26,7 +26,7 @@ func NewAdministratorRepo(data *Data, logger log.Logger) biz.UserRepo {
 func (r *AdministratorRepo) GetPageList(ctx context.Context, in *v1.GetPageListRequest) (res []*entity.Administrator, total int64, err error) {
 	session := r.data.db.WithContext(ctx)
 	session = session.Table((&entity.Administrator{}).TableName())
-	q, v := buildTraderConditions(in)
+	q, v := r.buildConditions(in)
 	if q != "" {
 		session.Where(q, v...)
 	}
@@ -153,7 +153,7 @@ func (r *AdministratorRepo) DeleteUser(ctx context.Context, userId int64) error 
 	return err
 }
 
-func buildTraderConditions(in *v1.GetPageListRequest) (string, []interface{}) {
+func (r *AdministratorRepo) buildConditions(in *v1.GetPageListRequest) (string, []interface{}) {
 	var (
 		query strings.Builder
 		value []interface{}

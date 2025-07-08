@@ -14,22 +14,19 @@ const TableNameSalesPaper = "sales_paper"
 
 // SalesPaper 售卷，作为系统对外销售的产品
 type SalesPaper struct {
-	ID                         int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                                    // 主键
-	Name                       string         `gorm:"column:name;not null;comment:售卷名称" json:"name"`                                                // 售卷名称
-	RecommendTimeLim           int32          `gorm:"column:recommend_time_lim;comment:推荐售卷时长" json:"recommend_time_lim"`                           // 推荐售卷时长
-	MaxScore                   int32          `gorm:"column:max_score;comment:最高分数上限" json:"max_score"`                                             // 最高分数上限
-	MinScore                   int32          `gorm:"column:min_score;comment:最低分数下限" json:"min_score"`                                             // 最低分数下限
-	SalesPaperReportTemplateID int32          `gorm:"column:sales_paper_report_template_id;comment:售卷报告模板ID" json:"sales_paper_report_template_id"` // 售卷报告模板ID
-	QuestionNumPerPage         int32          `gorm:"column:question_num_per_page;not null;default:8;comment:每页题目数量" json:"question_num_per_page"`  // 每页题目数量
-	IsEnabled                  bool           `gorm:"column:is_enabled;comment:是否启用" json:"is_enabled"`                                             // 是否启用
-	IsUsed                     bool           `gorm:"column:is_used;not null;comment:是否已使用" json:"is_used"`                                         // 是否已使用
-	CategoryNumber             int32          `gorm:"column:category_number;comment:类别编号" json:"category_number"`                                   // 类别编号
-	Mark                       string         `gorm:"column:mark;comment:备注" json:"mark"`                                                           // 备注
-	CreatedAt                  time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"`          // 创建时间
-	UpdatedAt                  time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"`          // 更新时间
-	CreatedBy                  string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                                   // 创建人标识
-	UpdatedBy                  string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                                   // 更新人标识
-	DeletedAt                  gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                           // 逻辑删除时间
+	ID               int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	Name             string         `gorm:"column:name;not null;comment:售卷名称" json:"name"`                                       // 售卷名称
+	RecommendTimeLim int32          `gorm:"column:recommend_time_lim;comment:推荐售卷时长" json:"recommend_time_lim"`                  // 推荐售卷时长
+	MaxScore         float64        `gorm:"column:max_score;default:0.00;comment:最高分数上限" json:"max_score"`                       // 最高分数上限
+	MinScore         float64        `gorm:"column:min_score;default:0.00;comment:最低分数下限" json:"min_score"`                       // 最低分数下限
+	IsEnabled        bool           `gorm:"column:is_enabled;comment:是否启用" json:"is_enabled"`                                    // 是否启用
+	IsUsed           bool           `gorm:"column:is_used;not null;comment:是否已使用" json:"is_used"`                                // 是否已使用
+	Mark             string         `gorm:"column:mark;comment:备注" json:"mark"`                                                  // 备注
+	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
+	UpdatedAt        time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
+	CreatedBy        string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy        string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	DeletedAt        gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 
 // TableName SalesPaper's table name

@@ -45,6 +45,21 @@ type EasServiceClient interface {
 	UpdateUserPassWord(ctx context.Context, in *UpdateUserPassWordRequest, opts ...grpc.CallOption) (*UpdateUserPassWordResponse, error)
 	// 删除
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
+	// ===============================试卷模块=========================================
+	// 创建试卷
+	CreateSalesPaper(ctx context.Context, in *CreateSalesPaperRequest, opts ...grpc.CallOption) (*CreateSalesPaperResponse, error)
+	// 试卷列表
+	GetSalesPaperPageList(ctx context.Context, in *GetSalesPaperPageListRequest, opts ...grpc.CallOption) (*GetSalesPaperPageListResponse, error)
+	// 可用试卷列表
+	GetUsableSalesPaperPageList(ctx context.Context, in *GetUsableSalesPaperPageListRequest, opts ...grpc.CallOption) (*GetUsableSalesPaperPageListResponse, error)
+	// 试卷详情
+	GetSalesPaperDetail(ctx context.Context, in *GetSalesPaperDetailRequest, opts ...grpc.CallOption) (*GetSalesPaperDetailResponse, error)
+	// 修改试卷信息
+	UpdateSalesPaper(ctx context.Context, in *UpdateSalesPaperRequest, opts ...grpc.CallOption) (*UpdateSalesPaperResponse, error)
+	// 禁用/启用试卷
+	SetSalesPaperStatus(ctx context.Context, in *SetSalesPaperStatusRequest, opts ...grpc.CallOption) (*SetSalesPaperStatusResponse, error)
+	// 删除试卷
+	DeleteSalesPaper(ctx context.Context, in *DeleteSalesPaperRequest, opts ...grpc.CallOption) (*DeleteSalesPaperResponse, error)
 }
 
 type easServiceClient struct {
@@ -154,6 +169,69 @@ func (c *easServiceClient) DeleteUser(ctx context.Context, in *DeleteUserRequest
 	return out, nil
 }
 
+func (c *easServiceClient) CreateSalesPaper(ctx context.Context, in *CreateSalesPaperRequest, opts ...grpc.CallOption) (*CreateSalesPaperResponse, error) {
+	out := new(CreateSalesPaperResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/CreateSalesPaper", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) GetSalesPaperPageList(ctx context.Context, in *GetSalesPaperPageListRequest, opts ...grpc.CallOption) (*GetSalesPaperPageListResponse, error) {
+	out := new(GetSalesPaperPageListResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/GetSalesPaperPageList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) GetUsableSalesPaperPageList(ctx context.Context, in *GetUsableSalesPaperPageListRequest, opts ...grpc.CallOption) (*GetUsableSalesPaperPageListResponse, error) {
+	out := new(GetUsableSalesPaperPageListResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/GetUsableSalesPaperPageList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) GetSalesPaperDetail(ctx context.Context, in *GetSalesPaperDetailRequest, opts ...grpc.CallOption) (*GetSalesPaperDetailResponse, error) {
+	out := new(GetSalesPaperDetailResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/GetSalesPaperDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) UpdateSalesPaper(ctx context.Context, in *UpdateSalesPaperRequest, opts ...grpc.CallOption) (*UpdateSalesPaperResponse, error) {
+	out := new(UpdateSalesPaperResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/UpdateSalesPaper", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) SetSalesPaperStatus(ctx context.Context, in *SetSalesPaperStatusRequest, opts ...grpc.CallOption) (*SetSalesPaperStatusResponse, error) {
+	out := new(SetSalesPaperStatusResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/SetSalesPaperStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) DeleteSalesPaper(ctx context.Context, in *DeleteSalesPaperRequest, opts ...grpc.CallOption) (*DeleteSalesPaperResponse, error) {
+	out := new(DeleteSalesPaperResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/DeleteSalesPaper", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EasServiceServer is the server API for EasService service.
 // All implementations must embed UnimplementedEasServiceServer
 // for forward compatibility
@@ -181,6 +259,21 @@ type EasServiceServer interface {
 	UpdateUserPassWord(context.Context, *UpdateUserPassWordRequest) (*UpdateUserPassWordResponse, error)
 	// 删除
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
+	// ===============================试卷模块=========================================
+	// 创建试卷
+	CreateSalesPaper(context.Context, *CreateSalesPaperRequest) (*CreateSalesPaperResponse, error)
+	// 试卷列表
+	GetSalesPaperPageList(context.Context, *GetSalesPaperPageListRequest) (*GetSalesPaperPageListResponse, error)
+	// 可用试卷列表
+	GetUsableSalesPaperPageList(context.Context, *GetUsableSalesPaperPageListRequest) (*GetUsableSalesPaperPageListResponse, error)
+	// 试卷详情
+	GetSalesPaperDetail(context.Context, *GetSalesPaperDetailRequest) (*GetSalesPaperDetailResponse, error)
+	// 修改试卷信息
+	UpdateSalesPaper(context.Context, *UpdateSalesPaperRequest) (*UpdateSalesPaperResponse, error)
+	// 禁用/启用试卷
+	SetSalesPaperStatus(context.Context, *SetSalesPaperStatusRequest) (*SetSalesPaperStatusResponse, error)
+	// 删除试卷
+	DeleteSalesPaper(context.Context, *DeleteSalesPaperRequest) (*DeleteSalesPaperResponse, error)
 	mustEmbedUnimplementedEasServiceServer()
 }
 
@@ -220,6 +313,27 @@ func (UnimplementedEasServiceServer) UpdateUserPassWord(context.Context, *Update
 }
 func (UnimplementedEasServiceServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (UnimplementedEasServiceServer) CreateSalesPaper(context.Context, *CreateSalesPaperRequest) (*CreateSalesPaperResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSalesPaper not implemented")
+}
+func (UnimplementedEasServiceServer) GetSalesPaperPageList(context.Context, *GetSalesPaperPageListRequest) (*GetSalesPaperPageListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperPageList not implemented")
+}
+func (UnimplementedEasServiceServer) GetUsableSalesPaperPageList(context.Context, *GetUsableSalesPaperPageListRequest) (*GetUsableSalesPaperPageListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsableSalesPaperPageList not implemented")
+}
+func (UnimplementedEasServiceServer) GetSalesPaperDetail(context.Context, *GetSalesPaperDetailRequest) (*GetSalesPaperDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperDetail not implemented")
+}
+func (UnimplementedEasServiceServer) UpdateSalesPaper(context.Context, *UpdateSalesPaperRequest) (*UpdateSalesPaperResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSalesPaper not implemented")
+}
+func (UnimplementedEasServiceServer) SetSalesPaperStatus(context.Context, *SetSalesPaperStatusRequest) (*SetSalesPaperStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetSalesPaperStatus not implemented")
+}
+func (UnimplementedEasServiceServer) DeleteSalesPaper(context.Context, *DeleteSalesPaperRequest) (*DeleteSalesPaperResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSalesPaper not implemented")
 }
 func (UnimplementedEasServiceServer) mustEmbedUnimplementedEasServiceServer() {}
 
@@ -432,6 +546,132 @@ func _EasService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EasService_CreateSalesPaper_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSalesPaperRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).CreateSalesPaper(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/CreateSalesPaper",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).CreateSalesPaper(ctx, req.(*CreateSalesPaperRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_GetSalesPaperPageList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSalesPaperPageListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).GetSalesPaperPageList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/GetSalesPaperPageList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).GetSalesPaperPageList(ctx, req.(*GetSalesPaperPageListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_GetUsableSalesPaperPageList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsableSalesPaperPageListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).GetUsableSalesPaperPageList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/GetUsableSalesPaperPageList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).GetUsableSalesPaperPageList(ctx, req.(*GetUsableSalesPaperPageListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_GetSalesPaperDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSalesPaperDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).GetSalesPaperDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/GetSalesPaperDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).GetSalesPaperDetail(ctx, req.(*GetSalesPaperDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_UpdateSalesPaper_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSalesPaperRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).UpdateSalesPaper(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/UpdateSalesPaper",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).UpdateSalesPaper(ctx, req.(*UpdateSalesPaperRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_SetSalesPaperStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSalesPaperStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).SetSalesPaperStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/SetSalesPaperStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).SetSalesPaperStatus(ctx, req.(*SetSalesPaperStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_DeleteSalesPaper_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSalesPaperRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).DeleteSalesPaper(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/DeleteSalesPaper",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).DeleteSalesPaper(ctx, req.(*DeleteSalesPaperRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EasService_ServiceDesc is the grpc.ServiceDesc for EasService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -482,6 +722,34 @@ var EasService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUser",
 			Handler:    _EasService_DeleteUser_Handler,
+		},
+		{
+			MethodName: "CreateSalesPaper",
+			Handler:    _EasService_CreateSalesPaper_Handler,
+		},
+		{
+			MethodName: "GetSalesPaperPageList",
+			Handler:    _EasService_GetSalesPaperPageList_Handler,
+		},
+		{
+			MethodName: "GetUsableSalesPaperPageList",
+			Handler:    _EasService_GetUsableSalesPaperPageList_Handler,
+		},
+		{
+			MethodName: "GetSalesPaperDetail",
+			Handler:    _EasService_GetSalesPaperDetail_Handler,
+		},
+		{
+			MethodName: "UpdateSalesPaper",
+			Handler:    _EasService_UpdateSalesPaper_Handler,
+		},
+		{
+			MethodName: "SetSalesPaperStatus",
+			Handler:    _EasService_SetSalesPaperStatus_Handler,
+		},
+		{
+			MethodName: "DeleteSalesPaper",
+			Handler:    _EasService_DeleteSalesPaper_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

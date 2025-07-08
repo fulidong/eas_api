@@ -132,6 +132,10 @@ func (uc *UserUseCase) GetUserDetail(ctx context.Context, req *v1.GetUserDetailR
 		err = innErr.ErrInternalServer
 		return
 	}
+	if res == nil {
+		err = errors.New("用户不存在")
+		return
+	}
 	resp.User = &v1.UserData{
 		UserId:       strconv.Itoa(int(res.ID)),
 		UserName:     res.UserName,
@@ -270,6 +274,10 @@ func (uc *UserUseCase) GetUserSelfDetail(ctx context.Context, req *v1.GetUserSel
 	if err != nil {
 		l.Errorf("GetUserSelfDetail.repo.GetByID Failed, err:%v", err)
 		err = innErr.ErrInternalServer
+		return
+	}
+	if res == nil {
+		err = errors.New("用户不存在")
 		return
 	}
 	resp.User = &v1.UserData{

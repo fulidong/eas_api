@@ -25,6 +25,143 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/eas_api.v1.LoginResponse'
+    /v1/sales_pager/create:
+        post:
+            tags:
+                - EasService
+            description: |-
+                ===============================试卷模块=========================================
+                创建试卷
+            operationId: EasService_CreateSalesPaper
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.CreateSalesPaperRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.CreateSalesPaperResponse'
+    /v1/sales_pager/delete:
+        post:
+            tags:
+                - EasService
+            description: 删除试卷
+            operationId: EasService_DeleteSalesPaper
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.DeleteSalesPaperRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.DeleteSalesPaperResponse'
+    /v1/sales_pager/detail:
+        get:
+            tags:
+                - EasService
+            description: 试卷详情
+            operationId: EasService_GetSalesPaperDetail
+            parameters:
+                - name: sales_pager_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperDetailResponse'
+    /v1/sales_pager/page_list:
+        get:
+            tags:
+                - EasService
+            description: 试卷列表
+            operationId: EasService_GetSalesPaperPageList
+            parameters:
+                - name: key_word
+                  in: query
+                  schema:
+                    type: string
+                - name: sales_pager_status
+                  in: query
+                  schema:
+                    type: string
+                - name: pageIndex
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperPageListResponse'
+    /v1/sales_pager/set_status:
+        post:
+            tags:
+                - EasService
+            description: 禁用/启用试卷
+            operationId: EasService_SetSalesPaperStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.SetSalesPaperStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.SetSalesPaperStatusResponse'
+    /v1/sales_pager/usable_page_list:
+        get:
+            tags:
+                - EasService
+            description: 可用试卷列表
+            operationId: EasService_GetUsableSalesPaperPageList
+            parameters:
+                - name: key_word
+                  in: query
+                  schema:
+                    type: string
+                - name: pageIndex
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetUsableSalesPaperPageListResponse'
     /v1/user/create:
         post:
             tags:
@@ -189,6 +326,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/eas_api.v1.UpdateUserPassWordResponse'
+    /v1/user/update_sales_paper:
+        post:
+            tags:
+                - EasService
+            description: 修改试卷信息
+            operationId: EasService_UpdateSalesPaper
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.UpdateSalesPaperRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.UpdateSalesPaperResponse'
     /v1/user/update_user:
         post:
             tags:
@@ -229,6 +385,27 @@ paths:
                                 $ref: '#/components/schemas/eas_api.v1.UpdateUserSelfResponse'
 components:
     schemas:
+        eas_api.v1.CreateSalesPaperRequest:
+            type: object
+            properties:
+                paper_name:
+                    type: string
+                recommend_time_lim:
+                    type: string
+                max_score:
+                    type: number
+                    format: double
+                min_score:
+                    type: number
+                    format: double
+                is_enabled:
+                    type: boolean
+                mark:
+                    type: string
+            description: ===============================试卷模块=========================================
+        eas_api.v1.CreateSalesPaperResponse:
+            type: object
+            properties: {}
         eas_api.v1.CreateUserRequest:
             type: object
             properties:
@@ -249,6 +426,14 @@ components:
         eas_api.v1.CreateUserResponse:
             type: object
             properties: {}
+        eas_api.v1.DeleteSalesPaperRequest:
+            type: object
+            properties:
+                sales_pager_id:
+                    type: string
+        eas_api.v1.DeleteSalesPaperResponse:
+            type: object
+            properties: {}
         eas_api.v1.DeleteUserRequest:
             type: object
             properties:
@@ -264,6 +449,29 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/eas_api.v1.UserData'
+                total:
+                    type: string
+        eas_api.v1.GetSalesPaperDetailResponse:
+            type: object
+            properties:
+                sales_pager:
+                    $ref: '#/components/schemas/eas_api.v1.SalesPaperData'
+        eas_api.v1.GetSalesPaperPageListResponse:
+            type: object
+            properties:
+                sales_pager_list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.SalesPaperData'
+                total:
+                    type: string
+        eas_api.v1.GetUsableSalesPaperPageListResponse:
+            type: object
+            properties:
+                sales_pager_list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.SalesPaperData'
                 total:
                     type: string
         eas_api.v1.GetUserDetailResponse:
@@ -303,6 +511,40 @@ components:
         eas_api.v1.ResetUserPassWordResponse:
             type: object
             properties: {}
+        eas_api.v1.SalesPaperData:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                paper_name:
+                    type: string
+                recommend_time_lim:
+                    type: string
+                max_score:
+                    type: number
+                    format: double
+                min_score:
+                    type: number
+                    format: double
+                is_enabled:
+                    type: boolean
+                is_used:
+                    type: boolean
+                mark:
+                    type: string
+                create_at:
+                    type: string
+        eas_api.v1.SetSalesPaperStatusRequest:
+            type: object
+            properties:
+                sales_pager_id:
+                    type: string
+                sales_paper_status:
+                    type: integer
+                    format: enum
+        eas_api.v1.SetSalesPaperStatusResponse:
+            type: object
+            properties: {}
         eas_api.v1.SetUserStatusRequest:
             type: object
             properties:
@@ -312,6 +554,28 @@ components:
                     type: integer
                     format: enum
         eas_api.v1.SetUserStatusResponse:
+            type: object
+            properties: {}
+        eas_api.v1.UpdateSalesPaperRequest:
+            type: object
+            properties:
+                sales_pager_id:
+                    type: string
+                sales_paper_name:
+                    type: string
+                recommend_time_lim:
+                    type: string
+                max_score:
+                    type: number
+                    format: double
+                min_score:
+                    type: number
+                    format: double
+                is_enabled:
+                    type: boolean
+                mark:
+                    type: string
+        eas_api.v1.UpdateSalesPaperResponse:
             type: object
             properties: {}
         eas_api.v1.UpdateUserPassWordRequest:
@@ -373,5 +637,7 @@ components:
                 user_type:
                     type: integer
                     format: enum
+                create_at:
+                    type: string
 tags:
     - name: EasService
