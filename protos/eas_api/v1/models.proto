@@ -46,8 +46,8 @@ message GetPageListRequest {
   string key_word=1 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名搜索"}];
   int64 user_status=2 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活；-1全部", default:"-1"}];
   int64 user_type=3 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户；-1全部", default:"-1"}];
-  int32 pageIndex=4 [json_name="pageIndex",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
-  int32 pageSize=5 [json_name="pageSize",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
+  int32 page_index=4 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
+  int32 page_size=5 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
 }
 message GetPageListResponse {
   repeated UserData user_list=1 [json_name="user_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户列表"}];
@@ -147,8 +147,8 @@ message SalesPaperData {
 message GetSalesPaperPageListRequest {
   string key_word=1 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名搜索"}];
   int64 sales_paper_status=2 [json_name="sales_paper_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷状态,1.启用;0.禁用；-1全部", default:"-1"}];
-  int32 pageIndex=3 [json_name="pageIndex",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
-  int32 pageSize=4 [json_name="pageSize",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
+  int32 page_index=3 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
+  int32 page_size=4 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
 }
 message GetSalesPaperPageListResponse {
   repeated SalesPaperData sales_paper_list=1 [json_name="sales_paper_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷列表"}];
@@ -158,8 +158,8 @@ message GetSalesPaperPageListResponse {
 
 message GetUsableSalesPaperPageListRequest {
   string key_word=1 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名搜索"}];
-  int32 pageIndex=2 [json_name="pageIndex",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
-  int32 pageSize=3 [json_name="pageSize",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
+  int32 page_index=2 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
+  int32 page_size=3 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
 }
 message GetUsableSalesPaperPageListResponse {
   repeated SalesPaperData sales_paper_list=1 [json_name="sales_paper_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷列表"}];

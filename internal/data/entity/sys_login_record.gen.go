@@ -12,10 +12,10 @@ const TableNameSysLoginRecord = "sys_login_record"
 
 // SysLoginRecord 登录日志
 type SysLoginRecord struct {
-	ID            int64     `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	UserID        int64     `gorm:"column:user_id;comment:记录登录者ID" json:"user_id"`                                       // 记录登录者ID
-	LoginPlatform int32     `gorm:"column:login_platform;comment:登录平台: 1.企业后台 2.候选" json:"login_platform"`               // 登录平台: 1.企业后台 2.候选
-	CreatedAt     time.Time `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:登录时间" json:"created_at"` // 登录时间
+	ID            string    `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                                // 主键
+	UserID        string    `gorm:"column:user_id;not null;comment:记录登录者ID" json:"user_id"`                                   // 记录登录者ID
+	LoginPlatform int32     `gorm:"column:login_platform;not null;default:1;comment:登录平台: 1.企业后台 2.候选" json:"login_platform"` // 登录平台: 1.企业后台 2.候选
+	CreatedAt     time.Time `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:登录时间" json:"created_at"`      // 登录时间
 }
 
 // TableName SysLoginRecord's table name

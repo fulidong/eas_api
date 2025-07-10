@@ -2,6 +2,7 @@ package isnowflake
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 )
@@ -48,7 +49,15 @@ func NewSnowflake(workerID int64) (*Snowflake, error) {
 	}, nil
 }
 
-func (sf *Snowflake) NextID() (int64, error) {
+func (sf *Snowflake) NextID(key string) (string, error) {
+	id, err := sf.nextID()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s%d", key, id), nil
+}
+
+func (sf *Snowflake) nextID() (int64, error) {
 	sf.mu.Lock()
 	defer sf.mu.Unlock()
 
@@ -63,7 +72,7 @@ func (sf *Snowflake) NextID() (int64, error) {
 		if sf.sequence == 0 {
 			// 同一毫秒内序号已满，等待下一毫秒
 			<-time.After(time.Millisecond)
-			return sf.NextID()
+			return sf.nextID()
 		}
 	} else {
 		sf.sequence = 0

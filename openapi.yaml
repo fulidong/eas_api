@@ -98,12 +98,12 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: pageIndex
+                - name: page_index
                   in: query
                   schema:
                     type: integer
                     format: int32
-                - name: pageSize
+                - name: page_size
                   in: query
                   schema:
                     type: integer
@@ -164,12 +164,12 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: pageIndex
+                - name: page_index
                   in: query
                   schema:
                     type: integer
                     format: int32
-                - name: pageSize
+                - name: page_size
                   in: query
                   schema:
                     type: integer
@@ -310,12 +310,12 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: pageIndex
+                - name: page_index
                   in: query
                   schema:
                     type: integer
                     format: int32
-                - name: pageSize
+                - name: page_size
                   in: query
                   schema:
                     type: integer

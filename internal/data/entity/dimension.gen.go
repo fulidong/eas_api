@@ -14,21 +14,19 @@ const TableNameDimension = "dimension"
 
 // Dimension 维度表
 type Dimension struct {
-	ID               int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	Name             string         `gorm:"column:name;comment:维度名称" json:"name"`                                                // 维度名称
-	AverageMark      float64        `gorm:"column:average_mark;not null;default:0.00;comment:平均分" json:"average_mark"`           // 平均分
-	StandardMark     float64        `gorm:"column:standard_mark;not null;default:0.00;comment:标准差" json:"standard_mark"`         // 标准差
-	Description      string         `gorm:"column:description;comment:描述" json:"description"`                                    // 描述
-	MaxScore         int32          `gorm:"column:max_score;comment:最高分数上限" json:"max_score"`                                    // 最高分数上限
-	MinScore         int32          `gorm:"column:min_score;comment:最低分数下限" json:"min_score"`                                    // 最低分数下限
-	IsChoose         bool           `gorm:"column:is_choose;not null;comment:是否可选择该维度" json:"is_choose"`                         // 是否可选择该维度
-	QuestionUIModeID int32          `gorm:"column:question_ui_mode_id;comment:问题UI模式ID" json:"question_ui_mode_id"`              // 问题UI模式ID
-	Type             int32          `gorm:"column:type;comment:维度类型：1.能力型 2.性格型" json:"type"`                                    // 维度类型：1.能力型 2.性格型
-	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
-	UpdatedAt        time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy        int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy        int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
-	DeletedAt        gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
+	ID           string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	Name         string         `gorm:"column:name;not null;comment:维度名称" json:"name"`                                       // 维度名称
+	AverageMark  float64        `gorm:"column:average_mark;not null;default:0.00;comment:平均分" json:"average_mark"`           // 平均分
+	StandardMark float64        `gorm:"column:standard_mark;not null;default:0.00;comment:标准差" json:"standard_mark"`         // 标准差
+	Description  string         `gorm:"column:description;not null;comment:描述" json:"description"`                           // 描述
+	MaxScore     int32          `gorm:"column:max_score;not null;comment:最高分数上限" json:"max_score"`                           // 最高分数上限
+	MinScore     int32          `gorm:"column:min_score;not null;comment:最低分数下限" json:"min_score"`                           // 最低分数下限
+	IsChoose     bool           `gorm:"column:is_choose;not null;comment:是否可选择该维度" json:"is_choose"`                         // 是否可选择该维度
+	CreatedAt    time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
+	UpdatedAt    time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
+	CreatedBy    string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy    string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 
 // TableName Dimension's table name

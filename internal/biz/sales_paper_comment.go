@@ -3,21 +3,19 @@ package biz
 import (
 	"context"
 	v1 "eas_api/api/eas_api/v1"
+	_const "eas_api/internal/const"
 	"eas_api/internal/data/entity"
 	"eas_api/internal/pkg/icontext"
 	innErr "eas_api/internal/pkg/ierrors"
 	"eas_api/internal/pkg/isnowflake"
 	"eas_api/internal/pkg/iutils"
-	"errors"
-	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"strconv"
 	"time"
 )
 
 type SalesPaperCommentRepo interface {
-	GetSalesPaperCommentList(ctx context.Context, salesPaperId int64) (res []*entity.SalesPaperComment, err error)
-	SaveSalesPaperComment(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []int64, updatedBy int64) error
+	GetSalesPaperCommentList(ctx context.Context, salesPaperId string) (res []*entity.SalesPaperComment, err error)
+	SaveSalesPaperComment(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []string, updatedBy string) error
 }
 
 type SalesPaperCommentUseCase struct {
@@ -33,34 +31,25 @@ func NewSalesPaperCommentUseCase(repo SalesPaperCommentRepo, userRepo UserRepo, 
 func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, req *v1.SaveSalesPaperCommentRequest) (resp *v1.SaveSalesPaperCommentResponse, err error) {
 	resp = &v1.SaveSalesPaperCommentResponse{}
 	l := uc.log.WithContext(ctx)
-	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	salesPaperComments, err := uc.repo.GetSalesPaperCommentList(ctx, salesPaperId)
+	salesPaperComments, err := uc.repo.GetSalesPaperCommentList(ctx, req.SalesPaperId)
 	if err != nil {
 		l.Errorf("GetSalesPaperCommentList.repo.GetSalesPaperCommentList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
 
-	addComments, updateComments, delComments := iutils.DiffEntities[*entity.SalesPaperComment, *v1.SaveSalesPaperCommentData, int64](
+	addComments, updateComments, delComments := iutils.DiffEntities[*entity.SalesPaperComment, *v1.SaveSalesPaperCommentData, string](
 		salesPaperComments,
 		req.CommentData,
-		func(comment *entity.SalesPaperComment) int64 {
+		func(comment *entity.SalesPaperComment) string {
 			return comment.ID
 		},
-		func(data *v1.SaveSalesPaperCommentData) int64 {
-			id, e := strconv.ParseInt(data.SalesPaperCommentId, 10, 64)
-			if e != nil {
-				id = 0
-			}
-			return id
+		func(data *v1.SaveSalesPaperCommentData) string {
+			return data.SalesPaperCommentId
 		},
 		func() *entity.SalesPaperComment {
 			return &entity.SalesPaperComment{}
@@ -68,12 +57,12 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 
 	if len(addComments) > 0 {
 		for _, comment := range addComments {
-			id, err := isnowflake.SnowFlake.NextID()
+			id, err := isnowflake.SnowFlake.NextID(_const.SalesPaperCommentPrefix)
 			if err != nil {
 				return resp, err
 			}
 			comment.ID = id
-			comment.SalesPaperID = salesPaperId
+			comment.SalesPaperID = req.SalesPaperId
 		}
 	}
 
@@ -88,27 +77,22 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 func (uc *SalesPaperCommentUseCase) GetSalesPaperCommentList(ctx context.Context, req *v1.GetSalesPaperCommentListRequest) (resp *v1.GetSalesPaperCommentListResponse, err error) {
 	resp = &v1.GetSalesPaperCommentListResponse{CommentData: make([]*v1.SalesPaperCommentData, 0, 5)}
 	l := uc.log.WithContext(ctx)
-	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 
-	res, err := uc.repo.GetSalesPaperCommentList(ctx, salesPaperId)
+	res, err := uc.repo.GetSalesPaperCommentList(ctx, req.SalesPaperId)
 	if err != nil {
 		l.Errorf("GetSalesPaperCommentList.repo.GetSalesPaperCommentList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
-	userMap := map[int64]*entity.Administrator{}
-	updatedIds := iutils.GetDistinctFields[*entity.SalesPaperComment, int64](res, func(salesPaper *entity.SalesPaperComment) int64 {
+	userMap := map[string]*entity.Administrator{}
+	updatedIds := iutils.GetDistinctFields[*entity.SalesPaperComment, string](res, func(salesPaper *entity.SalesPaperComment) string {
 		return salesPaper.UpdatedBy
 	})
 	if len(updatedIds) > 0 {
-		userMap = make(map[int64]*entity.Administrator, len(updatedIds))
+		userMap = make(map[string]*entity.Administrator, len(updatedIds))
 		userList, err := uc.userRepo.GetByIDs(ctx, updatedIds)
 		if err != nil {
 			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v, err:%v", updatedIds, err.Error())
@@ -125,7 +109,7 @@ func (uc *SalesPaperCommentUseCase) GetSalesPaperCommentList(ctx context.Context
 			updatedBy = userMap[re.UpdatedBy].UserName
 		}
 		cur := &v1.SalesPaperCommentData{
-			SalesPaperCommentId: fmt.Sprintf("%d", re.ID),
+			SalesPaperCommentId: re.ID,
 			Content:             re.Content,
 			UpScore:             re.UpScore,
 			LowScore:            re.LowScore,

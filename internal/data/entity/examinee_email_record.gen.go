@@ -14,22 +14,22 @@ const TableNameExamineeEmailRecord = "examinee_email_record"
 
 // ExamineeEmailRecord 邮件发送日志
 type ExamineeEmailRecord struct {
-	ID                int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	SalesPaperID      int64          `gorm:"column:sales_paper_id;comment:SalesPaper表的外键" json:"sales_paper_id"`                  // SalesPaper表的外键
-	ExamineeID        int64          `gorm:"column:examinee_id;comment:考生ID" json:"examinee_id"`                                  // 考生ID
-	Title             string         `gorm:"column:title;comment:邮件标题" json:"title"`                                              // 邮件标题
+	ID                string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	SalesPaperID      string         `gorm:"column:sales_paper_id;not null;comment:SalesPaper表的外键" json:"sales_paper_id"`         // SalesPaper表的外键
+	ExamineeID        string         `gorm:"column:examinee_id;not null;comment:考生ID" json:"examinee_id"`                         // 考生ID
+	Title             string         `gorm:"column:title;not null;comment:邮件标题" json:"title"`                                     // 邮件标题
 	Content           string         `gorm:"column:content;comment:邮件内容" json:"content"`                                          // 邮件内容
 	ReceiverEmail     string         `gorm:"column:receiver_email;not null;comment:接收人邮箱" json:"receiver_email"`                  // 接收人邮箱
 	SendTime          time.Time      `gorm:"column:send_time;comment:发送时刻" json:"send_time"`                                      // 发送时刻
 	IsSended          bool           `gorm:"column:is_sended;not null;comment:是否发送：1.已发送 0.未发送" json:"is_sended"`                 // 是否发送：1.已发送 0.未发送
-	SenderEmail       string         `gorm:"column:sender_email;comment:发件人邮箱" json:"sender_email"`                               // 发件人邮箱
-	CopyReceiverEmail string         `gorm:"column:copy_receiver_email;comment:抄送人邮箱" json:"copy_receiver_email"`                 // 抄送人邮箱
-	Attachment        string         `gorm:"column:attachment;comment:附件" json:"attachment"`                                      // 附件
-	IsFalseAddress    bool           `gorm:"column:is_false_address;comment:是否为错误地址" json:"is_false_address"`                     // 是否为错误地址
+	SenderEmail       string         `gorm:"column:sender_email;not null;comment:发件人邮箱" json:"sender_email"`                      // 发件人邮箱
+	CopyReceiverEmail string         `gorm:"column:copy_receiver_email;not null;comment:抄送人邮箱" json:"copy_receiver_email"`        // 抄送人邮箱
+	Attachment        string         `gorm:"column:attachment;not null;comment:附件" json:"attachment"`                             // 附件
+	IsFalseAddress    bool           `gorm:"column:is_false_address;not null;comment:是否为错误地址" json:"is_false_address"`            // 是否为错误地址
 	CreatedAt         time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt         time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy         int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy         int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy         string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy         string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt         gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 

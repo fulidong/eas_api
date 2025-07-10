@@ -21,7 +21,7 @@ func NewSalesPaperCommentRepo(data *Data, logger log.Logger) biz.SalesPaperComme
 	}
 }
 
-func (r *SalesPaperCommentRepo) GetSalesPaperCommentList(ctx context.Context, salesPaperId int64) (res []*entity.SalesPaperComment, err error) {
+func (r *SalesPaperCommentRepo) GetSalesPaperCommentList(ctx context.Context, salesPaperId string) (res []*entity.SalesPaperComment, err error) {
 	err = r.data.db.WithContext(ctx).Model(&entity.SalesPaperComment{}).
 		Where(" sales_paper_id = ?", salesPaperId).
 		Order("up_score asc").
@@ -34,7 +34,7 @@ func (r *SalesPaperCommentRepo) GetSalesPaperCommentList(ctx context.Context, sa
 }
 
 // 创建方法
-func (r *SalesPaperCommentRepo) SaveSalesPaperComment(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []int64, updatedBy int64) error {
+func (r *SalesPaperCommentRepo) SaveSalesPaperComment(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []string, updatedBy string) error {
 	if err := r.data.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if len(addComments) > 0 {
 			for _, comment := range addComments {
@@ -67,7 +67,7 @@ func (r *SalesPaperCommentRepo) SaveSalesPaperComment(ctx context.Context, addCo
 
 // 更新方法
 func (r *SalesPaperCommentRepo) update(tx *gorm.DB, updateSalesPaperComments []*entity.SalesPaperComment) error {
-	ids := make([]int64, 0, len(updateSalesPaperComments))
+	ids := make([]string, 0, len(updateSalesPaperComments))
 	for _, comment := range updateSalesPaperComments {
 		ids = append(ids, comment.ID)
 	}
@@ -101,7 +101,7 @@ func (r *SalesPaperCommentRepo) update(tx *gorm.DB, updateSalesPaperComments []*
 }
 
 // 删除
-func (r *SalesPaperCommentRepo) delete(tx *gorm.DB, salesPaperCommentId []int64, updateBy int64) error {
+func (r *SalesPaperCommentRepo) delete(tx *gorm.DB, salesPaperCommentId []string, updateBy string) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"deleted_at": time.Now(),

@@ -14,17 +14,17 @@ const TableNameQuestion = "question"
 
 // Question 存放试题
 type Question struct {
-	ID             int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	DimensionID    int64          `gorm:"column:dimension_id;comment:维度表外键" json:"dimension_id"`                               // 维度表外键
+	ID             string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	DimensionID    string         `gorm:"column:dimension_id;not null;comment:维度表外键" json:"dimension_id"`                      // 维度表外键
 	Title          string         `gorm:"column:title;not null;comment:题干" json:"title"`                                       // 题干
-	Remark         string         `gorm:"column:remark;comment:备注" json:"remark"`                                              // 备注
-	Status         bool           `gorm:"column:status;comment:状态" json:"status"`                                              // 状态
-	QuestionTypeID int32          `gorm:"column:question_type_id;comment:试题类型ID" json:"question_type_id"`                      // 试题类型ID
+	Remark         string         `gorm:"column:remark;not null;comment:备注" json:"remark"`                                     // 备注
+	Status         bool           `gorm:"column:status;not null;comment:状态" json:"status"`                                     // 状态
+	QuestionTypeID int32          `gorm:"column:question_type_id;not null;comment:试题类型ID" json:"question_type_id"`             // 试题类型ID
 	Order          int32          `gorm:"column:order;not null;comment:排序" json:"order"`                                       // 排序
 	CreatedAt      time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt      time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy      int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy      int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy      string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy      string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt      gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 

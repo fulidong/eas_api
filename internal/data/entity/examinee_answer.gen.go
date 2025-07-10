@@ -14,12 +14,12 @@ const TableNameExamineeAnswer = "examinee_answer"
 
 // ExamineeAnswer 考生答题记录表
 type ExamineeAnswer struct {
-	ID                  int64          `gorm:"column:id;primaryKey;comment:主键（雪花ID）" json:"id"`                                                 // 主键（雪花ID）
-	SalesPaperID        int64          `gorm:"column:sales_paper_id;not null;comment:试卷ID" json:"sales_paper_id"`                               // 试卷ID
-	ExamineeID          int64          `gorm:"column:examinee_id;not null;comment:考生唯一标识" json:"examinee_id"`                                   // 考生唯一标识
+	ID                  string         `gorm:"column:id;primaryKey;comment:主键（雪花ID）" json:"id"`                                                 // 主键（雪花ID）
+	SalesPaperID        string         `gorm:"column:sales_paper_id;not null;comment:试卷ID" json:"sales_paper_id"`                               // 试卷ID
+	ExamineeID          string         `gorm:"column:examinee_id;not null;comment:考生唯一标识" json:"examinee_id"`                                   // 考生唯一标识
 	Score               float64        `gorm:"column:score;not null;default:0.00;comment:答题标准分" json:"score"`                                   // 答题标准分
 	BeginTestTime       time.Time      `gorm:"column:begin_test_time;not null;default:CURRENT_TIMESTAMP;comment:答题开始时刻" json:"begin_test_time"` // 答题开始时刻
-	SubmitTime          time.Time      `gorm:"column:submit_time;not null;default:1900-01-01 00:00:00;comment:答题提交时刻" json:"submit_time"`       // 答题提交时刻
+	SubmitTime          time.Time      `gorm:"column:submit_time;comment:答题提交时刻" json:"submit_time"`                                            // 答题提交时刻
 	CompleteQuestionNum int32          `gorm:"column:complete_question_num;not null;comment:完成题目个数" json:"complete_question_num"`               // 完成题目个数
 	LastActionTime      time.Time      `gorm:"column:last_action_time;comment:最后活动时刻" json:"last_action_time"`                                  // 最后活动时刻
 	Comparability       int32          `gorm:"column:comparability;not null;comment:匹配度" json:"comparability"`                                  // 匹配度
@@ -33,8 +33,8 @@ type ExamineeAnswer struct {
 	StageNumber         int32          `gorm:"column:stage_number;not null;comment:阶段编号（0~8）" json:"stage_number"`                              // 阶段编号（0~8）
 	CreatedAt           time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"`             // 创建时间
 	UpdatedAt           time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"`             // 更新时间
-	CreatedBy           int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                                      // 创建人标识
-	UpdatedBy           int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                                      // 更新人标识
+	CreatedBy           string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                                      // 创建人标识
+	UpdatedBy           string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                                      // 更新人标识
 	DeletedAt           gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                              // 逻辑删除时间
 }
 

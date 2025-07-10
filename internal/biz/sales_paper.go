@@ -3,15 +3,14 @@ package biz
 import (
 	"context"
 	v1 "eas_api/api/eas_api/v1"
+	_const "eas_api/internal/const"
 	"eas_api/internal/data/entity"
 	"eas_api/internal/pkg/icontext"
 	innErr "eas_api/internal/pkg/ierrors"
 	"eas_api/internal/pkg/isnowflake"
 	"eas_api/internal/pkg/iutils"
 	"errors"
-	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"strconv"
 	"time"
 )
 
@@ -20,10 +19,10 @@ type SalesPaperRepo interface {
 	GetPageList(ctx context.Context, in *v1.GetSalesPaperPageListRequest) (res []*entity.SalesPaper, total int64, err error)
 	GetUsablePageList(ctx context.Context, in *v1.GetUsableSalesPaperPageListRequest) (res []*entity.SalesPaper, total int64, err error)
 	GetBySalesPaperName(ctx context.Context, salesPaperName string) (list []*entity.SalesPaper, err error)
-	GetByID(ctx context.Context, salesPaperId int64) (resEntity *entity.SalesPaper, err error)
+	GetByID(ctx context.Context, salesPaperId string) (resEntity *entity.SalesPaper, err error)
 	Update(ctx context.Context, salesPaper *entity.SalesPaper) error
-	SetSalesPaperStatus(ctx context.Context, salesPaperId int64, salesPaperStatus v1.SalesPaperStatus, updatedBy int64) error
-	DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy int64) error
+	SetSalesPaperStatus(ctx context.Context, salesPaperId string, salesPaperStatus v1.SalesPaperStatus, updatedBy string) error
+	DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy string) error
 }
 
 type SalesPaperUseCase struct {
@@ -53,7 +52,7 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 		return resp, errors.New("该试卷已存在！")
 	}
 
-	id, err := isnowflake.SnowFlake.NextID()
+	id, err := isnowflake.SnowFlake.NextID(_const.SalesPaperPrefix)
 	if err != nil {
 		return resp, err
 	}
@@ -89,12 +88,12 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 		err = innErr.ErrInternalServer
 		return
 	}
-	userMap := map[int64]*entity.Administrator{}
-	updatedIds := iutils.GetDistinctFields[*entity.SalesPaper, int64](res, func(salesPaper *entity.SalesPaper) int64 {
+	userMap := map[string]*entity.Administrator{}
+	updatedIds := iutils.GetDistinctFields[*entity.SalesPaper, string](res, func(salesPaper *entity.SalesPaper) string {
 		return salesPaper.UpdatedBy
 	})
 	if len(updatedIds) > 0 {
-		userMap = make(map[int64]*entity.Administrator, len(updatedIds))
+		userMap = make(map[string]*entity.Administrator, len(updatedIds))
 		userList, err := uc.userRepo.GetByIDs(ctx, updatedIds)
 		if err != nil {
 			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v", updatedIds)
@@ -112,7 +111,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 			updatedBy = userMap[re.UpdatedBy].UserName
 		}
 		cur := &v1.SalesPaperData{
-			SalesPaperId:     fmt.Sprintf("%d", re.ID),
+			SalesPaperId:     re.ID,
 			SalesPaperName:   re.Name,
 			RecommendTimeLim: int64(re.RecommendTimeLim),
 			MaxScore:         re.MaxScore,
@@ -143,7 +142,7 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 	resp.Total = total
 	for _, re := range res {
 		cur := &v1.SalesPaperData{
-			SalesPaperId:     fmt.Sprintf("%d", re.ID),
+			SalesPaperId:     re.ID,
 			SalesPaperName:   re.Name,
 			RecommendTimeLim: int64(re.RecommendTimeLim),
 			MaxScore:         re.MaxScore,
@@ -164,12 +163,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
-	res, err := uc.repo.GetByID(ctx, salesPaperId)
+	res, err := uc.repo.GetByID(ctx, req.SalesPaperId)
 	if err != nil {
 		l.Errorf("GetSalesPaperDetail.repo.GetByID Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -180,7 +174,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 		return
 	}
 	resp.SalesPaper = &v1.SalesPaperData{
-		SalesPaperId:     fmt.Sprintf("%d", res.ID),
+		SalesPaperId:     res.ID,
 		SalesPaperName:   res.Name,
 		RecommendTimeLim: int64(res.RecommendTimeLim),
 		MaxScore:         res.MaxScore,
@@ -200,17 +194,11 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		err = errors.New("参数无效")
 		return
 	}
-
-	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.checkSalesPaper(ctx, salesPaperId, l)
+	err, ok := uc.checkSalesPaper(ctx, req.SalesPaperId, l)
 	if !ok {
 		return
 	}
@@ -221,13 +209,13 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	for _, salesPaper := range list {
-		if salesPaper.ID != salesPaperId {
+		if salesPaper.ID != req.SalesPaperId {
 			err = errors.New("试卷名已存在")
 			return
 		}
 	}
 	err = uc.repo.Update(ctx, &entity.SalesPaper{
-		ID:               salesPaperId,
+		ID:               req.SalesPaperId,
 		Name:             req.SalesPaperName,
 		RecommendTimeLim: int32(req.RecommendTimeLim),
 		MaxScore:         req.MaxScore,
@@ -251,16 +239,11 @@ func (uc *SalesPaperUseCase) SetSalesPaperStatus(ctx context.Context, req *v1.Se
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
-	err, ok := uc.checkSalesPaper(ctx, salesPaperId, l)
+	err, ok := uc.checkSalesPaper(ctx, req.SalesPaperId, l)
 	if !ok {
 		return
 	}
-	err = uc.repo.SetSalesPaperStatus(ctx, salesPaperId, req.SalesPaperStatus, userId)
+	err = uc.repo.SetSalesPaperStatus(ctx, req.SalesPaperId, req.SalesPaperStatus, userId)
 	if err != nil {
 		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -276,16 +259,11 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
-	err, ok := uc.checkSalesPaper(ctx, salesPaperId, l)
+	err, ok := uc.checkSalesPaper(ctx, req.SalesPaperId, l)
 	if !ok {
 		return
 	}
-	err = uc.repo.DeleteSalesPaper(ctx, salesPaperId, userId)
+	err = uc.repo.DeleteSalesPaper(ctx, req.SalesPaperId, userId)
 	if err != nil {
 		l.Errorf("DeleteSalesPaper.repo.DeleteSalesPaper Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -294,7 +272,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 	return
 }
 
-func (uc *SalesPaperUseCase) checkSalesPaper(ctx context.Context, iSalesPaperId int64, l *log.Helper) (error, bool) {
+func (uc *SalesPaperUseCase) checkSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (error, bool) {
 	salesPaper, err := uc.repo.GetByID(ctx, iSalesPaperId)
 	if err != nil {
 		l.Errorf("UpdateSalesPaper.repo.GetByID Failed, err:%v ", err)

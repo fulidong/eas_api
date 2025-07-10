@@ -14,18 +14,18 @@ const TableNameSalesPaper = "sales_paper"
 
 // SalesPaper 售卷，作为系统对外销售的产品
 type SalesPaper struct {
-	ID               int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	ID               string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
 	Name             string         `gorm:"column:name;not null;comment:售卷名称" json:"name"`                                       // 售卷名称
-	RecommendTimeLim int32          `gorm:"column:recommend_time_lim;comment:推荐售卷时长" json:"recommend_time_lim"`                  // 推荐售卷时长
-	MaxScore         float64        `gorm:"column:max_score;default:0.00;comment:最高分数上限" json:"max_score"`                       // 最高分数上限
-	MinScore         float64        `gorm:"column:min_score;default:0.00;comment:最低分数下限" json:"min_score"`                       // 最低分数下限
-	IsEnabled        bool           `gorm:"column:is_enabled;comment:是否启用" json:"is_enabled"`                                    // 是否启用
+	RecommendTimeLim int32          `gorm:"column:recommend_time_lim;not null;comment:推荐售卷时长" json:"recommend_time_lim"`         // 推荐售卷时长
+	MaxScore         float64        `gorm:"column:max_score;not null;default:0.00;comment:最高分数上限" json:"max_score"`              // 最高分数上限
+	MinScore         float64        `gorm:"column:min_score;not null;default:0.00;comment:最低分数下限" json:"min_score"`              // 最低分数下限
+	IsEnabled        bool           `gorm:"column:is_enabled;not null;comment:是否启用" json:"is_enabled"`                           // 是否启用
 	IsUsed           bool           `gorm:"column:is_used;not null;comment:是否已使用" json:"is_used"`                                // 是否已使用
-	Mark             string         `gorm:"column:mark;comment:备注" json:"mark"`                                                  // 备注
+	Mark             string         `gorm:"column:mark;not null;comment:备注" json:"mark"`                                         // 备注
 	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt        time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy        int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy        int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy        string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy        string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt        gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 

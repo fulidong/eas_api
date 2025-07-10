@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	v1 "eas_api/api/eas_api/v1"
+	_const "eas_api/internal/const"
 	"eas_api/internal/data/entity"
 	"eas_api/internal/pkg/icontext"
 	innErr "eas_api/internal/pkg/ierrors"
@@ -12,22 +13,21 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"strconv"
 	"time"
 )
 
 type UserRepo interface {
 	Create(ctx context.Context, administrator *entity.Administrator) error
-	GetByLoginAccount(ctx context.Context, login_account string) (*entity.Administrator, error)
-	GetByUserName(ctx context.Context, user_name string) (*entity.Administrator, error)
+	GetByLoginAccount(ctx context.Context, loginAccount string) (*entity.Administrator, error)
+	GetByUserName(ctx context.Context, userName string) (*entity.Administrator, error)
 	GetPageList(ctx context.Context, in *v1.GetPageListRequest) (res []*entity.Administrator, total int64, err error)
-	GetByID(ctx context.Context, userId int64) (resEntity *entity.Administrator, err error)
-	GetByIDs(ctx context.Context, userId []int64) (list []*entity.Administrator, err error)
+	GetByID(ctx context.Context, userId string) (resEntity *entity.Administrator, err error)
+	GetByIDs(ctx context.Context, userId []string) (list []*entity.Administrator, err error)
 	GetListByLoginAccount(ctx context.Context, loginAccount string) (list []*entity.Administrator, err error)
 	Update(ctx context.Context, user *entity.Administrator, isOwn bool) error
-	SetUserStatus(ctx context.Context, userId int64, userStatus v1.AccountStatus, updatedBy int64) error
-	UpdateUserPassWord(ctx context.Context, userId int64, passWord string, updatedBy int64) error
-	DeleteUser(ctx context.Context, userId int64, updatedBy int64) error
+	SetUserStatus(ctx context.Context, userId string, userStatus v1.AccountStatus, updatedBy string) error
+	UpdateUserPassWord(ctx context.Context, userId, passWord, updatedBy string) error
+	DeleteUser(ctx context.Context, userId, updatedBy string) error
 }
 
 type UserUseCase struct {
@@ -65,7 +65,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 		return resp, errors.New("该用户名已存在！")
 	}
 
-	id, err := isnowflake.SnowFlake.NextID()
+	id, err := isnowflake.SnowFlake.NextID(_const.AdministratorPrefix)
 	if err != nil {
 		return resp, err
 	}
@@ -106,12 +106,12 @@ func (uc *UserUseCase) GetPageList(ctx context.Context, req *v1.GetPageListReque
 		err = innErr.ErrInternalServer
 		return
 	}
-	userMap := map[int64]*entity.Administrator{}
-	updatedIds := iutils.GetDistinctFields[*entity.Administrator, int64](res, func(administrator *entity.Administrator) int64 {
+	userMap := map[string]*entity.Administrator{}
+	updatedIds := iutils.GetDistinctFields[*entity.Administrator, string](res, func(administrator *entity.Administrator) string {
 		return administrator.ID
 	})
 	if len(updatedIds) > 0 {
-		userMap = make(map[int64]*entity.Administrator, len(updatedIds))
+		userMap = make(map[string]*entity.Administrator, len(updatedIds))
 		userList, err := uc.repo.GetByIDs(ctx, updatedIds)
 		if err != nil {
 			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v", updatedIds)
@@ -130,7 +130,7 @@ func (uc *UserUseCase) GetPageList(ctx context.Context, req *v1.GetPageListReque
 			updatedBy = userMap[re.UpdatedBy].UserName
 		}
 		cur := &v1.UserData{
-			UserId:       fmt.Sprintf("%d", re.ID),
+			UserId:       re.ID,
 			UserName:     re.UserName,
 			LoginAccount: re.LoginAccount,
 			Email:        re.Email,
@@ -150,12 +150,7 @@ func (uc *UserUseCase) GetUserDetail(ctx context.Context, req *v1.GetUserDetailR
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	userId, err := strconv.ParseInt(req.UserId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
-	res, err := uc.repo.GetByID(ctx, userId)
+	res, err := uc.repo.GetByID(ctx, req.UserId)
 	if err != nil {
 		l.Errorf("GetUserDetail.repo.GetByID Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -166,7 +161,7 @@ func (uc *UserUseCase) GetUserDetail(ctx context.Context, req *v1.GetUserDetailR
 		return
 	}
 	resp.User = &v1.UserData{
-		UserId:       fmt.Sprintf("%d", res.ID),
+		UserId:       res.ID,
 		UserName:     res.UserName,
 		LoginAccount: res.LoginAccount,
 		Email:        res.Email,
@@ -180,11 +175,6 @@ func (uc *UserUseCase) GetUserDetail(ctx context.Context, req *v1.GetUserDetailR
 func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest) (resp *v1.UpdateUserResponse, err error) {
 	resp = &v1.UpdateUserResponse{}
 	l := uc.log.WithContext(ctx)
-	userId, err := strconv.ParseInt(req.UserId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
@@ -200,13 +190,13 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest
 		return
 	}
 	for _, administrator := range list {
-		if administrator.ID != userId {
+		if administrator.ID != req.UserId {
 			err = errors.New("账户名已存在")
 			return
 		}
 	}
 	err = uc.repo.Update(ctx, &entity.Administrator{
-		ID:           userId,
+		ID:           req.UserId,
 		UserName:     req.UserName,
 		LoginAccount: req.LoginAccount,
 		Status:       int32(req.UserStatus),
@@ -225,16 +215,11 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest
 func (uc *UserUseCase) SetUserStatus(ctx context.Context, req *v1.SetUserStatusRequest) (resp *v1.SetUserStatusResponse, err error) {
 	resp = &v1.SetUserStatusResponse{}
 	l := uc.log.WithContext(ctx)
-	userId, err := strconv.ParseInt(req.UserId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
-	err = uc.repo.SetUserStatus(ctx, userId, req.UserStatus, curUserId)
+	err = uc.repo.SetUserStatus(ctx, req.UserId, req.UserStatus, curUserId)
 	if err != nil {
 		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -246,11 +231,6 @@ func (uc *UserUseCase) SetUserStatus(ctx context.Context, req *v1.SetUserStatusR
 func (uc *UserUseCase) ResetUserPassWord(ctx context.Context, req *v1.ResetUserPassWordRequest) (resp *v1.ResetUserPassWordResponse, err error) {
 	resp = &v1.ResetUserPassWordResponse{}
 	l := uc.log.WithContext(ctx)
-	userId, err := strconv.ParseInt(req.UserId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
@@ -261,7 +241,7 @@ func (uc *UserUseCase) ResetUserPassWord(ctx context.Context, req *v1.ResetUserP
 		err = innErr.ErrInternalServer
 		return
 	}
-	err = uc.repo.UpdateUserPassWord(ctx, userId, hashPassWord, curUserId)
+	err = uc.repo.UpdateUserPassWord(ctx, req.UserId, hashPassWord, curUserId)
 	if err != nil {
 		l.Errorf("ResetUserPassWord.repo.UpdateUserPassWord Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -273,16 +253,11 @@ func (uc *UserUseCase) ResetUserPassWord(ctx context.Context, req *v1.ResetUserP
 func (uc *UserUseCase) DeleteUser(ctx context.Context, req *v1.DeleteUserRequest) (resp *v1.DeleteUserResponse, err error) {
 	resp = &v1.DeleteUserResponse{}
 	l := uc.log.WithContext(ctx)
-	userId, err := strconv.ParseInt(req.UserId, 10, 64)
-	if err != nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
-	err = uc.repo.DeleteUser(ctx, userId, curUserId)
+	err = uc.repo.DeleteUser(ctx, req.UserId, curUserId)
 	if err != nil {
 		l.Errorf("DeleteUser.repo.DeleteUser Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -310,7 +285,7 @@ func (uc *UserUseCase) GetUserSelfDetail(ctx context.Context, req *v1.GetUserSel
 		return
 	}
 	resp.User = &v1.UserData{
-		UserId:       fmt.Sprintf("%d", res.ID),
+		UserId:       res.ID,
 		UserName:     res.UserName,
 		LoginAccount: res.LoginAccount,
 		Email:        res.Email,
@@ -360,7 +335,7 @@ func (uc *UserUseCase) UpdateUserPassWord(ctx context.Context, req *v1.UpdateUse
 	resp = &v1.UpdateUserPassWordResponse{}
 	l := uc.log.WithContext(ctx)
 	userId, _ := icontext.UserIdFrom(ctx)
-	if userId == 0 {
+	if userId == "" {
 		err = innErr.ErrLogin
 		return
 	}

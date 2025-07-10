@@ -36,7 +36,8 @@ func DiffEntities[T1 any, T2 any, Y int | int32 | int64 | string](
 	}
 	for _, inputEnt := range inputList {
 		id := getId2(inputEnt)
-		if id == Y(0) {
+		var zero Y
+		if id == zero {
 			dbEnt := instanceFunc()
 			toCreate = append(toCreate, MapTo[T2, T1](dbEnt, inputEnt))
 		} else {

@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	v1 "eas_api/api/eas_api/v1"
+	_const "eas_api/internal/const"
 	"eas_api/internal/data/entity"
 	"eas_api/internal/middleware"
 	"eas_api/internal/pkg/isecurity"
@@ -48,14 +49,14 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 	if user.Status != int32(v1.AccountStatus_Active) {
 		err = errors.New("用户未激活")
 	}
-	id, _ := isnowflake.SnowFlake.NextID()
+	id, _ := isnowflake.SnowFlake.NextID(_const.AdministratorPrefix)
 	uc.sysLogin.Create(ctx, &entity.SysLoginRecord{
 		ID:            id,
 		UserID:        user.ID,
 		LoginPlatform: int32(v1.LoginPlatform_Management),
 	})
 	// 生成jwt
-	accessJWT, err := middleware.JWT.GenerateAccessToken(fmt.Sprintf("%d", user.ID), user.UserName, fmt.Sprintf("%d", user.UserType))
+	accessJWT, err := middleware.JWT.GenerateAccessToken(user.ID, user.UserName, fmt.Sprintf("%d", user.UserType))
 	if err != nil {
 		// 处理错误
 	}

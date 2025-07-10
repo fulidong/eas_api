@@ -14,17 +14,17 @@ const TableNameAdministrator = "administrator"
 
 // Administrator 测评管理员用户
 type Administrator struct {
-	ID           int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	UserName     string         `gorm:"column:user_name;comment:用户名" json:"user_name"`                                       // 用户名
+	ID           string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	UserName     string         `gorm:"column:user_name;not null;comment:用户名" json:"user_name"`                              // 用户名
 	LoginAccount string         `gorm:"column:login_account;not null;comment:登录名" json:"login_account"`                      // 登录名
 	HashPassword string         `gorm:"column:hash_password;not null;comment:密码" json:"hash_password"`                       // 密码
-	Status       int32          `gorm:"column:status;comment:状态：1.已激活;0.未激活" json:"status"`                                  // 状态：1.已激活;0.未激活
+	Status       int32          `gorm:"column:status;not null;comment:状态：1.已激活;0.未激活" json:"status"`                         // 状态：1.已激活;0.未激活
 	Email        string         `gorm:"column:email;not null;comment:邮箱" json:"email"`                                       // 邮箱
-	UserType     int32          `gorm:"column:user_type;comment:用户类型（0、管理员，1、普通用户）" json:"user_type"`                        // 用户类型（0、管理员，1、普通用户）
+	UserType     int32          `gorm:"column:user_type;not null;default:1;comment:用户类型（0、管理员，1、普通用户）" json:"user_type"`     // 用户类型（0、管理员，1、普通用户）
 	CreatedAt    time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt    time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy    int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy    int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy    string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy    string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 

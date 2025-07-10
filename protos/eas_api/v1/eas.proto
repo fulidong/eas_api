@@ -509,7 +509,7 @@ service EasService {
   //保存试卷评语
   rpc SaveSalesPaperComment(SaveSalesPaperCommentRequest) returns (SaveSalesPaperCommentResponse){
     option (google.api.http)={post:"/v1/sales_pager_comment/save", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷",tags: ["试卷评语模块"],
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷评语",tags: ["试卷评语模块"],
       parameters: {
         headers: [
           {
@@ -535,7 +535,7 @@ service EasService {
   //试卷评语列表
   rpc GetSalesPaperCommentList(GetSalesPaperCommentListRequest) returns (GetSalesPaperCommentListResponse){
     option (google.api.http)={get:"/v1/sales_pager_comment/list"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷列表",tags: ["试卷评语模块"],
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷评语列表",tags: ["试卷评语模块"],
       parameters: {
         headers: [
           {

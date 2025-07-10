@@ -70,7 +70,7 @@ func (r *SalesPaperRepo) GetBySalesPaperName(ctx context.Context, salesPaperName
 	return list, nil
 }
 
-func (r *SalesPaperRepo) GetByID(ctx context.Context, salesPaperId int64) (resEntity *entity.SalesPaper, err error) {
+func (r *SalesPaperRepo) GetByID(ctx context.Context, salesPaperId string) (resEntity *entity.SalesPaper, err error) {
 	resEntity, err = getSingleRecordByScope[entity.SalesPaper](
 		r.data.db.WithContext(ctx).Model(resEntity).Where(" id = ? ", salesPaperId),
 	)
@@ -105,7 +105,7 @@ func (r *SalesPaperRepo) Update(ctx context.Context, salesPaper *entity.SalesPap
 }
 
 // 更新激活状态
-func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId int64, salesPaperStatus v1.SalesPaperStatus, updatedBy int64) error {
+func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId string, salesPaperStatus v1.SalesPaperStatus, updatedBy string) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"is_enabled": salesPaperStatus,
@@ -121,7 +121,7 @@ func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId i
 }
 
 // 删除用户
-func (r *SalesPaperRepo) DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy int64) error {
+func (r *SalesPaperRepo) DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy string) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"deleted_at": time.Now(),
