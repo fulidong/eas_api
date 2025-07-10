@@ -15,7 +15,7 @@ const TableNameExamineeEmailRecord = "examinee_email_record"
 // ExamineeEmailRecord 邮件发送日志
 type ExamineeEmailRecord struct {
 	ID                int64          `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	SalesPaperID      int32          `gorm:"column:sales_paper_id;comment:SalesPaper表的外键" json:"sales_paper_id"`                  // SalesPaper表的外键
+	SalesPaperID      int64          `gorm:"column:sales_paper_id;comment:SalesPaper表的外键" json:"sales_paper_id"`                  // SalesPaper表的外键
 	ExamineeID        int64          `gorm:"column:examinee_id;comment:考生ID" json:"examinee_id"`                                  // 考生ID
 	Title             string         `gorm:"column:title;comment:邮件标题" json:"title"`                                              // 邮件标题
 	Content           string         `gorm:"column:content;comment:邮件内容" json:"content"`                                          // 邮件内容
@@ -28,8 +28,8 @@ type ExamineeEmailRecord struct {
 	IsFalseAddress    bool           `gorm:"column:is_false_address;comment:是否为错误地址" json:"is_false_address"`                     // 是否为错误地址
 	CreatedAt         time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt         time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy         string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy         string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy         int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy         int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt         gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 

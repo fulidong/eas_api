@@ -38,7 +38,8 @@ message UserData {
   string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱"}];
   AccountStatus user_status=5 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活"}];
   UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户"}];
-  string create_at=7 [json_name="create_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"创建时间"}];
+  string updated_at=7 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
+  string updated_by=8 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
 }
 
 message GetPageListRequest {
@@ -132,24 +133,25 @@ message CreateSalesPaperResponse {
 
 message SalesPaperData {
   string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id"}];
-  string sales_paper_name=2 [json_name="paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称",required:["paper_name"], max_length:20, min_length:1}];
-  int64 recommend_time_lim=3 [json_name="recommend_time_lim",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"推荐作答时长：分钟",required:["recommend_time_lim"]}];
-  double max_score=4 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限",required:["max_score"]}];
-  double min_score=5 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限",required:["min_score"]}];
-  bool is_enabled=6 [json_name="is_enabled",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否启用,1.启用;0.禁用",required:["is_enabled"]}];
-  bool is_used=7 [json_name="is_used",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否使用,1.使用;0.未使用",required:["is_used"]}];
-  string mark=8 [json_name="mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"备注",required:["mark"]}];
-  string create_at=9 [json_name="create_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"创建时间"}];
+  string sales_paper_name=2 [json_name="paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称"}];
+  int64 recommend_time_lim=3 [json_name="recommend_time_lim",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"推荐作答时长：分钟"}];
+  double max_score=4 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限"}];
+  double min_score=5 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限"}];
+  bool is_enabled=6 [json_name="is_enabled",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否启用,1.启用;0.禁用"}];
+  bool is_used=7 [json_name="is_used",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否使用,1.使用;0.未使用"}];
+  string mark=8 [json_name="mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"备注"}];
+  string updated_at=9 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
+  string updated_by=10 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
 }
 
 message GetSalesPaperPageListRequest {
   string key_word=1 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名搜索"}];
-  int64 sales_pager_status=2 [json_name="sales_pager_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷状态,1.启用;0.禁用；-1全部", default:"-1"}];
+  int64 sales_paper_status=2 [json_name="sales_paper_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷状态,1.启用;0.禁用；-1全部", default:"-1"}];
   int32 pageIndex=3 [json_name="pageIndex",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
   int32 pageSize=4 [json_name="pageSize",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
 }
 message GetSalesPaperPageListResponse {
-  repeated SalesPaperData sales_pager_list=1 [json_name="sales_pager_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷列表"}];
+  repeated SalesPaperData sales_paper_list=1 [json_name="sales_paper_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷列表"}];
   int64 total=2 [json_name="total",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"总数"}];
 }
 
@@ -160,26 +162,26 @@ message GetUsableSalesPaperPageListRequest {
   int32 pageSize=3 [json_name="pageSize",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
 }
 message GetUsableSalesPaperPageListResponse {
-  repeated SalesPaperData sales_pager_list=1 [json_name="sales_pager_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷列表"}];
+  repeated SalesPaperData sales_paper_list=1 [json_name="sales_paper_list",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷列表"}];
   int64 total=2 [json_name="total",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"总数"}];
 }
 
 message GetSalesPaperDetailRequest {
-  string sales_pager_id=1 [json_name="sales_pager_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_pager_id"]}];
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_paper_id"]}];
 }
 message GetSalesPaperDetailResponse {
-  SalesPaperData sales_pager=1 [json_name="sales_pager",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷信息"}];
+  SalesPaperData sales_paper=1 [json_name="sales_paper",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷信息"}];
 }
 
 message SetSalesPaperStatusRequest {
-  string sales_pager_id=1 [json_name="sales_pager_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_pager_id"]}];
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_paper_id"]}];
   SalesPaperStatus sales_paper_status=2 [json_name="sales_paper_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷状态,1.启用;0.禁用", required:["sales_paper_status"]}];
 }
 message SetSalesPaperStatusResponse {
 }
 
 message UpdateSalesPaperRequest {
-  string sales_pager_id=1 [json_name="sales_pager_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id",required:["sales_pager_id"]}];
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id",required:["sales_paper_id"]}];
   string sales_paper_name=2 [json_name="sales_paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称",required:["sales_paper_name"], max_length:20, min_length:1}];
   int64 recommend_time_lim=3 [json_name="recommend_time_lim",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"推荐作答时长：分钟",required:["recommend_time_lim"]}];
   double max_score=4 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限",required:["max_score"]}];
@@ -192,11 +194,47 @@ message UpdateSalesPaperResponse {
 
 
 message DeleteSalesPaperRequest {
-  string sales_pager_id=1 [json_name="sales_pager_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_pager_id"]}];
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_paper_id"]}];
 }
 message DeleteSalesPaperResponse {
 
 }
+
+
+
+//===============================试卷评语模块=========================================
+message SaveSalesPaperCommentRequest {
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id", required:["sales_paper_id"]}];
+  repeated SaveSalesPaperCommentData comment_data=2 [json_name="comment_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语集合", required:["comment_data"]}];
+}
+message SaveSalesPaperCommentResponse {
+
+}
+
+message SaveSalesPaperCommentData {
+  string sales_paper_comment_id=1 [json_name="sales_paper_comment_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_comment_id"}];
+  string content=2 [json_name="content",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容",required:["content"]}];
+  double up_score=3 [json_name="up_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"上限分数区分点",required:["up_score"]}];
+  double low_score=4 [json_name="low_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"下限分数区分点",required:["low_score"]}];
+}
+
+message SalesPaperCommentData {
+  string sales_paper_comment_id=1 [json_name="sales_paper_comment_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_comment_id"}];
+  string content=2 [json_name="content",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容"}];
+  double up_score=3 [json_name="up_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"上限分数区分点"}];
+  double low_score=4 [json_name="low_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"下限分数区分点"}];
+  string updated_at=5 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
+  string updated_by=6 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
+}
+
+message GetSalesPaperCommentListRequest {
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id", required:["sales_paper_id"]}];
+}
+
+message GetSalesPaperCommentListResponse {
+  repeated SalesPaperCommentData comment_data=1 [json_name="comment_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容"}];
+}
+
 
 enum LoginPlatform {
   NoKnow = 0;

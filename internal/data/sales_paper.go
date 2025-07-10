@@ -26,7 +26,7 @@ func NewSalesPaperRepo(data *Data, logger log.Logger) biz.SalesPaperRepo {
 func (r *SalesPaperRepo) GetPageList(ctx context.Context, in *v1.GetSalesPaperPageListRequest) (res []*entity.SalesPaper, total int64, err error) {
 	session := r.data.db.WithContext(ctx)
 	session = session.Table((&entity.SalesPaper{}).TableName())
-	q, v := r.buildConditions(in.KeyWord, in.SalesPagerStatus)
+	q, v := r.buildConditions(in.KeyWord, in.SalesPaperStatus)
 	if q != "" {
 		session.Where(q, v...)
 	}
@@ -71,7 +71,7 @@ func (r *SalesPaperRepo) GetBySalesPaperName(ctx context.Context, salesPaperName
 }
 
 func (r *SalesPaperRepo) GetByID(ctx context.Context, salesPaperId int64) (resEntity *entity.SalesPaper, err error) {
-	resEntity, err = GetSingleRecordByScope[entity.SalesPaper](
+	resEntity, err = getSingleRecordByScope[entity.SalesPaper](
 		r.data.db.WithContext(ctx).Model(resEntity).Where(" id = ? ", salesPaperId),
 	)
 	if err != nil {
@@ -105,10 +105,11 @@ func (r *SalesPaperRepo) Update(ctx context.Context, salesPaper *entity.SalesPap
 }
 
 // 更新激活状态
-func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId int64, salesPaperStatus v1.SalesPaperStatus) error {
+func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId int64, salesPaperStatus v1.SalesPaperStatus, updatedBy int64) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"is_enabled": salesPaperStatus,
+		"updated_by": updatedBy,
 	}
 
 	// 执行更新
@@ -120,10 +121,11 @@ func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId i
 }
 
 // 删除用户
-func (r *SalesPaperRepo) DeleteSalesPaper(ctx context.Context, salesPaperId int64) error {
+func (r *SalesPaperRepo) DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy int64) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"deleted_at": time.Now(),
+		"updated_by": updatedBy,
 	}
 
 	// 执行更新

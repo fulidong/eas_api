@@ -4,11 +4,13 @@ import (
 	"eas_api/internal/conf"
 	"eas_api/internal/pkg/igorm"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
+	"strings"
 	"time"
 )
 
@@ -16,7 +18,8 @@ import (
 var ProviderSet = wire.NewSet(NewData,
 	NewAdministratorRepo,
 	NewSysLoginRepo,
-	NewSalesPaperRepo)
+	NewSalesPaperRepo,
+	NewSalesPaperCommentRepo)
 
 type Data struct {
 	db *gorm.DB
@@ -49,7 +52,7 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 		}, nil
 }
 
-func GetSingleRecordByScope[T any](db *gorm.DB) (*T, error) {
+func getSingleRecordByScope[T any](db *gorm.DB) (*T, error) {
 	var result T
 	err := db.First(&result).Error
 
@@ -61,4 +64,23 @@ func GetSingleRecordByScope[T any](db *gorm.DB) (*T, error) {
 	}
 
 	return &result, nil
+}
+
+// 构造通用的 CASE WHEN 表达式
+func buildCaseExpr[T any](entities []T, getId func(T) interface{}, getField func(T) interface{}) interface{} {
+	var cases []string
+	values := make([]interface{}, 0)
+
+	for _, u := range entities {
+		cases = append(cases, fmt.Sprintf("WHEN ? THEN ?"))
+		values = append(values, getId(u), getField(u))
+	}
+
+	sql := fmt.Sprintf("CASE id %s END", strings.Join(cases, " "))
+	args := make([]interface{}, 0, len(values))
+	for _, v := range values {
+		args = append(args, v)
+	}
+
+	return gorm.Expr(sql, args...)
 }

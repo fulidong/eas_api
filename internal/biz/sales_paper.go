@@ -4,9 +4,12 @@ import (
 	"context"
 	v1 "eas_api/api/eas_api/v1"
 	"eas_api/internal/data/entity"
+	"eas_api/internal/pkg/icontext"
 	innErr "eas_api/internal/pkg/ierrors"
 	"eas_api/internal/pkg/isnowflake"
+	"eas_api/internal/pkg/iutils"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"strconv"
 	"time"
@@ -19,17 +22,18 @@ type SalesPaperRepo interface {
 	GetBySalesPaperName(ctx context.Context, salesPaperName string) (list []*entity.SalesPaper, err error)
 	GetByID(ctx context.Context, salesPaperId int64) (resEntity *entity.SalesPaper, err error)
 	Update(ctx context.Context, salesPaper *entity.SalesPaper) error
-	SetSalesPaperStatus(ctx context.Context, salesPaperId int64, salesPaperStatus v1.SalesPaperStatus) error
-	DeleteSalesPaper(ctx context.Context, salesPaperId int64) error
+	SetSalesPaperStatus(ctx context.Context, salesPaperId int64, salesPaperStatus v1.SalesPaperStatus, updatedBy int64) error
+	DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy int64) error
 }
 
 type SalesPaperUseCase struct {
-	repo SalesPaperRepo
-	log  *log.Helper
+	repo     SalesPaperRepo
+	userRepo UserRepo
+	log      *log.Helper
 }
 
-func NewSalesPaperUseCase(repo SalesPaperRepo, logger log.Logger) *SalesPaperUseCase {
-	return &SalesPaperUseCase{repo: repo, log: log.NewHelper(logger)}
+func NewSalesPaperUseCase(repo SalesPaperRepo, userRepo UserRepo, logger log.Logger) *SalesPaperUseCase {
+	return &SalesPaperUseCase{repo: repo, userRepo: userRepo, log: log.NewHelper(logger)}
 }
 
 func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.CreateSalesPaperRequest) (resp *v1.CreateSalesPaperResponse, err error) {
@@ -38,6 +42,7 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
+	curUserId, _ := icontext.UserIdFrom(ctx)
 	//判断试卷是否存在
 	salesPaperList, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperName)
 	if err != nil {
@@ -61,6 +66,8 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 		MinScore:         req.MinScore,
 		IsEnabled:        req.IsEnabled,
 		Mark:             req.Mark,
+		CreatedBy:        curUserId,
+		UpdatedBy:        curUserId,
 	}
 	err = uc.repo.Create(ctx, salesPaper)
 	if err != nil {
@@ -71,7 +78,7 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 }
 
 func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.GetSalesPaperPageListRequest) (resp *v1.GetSalesPaperPageListResponse, err error) {
-	resp = &v1.GetSalesPaperPageListResponse{SalesPagerList: make([]*v1.SalesPaperData, 0, req.PageSize)}
+	resp = &v1.GetSalesPaperPageListResponse{SalesPaperList: make([]*v1.SalesPaperData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
 	if _, err = adminPermission(ctx); err != nil {
 		return
@@ -82,10 +89,30 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 		err = innErr.ErrInternalServer
 		return
 	}
+	userMap := map[int64]*entity.Administrator{}
+	updatedIds := iutils.GetDistinctFields[*entity.SalesPaper, int64](res, func(salesPaper *entity.SalesPaper) int64 {
+		return salesPaper.UpdatedBy
+	})
+	if len(updatedIds) > 0 {
+		userMap = make(map[int64]*entity.Administrator, len(updatedIds))
+		userList, err := uc.userRepo.GetByIDs(ctx, updatedIds)
+		if err != nil {
+			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v", updatedIds)
+			err = innErr.ErrInternalServer
+			return resp, err
+		}
+		for _, administrator := range userList {
+			userMap[administrator.ID] = administrator
+		}
+	}
 	resp.Total = total
 	for _, re := range res {
+		updatedBy := ""
+		if _, ok := userMap[re.UpdatedBy]; ok {
+			updatedBy = userMap[re.UpdatedBy].UserName
+		}
 		cur := &v1.SalesPaperData{
-			SalesPaperId:     strconv.Itoa(int(re.ID)),
+			SalesPaperId:     fmt.Sprintf("%d", re.ID),
 			SalesPaperName:   re.Name,
 			RecommendTimeLim: int64(re.RecommendTimeLim),
 			MaxScore:         re.MaxScore,
@@ -93,15 +120,16 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 			IsEnabled:        re.IsEnabled,
 			IsUsed:           re.IsUsed,
 			Mark:             re.Mark,
-			CreateAt:         re.CreatedAt.Format(time.DateTime),
+			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
+			UpdatedBy:        updatedBy,
 		}
-		resp.SalesPagerList = append(resp.SalesPagerList, cur)
+		resp.SalesPaperList = append(resp.SalesPaperList, cur)
 	}
 	return
 }
 
 func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, req *v1.GetUsableSalesPaperPageListRequest) (resp *v1.GetUsableSalesPaperPageListResponse, err error) {
-	resp = &v1.GetUsableSalesPaperPageListResponse{SalesPagerList: make([]*v1.SalesPaperData, 0, req.PageSize)}
+	resp = &v1.GetUsableSalesPaperPageListResponse{SalesPaperList: make([]*v1.SalesPaperData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
 	if _, err = adminPermission(ctx); err != nil {
 		return
@@ -115,7 +143,7 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 	resp.Total = total
 	for _, re := range res {
 		cur := &v1.SalesPaperData{
-			SalesPaperId:     strconv.Itoa(int(re.ID)),
+			SalesPaperId:     fmt.Sprintf("%d", re.ID),
 			SalesPaperName:   re.Name,
 			RecommendTimeLim: int64(re.RecommendTimeLim),
 			MaxScore:         re.MaxScore,
@@ -123,9 +151,9 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 			IsEnabled:        re.IsEnabled,
 			IsUsed:           re.IsUsed,
 			Mark:             re.Mark,
-			CreateAt:         re.CreatedAt.Format(time.DateTime),
+			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
 		}
-		resp.SalesPagerList = append(resp.SalesPagerList, cur)
+		resp.SalesPaperList = append(resp.SalesPaperList, cur)
 	}
 	return
 }
@@ -136,7 +164,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	salesPaperId, err := strconv.ParseInt(req.SalesPagerId, 10, 64)
+	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
 	if err != nil {
 		err = errors.New("参数无效")
 		return
@@ -151,8 +179,8 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 		err = errors.New("试卷不存在")
 		return
 	}
-	resp.SalesPager = &v1.SalesPaperData{
-		SalesPaperId:     strconv.Itoa(int(res.ID)),
+	resp.SalesPaper = &v1.SalesPaperData{
+		SalesPaperId:     fmt.Sprintf("%d", res.ID),
 		SalesPaperName:   res.Name,
 		RecommendTimeLim: int64(res.RecommendTimeLim),
 		MaxScore:         res.MaxScore,
@@ -160,7 +188,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 		IsEnabled:        res.IsEnabled,
 		IsUsed:           res.IsUsed,
 		Mark:             res.Mark,
-		CreateAt:         res.CreatedAt.Format(time.DateTime),
+		UpdatedAt:        res.UpdatedAt.Format(time.DateTime),
 	}
 	return
 }
@@ -168,19 +196,21 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.UpdateSalesPaperRequest) (resp *v1.UpdateSalesPaperResponse, err error) {
 	resp = &v1.UpdateSalesPaperResponse{}
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
-	if req.SalesPagerId == "" {
+	if req.SalesPaperId == "" {
 		err = errors.New("参数无效")
 		return
 	}
-	iSalesPaperId, err := strconv.ParseInt(req.SalesPagerId, 10, 64)
+
+	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
 	if err != nil {
 		err = errors.New("参数无效")
 		return
 	}
-	err, ok := uc.checkSalesPaper(ctx, iSalesPaperId, l)
+	if _, err = adminPermission(ctx); err != nil {
+		return
+	}
+	userId, _ := icontext.UserIdFrom(ctx)
+	err, ok := uc.checkSalesPaper(ctx, salesPaperId, l)
 	if !ok {
 		return
 	}
@@ -191,19 +221,20 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	for _, salesPaper := range list {
-		if salesPaper.ID != iSalesPaperId {
+		if salesPaper.ID != salesPaperId {
 			err = errors.New("试卷名已存在")
 			return
 		}
 	}
 	err = uc.repo.Update(ctx, &entity.SalesPaper{
-		ID:               iSalesPaperId,
+		ID:               salesPaperId,
 		Name:             req.SalesPaperName,
 		RecommendTimeLim: int32(req.RecommendTimeLim),
 		MaxScore:         req.MaxScore,
 		MinScore:         req.MinScore,
 		IsEnabled:        req.IsEnabled,
 		Mark:             req.Mark,
+		UpdatedBy:        userId,
 	})
 	if err != nil {
 		l.Errorf("UpdateSalesPaper.repo.Update Failed, err:%v", err)
@@ -219,17 +250,17 @@ func (uc *SalesPaperUseCase) SetSalesPaperStatus(ctx context.Context, req *v1.Se
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	salesPaperId, err := strconv.ParseInt(req.SalesPagerId, 10, 64)
+	userId, _ := icontext.UserIdFrom(ctx)
+	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
 	if err != nil {
 		err = errors.New("参数无效")
 		return
 	}
-
 	err, ok := uc.checkSalesPaper(ctx, salesPaperId, l)
 	if !ok {
 		return
 	}
-	err = uc.repo.SetSalesPaperStatus(ctx, salesPaperId, req.SalesPaperStatus)
+	err = uc.repo.SetSalesPaperStatus(ctx, salesPaperId, req.SalesPaperStatus, userId)
 	if err != nil {
 		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, err:%v", err)
 		err = innErr.ErrInternalServer
@@ -244,17 +275,17 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	iSalesPaperId, err := strconv.ParseInt(req.SalesPagerId, 10, 64)
+	userId, _ := icontext.UserIdFrom(ctx)
+	salesPaperId, err := strconv.ParseInt(req.SalesPaperId, 10, 64)
 	if err != nil {
 		err = errors.New("参数无效")
 		return
 	}
-
-	err, ok := uc.checkSalesPaper(ctx, iSalesPaperId, l)
+	err, ok := uc.checkSalesPaper(ctx, salesPaperId, l)
 	if !ok {
 		return
 	}
-	err = uc.repo.DeleteSalesPaper(ctx, iSalesPaperId)
+	err = uc.repo.DeleteSalesPaper(ctx, salesPaperId, userId)
 	if err != nil {
 		l.Errorf("DeleteSalesPaper.repo.DeleteSalesPaper Failed, err:%v", err)
 		err = innErr.ErrInternalServer

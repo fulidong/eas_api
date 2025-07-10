@@ -45,7 +45,7 @@ func (r *AdministratorRepo) GetPageList(ctx context.Context, in *v1.GetPageListR
 
 func (r *AdministratorRepo) GetByLoginAccount(ctx context.Context, loginAccount string) (resEntity *entity.Administrator, err error) {
 
-	resEntity, err = GetSingleRecordByScope[entity.Administrator](
+	resEntity, err = getSingleRecordByScope[entity.Administrator](
 		r.data.db.WithContext(ctx).Model(resEntity).Where(" login_account = ? ", loginAccount),
 	)
 	if err != nil {
@@ -63,7 +63,7 @@ func (r *AdministratorRepo) GetListByLoginAccount(ctx context.Context, loginAcco
 }
 
 func (r *AdministratorRepo) GetByUserName(ctx context.Context, userName string) (resEntity *entity.Administrator, err error) {
-	resEntity, err = GetSingleRecordByScope[entity.Administrator](
+	resEntity, err = getSingleRecordByScope[entity.Administrator](
 		r.data.db.WithContext(ctx).Model(resEntity).Where(" user_name = ? ", userName),
 	)
 	if err != nil {
@@ -72,9 +72,8 @@ func (r *AdministratorRepo) GetByUserName(ctx context.Context, userName string) 
 	return resEntity, nil
 }
 
-// 封装查询方法
 func (r *AdministratorRepo) GetByID(ctx context.Context, userId int64) (resEntity *entity.Administrator, err error) {
-	resEntity, err = GetSingleRecordByScope[entity.Administrator](
+	resEntity, err = getSingleRecordByScope[entity.Administrator](
 		r.data.db.WithContext(ctx).Model(resEntity).Where(" id = ? ", userId),
 	)
 	if err != nil {
@@ -83,7 +82,14 @@ func (r *AdministratorRepo) GetByID(ctx context.Context, userId int64) (resEntit
 	return resEntity, nil
 }
 
-// 创建方法
+func (r *AdministratorRepo) GetByIDs(ctx context.Context, userId []int64) (list []*entity.Administrator, err error) {
+	err = r.data.db.WithContext(ctx).Model(&entity.Administrator{}).Where(" id in ? ", userId).Find(&list).Error
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
 func (r *AdministratorRepo) Create(ctx context.Context, admin *entity.Administrator) error {
 	return r.data.db.WithContext(ctx).Create(admin).Error
 }
@@ -95,6 +101,7 @@ func (r *AdministratorRepo) Update(ctx context.Context, user *entity.Administrat
 		"user_name":     user.UserName,
 		"login_account": user.LoginAccount,
 		"email":         user.Email,
+		"updated_by":    user.UpdatedBy,
 	}
 	if !isOwn {
 		updates["status"] = user.Status
@@ -109,10 +116,11 @@ func (r *AdministratorRepo) Update(ctx context.Context, user *entity.Administrat
 }
 
 // 更新激活状态
-func (r *AdministratorRepo) SetUserStatus(ctx context.Context, userId int64, userStatus v1.AccountStatus) error {
+func (r *AdministratorRepo) SetUserStatus(ctx context.Context, userId int64, userStatus v1.AccountStatus, updatedBy int64) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
-		"status": userStatus,
+		"status":     userStatus,
+		"updated_by": updatedBy,
 	}
 
 	// 执行更新
@@ -124,10 +132,11 @@ func (r *AdministratorRepo) SetUserStatus(ctx context.Context, userId int64, use
 }
 
 // 修改密码
-func (r *AdministratorRepo) UpdateUserPassWord(ctx context.Context, userId int64, passWord string) error {
+func (r *AdministratorRepo) UpdateUserPassWord(ctx context.Context, userId int64, passWord string, updatedBy int64) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"hash_password": passWord,
+		"updated_by":    updatedBy,
 	}
 
 	// 执行更新
@@ -139,10 +148,11 @@ func (r *AdministratorRepo) UpdateUserPassWord(ctx context.Context, userId int64
 }
 
 // 删除用户
-func (r *AdministratorRepo) DeleteUser(ctx context.Context, userId int64) error {
+func (r *AdministratorRepo) DeleteUser(ctx context.Context, userId int64, updatedBy int64) error {
 	// 准备更新字段
 	updates := map[string]interface{}{
 		"deleted_at": time.Now(),
+		"updated_by": updatedBy,
 	}
 
 	// 执行更新

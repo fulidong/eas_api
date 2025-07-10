@@ -26,8 +26,8 @@ type Dimension struct {
 	Type             int32          `gorm:"column:type;comment:维度类型：1.能力型 2.性格型" json:"type"`                                    // 维度类型：1.能力型 2.性格型
 	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt        time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy        string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy        string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy        int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy        int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt        gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 

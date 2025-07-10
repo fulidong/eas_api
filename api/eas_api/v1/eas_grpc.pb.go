@@ -60,6 +60,11 @@ type EasServiceClient interface {
 	SetSalesPaperStatus(ctx context.Context, in *SetSalesPaperStatusRequest, opts ...grpc.CallOption) (*SetSalesPaperStatusResponse, error)
 	// 删除试卷
 	DeleteSalesPaper(ctx context.Context, in *DeleteSalesPaperRequest, opts ...grpc.CallOption) (*DeleteSalesPaperResponse, error)
+	// ===============================试卷评语模块=========================================
+	// 保存试卷评语
+	SaveSalesPaperComment(ctx context.Context, in *SaveSalesPaperCommentRequest, opts ...grpc.CallOption) (*SaveSalesPaperCommentResponse, error)
+	// 试卷评语列表
+	GetSalesPaperCommentList(ctx context.Context, in *GetSalesPaperCommentListRequest, opts ...grpc.CallOption) (*GetSalesPaperCommentListResponse, error)
 }
 
 type easServiceClient struct {
@@ -232,6 +237,24 @@ func (c *easServiceClient) DeleteSalesPaper(ctx context.Context, in *DeleteSales
 	return out, nil
 }
 
+func (c *easServiceClient) SaveSalesPaperComment(ctx context.Context, in *SaveSalesPaperCommentRequest, opts ...grpc.CallOption) (*SaveSalesPaperCommentResponse, error) {
+	out := new(SaveSalesPaperCommentResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/SaveSalesPaperComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easServiceClient) GetSalesPaperCommentList(ctx context.Context, in *GetSalesPaperCommentListRequest, opts ...grpc.CallOption) (*GetSalesPaperCommentListResponse, error) {
+	out := new(GetSalesPaperCommentListResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasService/GetSalesPaperCommentList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EasServiceServer is the server API for EasService service.
 // All implementations must embed UnimplementedEasServiceServer
 // for forward compatibility
@@ -274,6 +297,11 @@ type EasServiceServer interface {
 	SetSalesPaperStatus(context.Context, *SetSalesPaperStatusRequest) (*SetSalesPaperStatusResponse, error)
 	// 删除试卷
 	DeleteSalesPaper(context.Context, *DeleteSalesPaperRequest) (*DeleteSalesPaperResponse, error)
+	// ===============================试卷评语模块=========================================
+	// 保存试卷评语
+	SaveSalesPaperComment(context.Context, *SaveSalesPaperCommentRequest) (*SaveSalesPaperCommentResponse, error)
+	// 试卷评语列表
+	GetSalesPaperCommentList(context.Context, *GetSalesPaperCommentListRequest) (*GetSalesPaperCommentListResponse, error)
 	mustEmbedUnimplementedEasServiceServer()
 }
 
@@ -334,6 +362,12 @@ func (UnimplementedEasServiceServer) SetSalesPaperStatus(context.Context, *SetSa
 }
 func (UnimplementedEasServiceServer) DeleteSalesPaper(context.Context, *DeleteSalesPaperRequest) (*DeleteSalesPaperResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSalesPaper not implemented")
+}
+func (UnimplementedEasServiceServer) SaveSalesPaperComment(context.Context, *SaveSalesPaperCommentRequest) (*SaveSalesPaperCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveSalesPaperComment not implemented")
+}
+func (UnimplementedEasServiceServer) GetSalesPaperCommentList(context.Context, *GetSalesPaperCommentListRequest) (*GetSalesPaperCommentListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperCommentList not implemented")
 }
 func (UnimplementedEasServiceServer) mustEmbedUnimplementedEasServiceServer() {}
 
@@ -672,6 +706,42 @@ func _EasService_DeleteSalesPaper_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EasService_SaveSalesPaperComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveSalesPaperCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).SaveSalesPaperComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/SaveSalesPaperComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).SaveSalesPaperComment(ctx, req.(*SaveSalesPaperCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasService_GetSalesPaperCommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSalesPaperCommentListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasServiceServer).GetSalesPaperCommentList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasService/GetSalesPaperCommentList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasServiceServer).GetSalesPaperCommentList(ctx, req.(*GetSalesPaperCommentListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EasService_ServiceDesc is the grpc.ServiceDesc for EasService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -750,6 +820,14 @@ var EasService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteSalesPaper",
 			Handler:    _EasService_DeleteSalesPaper_Handler,
+		},
+		{
+			MethodName: "SaveSalesPaperComment",
+			Handler:    _EasService_SaveSalesPaperComment_Handler,
+		},
+		{
+			MethodName: "GetSalesPaperCommentList",
+			Handler:    _EasService_GetSalesPaperCommentList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

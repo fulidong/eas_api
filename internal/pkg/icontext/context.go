@@ -3,6 +3,7 @@ package icontext
 import (
 	"context"
 	"os"
+	"strconv"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/metadata"
@@ -49,8 +50,16 @@ func WithUserIdKey(ctx context.Context, in string) context.Context {
 	return withValue(ctx, userIdKey, in)
 }
 
-func UserIdFrom(ctx context.Context) (string, bool) {
-	return fromValue(ctx, userIdKey)
+func UserIdFrom(ctx context.Context) (int64, bool) {
+	value, ok := fromValue(ctx, userIdKey)
+	if !ok {
+		return 0, false
+	}
+	userId, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		return 0, false
+	}
+	return userId, userId != 0
 }
 
 func WithUserNameKey(ctx context.Context, in string) context.Context {

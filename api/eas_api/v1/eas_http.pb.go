@@ -24,6 +24,7 @@ const OperationEasServiceCreateUser = "/eas_api.v1.EasService/CreateUser"
 const OperationEasServiceDeleteSalesPaper = "/eas_api.v1.EasService/DeleteSalesPaper"
 const OperationEasServiceDeleteUser = "/eas_api.v1.EasService/DeleteUser"
 const OperationEasServiceGetPageList = "/eas_api.v1.EasService/GetPageList"
+const OperationEasServiceGetSalesPaperCommentList = "/eas_api.v1.EasService/GetSalesPaperCommentList"
 const OperationEasServiceGetSalesPaperDetail = "/eas_api.v1.EasService/GetSalesPaperDetail"
 const OperationEasServiceGetSalesPaperPageList = "/eas_api.v1.EasService/GetSalesPaperPageList"
 const OperationEasServiceGetUsableSalesPaperPageList = "/eas_api.v1.EasService/GetUsableSalesPaperPageList"
@@ -31,6 +32,7 @@ const OperationEasServiceGetUserDetail = "/eas_api.v1.EasService/GetUserDetail"
 const OperationEasServiceGetUserSelfDetail = "/eas_api.v1.EasService/GetUserSelfDetail"
 const OperationEasServiceLogin = "/eas_api.v1.EasService/Login"
 const OperationEasServiceResetUserPassWord = "/eas_api.v1.EasService/ResetUserPassWord"
+const OperationEasServiceSaveSalesPaperComment = "/eas_api.v1.EasService/SaveSalesPaperComment"
 const OperationEasServiceSetSalesPaperStatus = "/eas_api.v1.EasService/SetSalesPaperStatus"
 const OperationEasServiceSetUserStatus = "/eas_api.v1.EasService/SetUserStatus"
 const OperationEasServiceUpdateSalesPaper = "/eas_api.v1.EasService/UpdateSalesPaper"
@@ -51,6 +53,8 @@ type EasServiceHTTPServer interface {
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
 	// GetPageList用户列表
 	GetPageList(context.Context, *GetPageListRequest) (*GetPageListResponse, error)
+	// GetSalesPaperCommentList试卷评语列表
+	GetSalesPaperCommentList(context.Context, *GetSalesPaperCommentListRequest) (*GetSalesPaperCommentListResponse, error)
 	// GetSalesPaperDetail试卷详情
 	GetSalesPaperDetail(context.Context, *GetSalesPaperDetailRequest) (*GetSalesPaperDetailResponse, error)
 	// GetSalesPaperPageList试卷列表
@@ -65,6 +69,9 @@ type EasServiceHTTPServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	// ResetUserPassWord重置用户密码
 	ResetUserPassWord(context.Context, *ResetUserPassWordRequest) (*ResetUserPassWordResponse, error)
+	// SaveSalesPaperComment===============================试卷评语模块=========================================
+	//保存试卷评语
+	SaveSalesPaperComment(context.Context, *SaveSalesPaperCommentRequest) (*SaveSalesPaperCommentResponse, error)
 	// SetSalesPaperStatus禁用/启用试卷
 	SetSalesPaperStatus(context.Context, *SetSalesPaperStatusRequest) (*SetSalesPaperStatusResponse, error)
 	// SetUserStatus禁用/启用用户
@@ -87,8 +94,8 @@ func RegisterEasServiceHTTPServer(s *http.Server, srv EasServiceHTTPServer) {
 	r.GET("/v1/user/detail", _EasService_GetUserDetail0_HTTP_Handler(srv))
 	r.GET("/v1/user/detail_self", _EasService_GetUserSelfDetail0_HTTP_Handler(srv))
 	r.POST("/v1/user/set_status", _EasService_SetUserStatus0_HTTP_Handler(srv))
-	r.POST("/v1/user/update_user", _EasService_UpdateUser0_HTTP_Handler(srv))
-	r.POST("/v1/user/update_user_self", _EasService_UpdateUserSelf0_HTTP_Handler(srv))
+	r.POST("/v1/user/update", _EasService_UpdateUser0_HTTP_Handler(srv))
+	r.POST("/v1/user/update_self", _EasService_UpdateUserSelf0_HTTP_Handler(srv))
 	r.POST("/v1/user/reset_password", _EasService_ResetUserPassWord0_HTTP_Handler(srv))
 	r.POST("/v1/user/update_password", _EasService_UpdateUserPassWord0_HTTP_Handler(srv))
 	r.POST("/v1/user/delete", _EasService_DeleteUser0_HTTP_Handler(srv))
@@ -96,9 +103,11 @@ func RegisterEasServiceHTTPServer(s *http.Server, srv EasServiceHTTPServer) {
 	r.GET("/v1/sales_pager/page_list", _EasService_GetSalesPaperPageList0_HTTP_Handler(srv))
 	r.GET("/v1/sales_pager/usable_page_list", _EasService_GetUsableSalesPaperPageList0_HTTP_Handler(srv))
 	r.GET("/v1/sales_pager/detail", _EasService_GetSalesPaperDetail0_HTTP_Handler(srv))
-	r.POST("/v1/user/update_sales_paper", _EasService_UpdateSalesPaper0_HTTP_Handler(srv))
+	r.POST("/v1/sales_pager/update", _EasService_UpdateSalesPaper0_HTTP_Handler(srv))
 	r.POST("/v1/sales_pager/set_status", _EasService_SetSalesPaperStatus0_HTTP_Handler(srv))
 	r.POST("/v1/sales_pager/delete", _EasService_DeleteSalesPaper0_HTTP_Handler(srv))
+	r.POST("/v1/sales_pager_comment/save", _EasService_SaveSalesPaperComment0_HTTP_Handler(srv))
+	r.GET("/v1/sales_pager_comment/list", _EasService_GetSalesPaperCommentList0_HTTP_Handler(srv))
 }
 
 func _EasService_Login0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
@@ -479,12 +488,54 @@ func _EasService_DeleteSalesPaper0_HTTP_Handler(srv EasServiceHTTPServer) func(c
 	}
 }
 
+func _EasService_SaveSalesPaperComment0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SaveSalesPaperCommentRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasServiceSaveSalesPaperComment)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SaveSalesPaperComment(ctx, req.(*SaveSalesPaperCommentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SaveSalesPaperCommentResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _EasService_GetSalesPaperCommentList0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetSalesPaperCommentListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasServiceGetSalesPaperCommentList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetSalesPaperCommentList(ctx, req.(*GetSalesPaperCommentListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetSalesPaperCommentListResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EasServiceHTTPClient interface {
 	CreateSalesPaper(ctx context.Context, req *CreateSalesPaperRequest, opts ...http.CallOption) (rsp *CreateSalesPaperResponse, err error)
 	CreateUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserResponse, err error)
 	DeleteSalesPaper(ctx context.Context, req *DeleteSalesPaperRequest, opts ...http.CallOption) (rsp *DeleteSalesPaperResponse, err error)
 	DeleteUser(ctx context.Context, req *DeleteUserRequest, opts ...http.CallOption) (rsp *DeleteUserResponse, err error)
 	GetPageList(ctx context.Context, req *GetPageListRequest, opts ...http.CallOption) (rsp *GetPageListResponse, err error)
+	GetSalesPaperCommentList(ctx context.Context, req *GetSalesPaperCommentListRequest, opts ...http.CallOption) (rsp *GetSalesPaperCommentListResponse, err error)
 	GetSalesPaperDetail(ctx context.Context, req *GetSalesPaperDetailRequest, opts ...http.CallOption) (rsp *GetSalesPaperDetailResponse, err error)
 	GetSalesPaperPageList(ctx context.Context, req *GetSalesPaperPageListRequest, opts ...http.CallOption) (rsp *GetSalesPaperPageListResponse, err error)
 	GetUsableSalesPaperPageList(ctx context.Context, req *GetUsableSalesPaperPageListRequest, opts ...http.CallOption) (rsp *GetUsableSalesPaperPageListResponse, err error)
@@ -492,6 +543,7 @@ type EasServiceHTTPClient interface {
 	GetUserSelfDetail(ctx context.Context, req *GetUserSelfDetailRequest, opts ...http.CallOption) (rsp *GetUserSelfDetailResponse, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginResponse, err error)
 	ResetUserPassWord(ctx context.Context, req *ResetUserPassWordRequest, opts ...http.CallOption) (rsp *ResetUserPassWordResponse, err error)
+	SaveSalesPaperComment(ctx context.Context, req *SaveSalesPaperCommentRequest, opts ...http.CallOption) (rsp *SaveSalesPaperCommentResponse, err error)
 	SetSalesPaperStatus(ctx context.Context, req *SetSalesPaperStatusRequest, opts ...http.CallOption) (rsp *SetSalesPaperStatusResponse, err error)
 	SetUserStatus(ctx context.Context, req *SetUserStatusRequest, opts ...http.CallOption) (rsp *SetUserStatusResponse, err error)
 	UpdateSalesPaper(ctx context.Context, req *UpdateSalesPaperRequest, opts ...http.CallOption) (rsp *UpdateSalesPaperResponse, err error)
@@ -565,6 +617,19 @@ func (c *EasServiceHTTPClientImpl) GetPageList(ctx context.Context, in *GetPageL
 	pattern := "/v1/user/page_list"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationEasServiceGetPageList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *EasServiceHTTPClientImpl) GetSalesPaperCommentList(ctx context.Context, in *GetSalesPaperCommentListRequest, opts ...http.CallOption) (*GetSalesPaperCommentListResponse, error) {
+	var out GetSalesPaperCommentListResponse
+	pattern := "/v1/sales_pager_comment/list"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationEasServiceGetSalesPaperCommentList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -664,6 +729,19 @@ func (c *EasServiceHTTPClientImpl) ResetUserPassWord(ctx context.Context, in *Re
 	return &out, nil
 }
 
+func (c *EasServiceHTTPClientImpl) SaveSalesPaperComment(ctx context.Context, in *SaveSalesPaperCommentRequest, opts ...http.CallOption) (*SaveSalesPaperCommentResponse, error) {
+	var out SaveSalesPaperCommentResponse
+	pattern := "/v1/sales_pager_comment/save"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEasServiceSaveSalesPaperComment))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 func (c *EasServiceHTTPClientImpl) SetSalesPaperStatus(ctx context.Context, in *SetSalesPaperStatusRequest, opts ...http.CallOption) (*SetSalesPaperStatusResponse, error) {
 	var out SetSalesPaperStatusResponse
 	pattern := "/v1/sales_pager/set_status"
@@ -692,7 +770,7 @@ func (c *EasServiceHTTPClientImpl) SetUserStatus(ctx context.Context, in *SetUse
 
 func (c *EasServiceHTTPClientImpl) UpdateSalesPaper(ctx context.Context, in *UpdateSalesPaperRequest, opts ...http.CallOption) (*UpdateSalesPaperResponse, error) {
 	var out UpdateSalesPaperResponse
-	pattern := "/v1/user/update_sales_paper"
+	pattern := "/v1/sales_pager/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceUpdateSalesPaper))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -705,7 +783,7 @@ func (c *EasServiceHTTPClientImpl) UpdateSalesPaper(ctx context.Context, in *Upd
 
 func (c *EasServiceHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...http.CallOption) (*UpdateUserResponse, error) {
 	var out UpdateUserResponse
-	pattern := "/v1/user/update_user"
+	pattern := "/v1/user/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceUpdateUser))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -731,7 +809,7 @@ func (c *EasServiceHTTPClientImpl) UpdateUserPassWord(ctx context.Context, in *U
 
 func (c *EasServiceHTTPClientImpl) UpdateUserSelf(ctx context.Context, in *UpdateUserSelfRequest, opts ...http.CallOption) (*UpdateUserSelfResponse, error) {
 	var out UpdateUserSelfResponse
-	pattern := "/v1/user/update_user_self"
+	pattern := "/v1/user/update_self"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceUpdateUserSelf))
 	opts = append(opts, http.PathTemplate(pattern))

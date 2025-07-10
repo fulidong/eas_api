@@ -22,8 +22,8 @@ type ExamineeAnswerQuestionAnswer struct {
 	OptionSign       string         `gorm:"column:option_sign;comment:选项标记：例如ABCD" json:"option_sign"`                           // 选项标记：例如ABCD
 	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt        time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy        string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy        string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	CreatedBy        int64          `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy        int64          `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
 	DeletedAt        gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 
