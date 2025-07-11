@@ -49,7 +49,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 	//判断账号是否存在
 	user, err := uc.repo.GetByLoginAccount(ctx, req.LoginAccount)
 	if err != nil {
-		l.Errorf("CreateUser.repo.GetByLoginAccount Failed, req:%v", req)
+		l.Errorf("CreateUser.repo.GetByLoginAccount Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	if user != nil {
@@ -58,7 +58,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 	//判断用户名是否存在
 	user, err = uc.repo.GetByUserName(ctx, req.UserName)
 	if err != nil {
-		l.Errorf("CreateUser.repo.GetByUserName Failed, req:%v", req)
+		l.Errorf("CreateUser.repo.GetByUserName Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	if user != nil {
@@ -71,7 +71,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 	}
 	hashed, err := isecurity.HashPassword(req.PassWord)
 	if err != nil {
-		l.Errorf("CreateUser.isecurity.HashPassword Failed, req:%v", req)
+		l.Errorf("CreateUser.isecurity.HashPassword Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 
@@ -88,7 +88,7 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 	}
 	err = uc.repo.Create(ctx, administrator)
 	if err != nil {
-		l.Errorf("CreateUser.repo.Create Failed, req:%v", req)
+		l.Errorf("CreateUser.repo.Create Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	return resp, nil
@@ -102,7 +102,7 @@ func (uc *UserUseCase) GetPageList(ctx context.Context, req *v1.GetPageListReque
 	}
 	res, total, err := uc.repo.GetPageList(ctx, req)
 	if err != nil {
-		l.Errorf("GetPageList.repo.GetPageList Failed, req:%v", req)
+		l.Errorf("GetPageList.repo.GetPageList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -112,9 +112,9 @@ func (uc *UserUseCase) GetPageList(ctx context.Context, req *v1.GetPageListReque
 	})
 	if len(updatedIds) > 0 {
 		userMap = make(map[string]*entity.Administrator, len(updatedIds))
-		userList, err := uc.repo.GetByIDs(ctx, updatedIds)
-		if err != nil {
-			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v", updatedIds)
+		userList, e := uc.repo.GetByIDs(ctx, updatedIds)
+		if e != nil {
+			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v, err:%v", updatedIds, e.Error())
 			err = innErr.ErrInternalServer
 			return resp, err
 		}
@@ -152,7 +152,7 @@ func (uc *UserUseCase) GetUserDetail(ctx context.Context, req *v1.GetUserDetailR
 	}
 	res, err := uc.repo.GetByID(ctx, req.UserId)
 	if err != nil {
-		l.Errorf("GetUserDetail.repo.GetByID Failed, err:%v", err)
+		l.Errorf("GetUserDetail.repo.GetByID Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -185,7 +185,7 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest
 	}
 	list, err := uc.repo.GetListByLoginAccount(ctx, req.LoginAccount)
 	if err != nil {
-		l.Errorf("UpdateUser.repo.GetListByLoginAccount Failed, err:%v ", err)
+		l.Errorf("UpdateUser.repo.GetListByLoginAccount Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -205,7 +205,7 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest
 		UpdatedBy:    curUserId,
 	}, false)
 	if err != nil {
-		l.Errorf("UpdateUser.repo.Update Failed, err:%v", err)
+		l.Errorf("UpdateUser.repo.Update Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -221,7 +221,7 @@ func (uc *UserUseCase) SetUserStatus(ctx context.Context, req *v1.SetUserStatusR
 	curUserId, _ := icontext.UserIdFrom(ctx)
 	err = uc.repo.SetUserStatus(ctx, req.UserId, req.UserStatus, curUserId)
 	if err != nil {
-		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, err:%v", err)
+		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -237,13 +237,13 @@ func (uc *UserUseCase) ResetUserPassWord(ctx context.Context, req *v1.ResetUserP
 	curUserId, _ := icontext.UserIdFrom(ctx)
 	hashPassWord, err := isecurity.HashPassword(req.PassWord)
 	if err != nil {
-		l.Errorf("ResetUserPassWord.isecurity.HashPassword Failed, err:%v", err)
+		l.Errorf("ResetUserPassWord.isecurity.HashPassword Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
 	err = uc.repo.UpdateUserPassWord(ctx, req.UserId, hashPassWord, curUserId)
 	if err != nil {
-		l.Errorf("ResetUserPassWord.repo.UpdateUserPassWord Failed, err:%v", err)
+		l.Errorf("ResetUserPassWord.repo.UpdateUserPassWord Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -259,7 +259,7 @@ func (uc *UserUseCase) DeleteUser(ctx context.Context, req *v1.DeleteUserRequest
 	curUserId, _ := icontext.UserIdFrom(ctx)
 	err = uc.repo.DeleteUser(ctx, req.UserId, curUserId)
 	if err != nil {
-		l.Errorf("DeleteUser.repo.DeleteUser Failed, err:%v", err)
+		l.Errorf("DeleteUser.repo.DeleteUser Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -276,7 +276,7 @@ func (uc *UserUseCase) GetUserSelfDetail(ctx context.Context, req *v1.GetUserSel
 	}
 	res, err := uc.repo.GetByID(ctx, userId)
 	if err != nil {
-		l.Errorf("GetUserSelfDetail.repo.GetByID Failed, err:%v", err)
+		l.Errorf("GetUserSelfDetail.repo.GetByID Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -306,7 +306,7 @@ func (uc *UserUseCase) UpdateUserSelf(ctx context.Context, req *v1.UpdateUserSel
 	}
 	list, err := uc.repo.GetListByLoginAccount(ctx, req.LoginAccount)
 	if err != nil {
-		l.Errorf("UpdateUserSelf.repo.GetListByLoginAccount Failed, err:%v ", err)
+		l.Errorf("UpdateUserSelf.repo.GetListByLoginAccount Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -324,7 +324,7 @@ func (uc *UserUseCase) UpdateUserSelf(ctx context.Context, req *v1.UpdateUserSel
 		UpdatedBy:    userId,
 	}, true)
 	if err != nil {
-		l.Errorf("UpdateUserSelf.repo.Update Failed, err:%v", err)
+		l.Errorf("UpdateUserSelf.repo.Update Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -350,13 +350,13 @@ func (uc *UserUseCase) UpdateUserPassWord(ctx context.Context, req *v1.UpdateUse
 	}
 	hashPassWord, err := isecurity.HashPassword(req.NewPassWord)
 	if err != nil {
-		l.Errorf("UpdateUserPassWord.isecurity.HashPassword Failed, err:%v", err)
+		l.Errorf("UpdateUserPassWord.isecurity.HashPassword Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
 	err = uc.repo.UpdateUserPassWord(ctx, userId, hashPassWord, userId)
 	if err != nil {
-		l.Errorf("UpdateUserPassWord.repo.UpdateUserPassWord Failed, err:%v", err)
+		l.Errorf("UpdateUserPassWord.repo.UpdateUserPassWord Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}

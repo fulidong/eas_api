@@ -441,6 +441,13 @@ components:
                     type: boolean
                 mark:
                     type: string
+                expression:
+                    type: string
+                rounding:
+                    type: integer
+                    format: int32
+                is_sum_score:
+                    type: boolean
             description: ===============================试卷模块=========================================
         eas_api.v1.CreateSalesPaperResponse:
             type: object
@@ -589,12 +596,19 @@ components:
                 min_score:
                     type: number
                     format: double
+                expression:
+                    type: string
+                rounding:
+                    type: integer
+                    format: int32
                 is_enabled:
                     type: boolean
                 is_used:
                     type: boolean
                 mark:
                     type: string
+                is_sum_score:
+                    type: boolean
                 updated_at:
                     type: string
                 updated_by:
@@ -666,6 +680,13 @@ components:
                     type: boolean
                 mark:
                     type: string
+                expression:
+                    type: string
+                rounding:
+                    type: integer
+                    format: int32
+                is_sum_score:
+                    type: boolean
         eas_api.v1.UpdateSalesPaperResponse:
             type: object
             properties: {}

@@ -16,3 +16,7 @@ data:
   jwt:
     access_secret: "!@#eas#@!"
     access_token_expire_minutes: 120
+  standard_score_formula_config:
+    expression: "5.5 + 2 * (raw_score - average_mark) / standard_mark"
+    rounding: 1
+

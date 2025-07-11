@@ -40,7 +40,12 @@ message Data {
     string access_secret = 1;
     int64 access_token_expire_minutes = 2;
   }
+  message StandardScoreFormulaConfig {
+    string expression = 1;
+    int64 rounding = 2;
+  }
   Database database = 1;
   Redis redis = 2;
   JWT jwt = 3;
+  StandardScoreFormulaConfig standard_score_formula_config = 4;
 }

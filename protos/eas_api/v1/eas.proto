@@ -558,5 +558,137 @@ service EasService {
     };
   };
 
+//
+//  //===============================试卷维度模块=========================================
+//  //创建试卷维度
+//  rpc CreateDimension(CreateDimensionRequest) returns (CreateDimensionResponse){
+//    option (google.api.http)={post:"/v1/dimension/create", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建维度",tags: ["维度模块"],
+//      parameters: {
+//        headers: [
+//          {
+//            name: "X-Forwarded-For"
+//            type: STRING,
+//            description: "客户端IP"
+//          },
+//          {
+//            name: "UserKey"
+//            type: STRING,
+//            description: "用户token"
+//          },
+//          {
+//            name: "X-Request-Id"
+//            type: STRING,
+//            description: "request_id"
+//          }
+//        ]
+//      };
+//    };
+//  };
+//
+//  //试卷维度列表
+//  rpc GetDimensionPageList(GetDimensionPageListRequest) returns (GetDimensionPageListResponse){
+//    option (google.api.http)={get:"/v1/dimension/page_list"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度列表",tags: ["试卷维度模块"],
+//      parameters: {
+//        headers: [
+//          {
+//            name: "X-Forwarded-For"
+//            type: STRING,
+//            description: "客户端IP"
+//          },
+//          {
+//            name: "UserKey"
+//            type: STRING,
+//            description: "用户token"
+//          },
+//          {
+//            name: "X-Request-Id"
+//            type: STRING,
+//            description: "request_id"
+//          }
+//        ]
+//      };
+//    };
+//  };
+//
+//  //试卷维度详情
+//  rpc GetDimensionDetail(GetDimensionDetailRequest) returns (GetDimensionDetailResponse){
+//    option (google.api.http)={get:"/v1/dimension/detail"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度详情",tags: ["试卷维度模块"],
+//      parameters: {
+//        headers: [
+//          {
+//            name: "X-Forwarded-For"
+//            type: STRING,
+//            description: "客户端IP"
+//          },
+//          {
+//            name: "UserKey"
+//            type: STRING,
+//            description: "用户token"
+//          },
+//          {
+//            name: "X-Request-Id"
+//            type: STRING,
+//            description: "request_id"
+//          }
+//        ]
+//      };
+//    };
+//  };
+//
+//
+//  //修改试卷维度信息
+//  rpc UpdateDimension(UpdateDimensionRequest) returns (UpdateDimensionResponse){
+//    option (google.api.http)={post:"/v1/dimension/update", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷维度信息",tags: ["试卷维度模块"],
+//      parameters: {
+//        headers: [
+//          {
+//            name: "X-Forwarded-For"
+//            type: STRING,
+//            description: "客户端IP"
+//          },
+//          {
+//            name: "UserKey"
+//            type: STRING,
+//            description: "用户token"
+//          },
+//          {
+//            name: "X-Request-Id"
+//            type: STRING,
+//            description: "request_id"
+//          }
+//        ]
+//      };
+//    };
+//  };
+//
+//  //删除试卷维度
+//  rpc DeleteDimension(DeleteDimensionRequest) returns (DeleteDimensionResponse){
+//    option (google.api.http)={post:"/v1/dimension/delete", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷维度",tags: ["试卷维度模块"],
+//      parameters: {
+//        headers: [
+//          {
+//            name: "X-Forwarded-For"
+//            type: STRING,
+//            description: "客户端IP"
+//          },
+//          {
+//            name: "UserKey"
+//            type: STRING,
+//            description: "用户token"
+//          },
+//          {
+//            name: "X-Request-Id"
+//            type: STRING,
+//            description: "request_id"
+//          }
+//        ]
+//      };
+//    };
+//  };
 }
 

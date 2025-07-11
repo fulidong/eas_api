@@ -68,7 +68,7 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 
 	err = uc.repo.SaveSalesPaperComment(ctx, addComments, updateComments, delComments, userId)
 	if err != nil {
-		l.Errorf("SaveSalesPaperComment.repo.SaveSalesPaperComment Failed, req:%v, err:%v", req, err)
+		l.Errorf("SaveSalesPaperComment.repo.SaveSalesPaperComment Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	return resp, nil

@@ -95,6 +95,9 @@ func (r *SalesPaperRepo) Update(ctx context.Context, salesPaper *entity.SalesPap
 		"min_score":          salesPaper.MinScore,
 		"is_enabled":         salesPaper.IsEnabled,
 		"mark":               salesPaper.Mark,
+		"expression":         salesPaper.Expression,
+		"rounding":           salesPaper.Rounding,
+		"is_sum_score":       salesPaper.IsSumScore,
 	}
 	// 执行更新
 	err := r.data.db.WithContext(ctx).Model(&entity.SalesPaper{}).

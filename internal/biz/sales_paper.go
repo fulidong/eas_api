@@ -7,6 +7,7 @@ import (
 	"eas_api/internal/data/entity"
 	"eas_api/internal/pkg/icontext"
 	innErr "eas_api/internal/pkg/ierrors"
+	"eas_api/internal/pkg/iformula"
 	"eas_api/internal/pkg/isnowflake"
 	"eas_api/internal/pkg/iutils"
 	"errors"
@@ -45,11 +46,18 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 	//判断试卷是否存在
 	salesPaperList, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperName)
 	if err != nil {
-		l.Errorf("CreateSalesPaper.repo.GetBySalesPaperName Failed, req:%v", req)
+		l.Errorf("CreateSalesPaper.repo.GetBySalesPaperName Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	if len(salesPaperList) > 0 {
 		return resp, errors.New("该试卷已存在！")
+	}
+
+	if len(req.Expression) > 0 {
+		if e := iformula.ValidateExpression(req.Expression, _const.AllowedVars); e != nil {
+			err = e
+			return resp, err
+		}
 	}
 
 	id, err := isnowflake.SnowFlake.NextID(_const.SalesPaperPrefix)
@@ -65,12 +73,15 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 		MinScore:         req.MinScore,
 		IsEnabled:        req.IsEnabled,
 		Mark:             req.Mark,
+		Expression:       req.Expression,
+		Rounding:         req.Rounding,
+		IsSumScore:       req.IsSumScore,
 		CreatedBy:        curUserId,
 		UpdatedBy:        curUserId,
 	}
 	err = uc.repo.Create(ctx, salesPaper)
 	if err != nil {
-		l.Errorf("CreateSalesPaper.repo.Create Failed, req:%v", req)
+		l.Errorf("CreateSalesPaper.repo.Create Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	return resp, nil
@@ -84,7 +95,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 	}
 	res, total, err := uc.repo.GetPageList(ctx, req)
 	if err != nil {
-		l.Errorf("GetSalesPaperPageList.repo.GetPageList Failed, req:%v", req)
+		l.Errorf("GetSalesPaperPageList.repo.GetPageList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -94,11 +105,11 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 	})
 	if len(updatedIds) > 0 {
 		userMap = make(map[string]*entity.Administrator, len(updatedIds))
-		userList, err := uc.userRepo.GetByIDs(ctx, updatedIds)
-		if err != nil {
-			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v", updatedIds)
+		userList, e := uc.userRepo.GetByIDs(ctx, updatedIds)
+		if e != nil {
+			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v, err:%v", updatedIds, err.Error())
 			err = innErr.ErrInternalServer
-			return resp, err
+			return
 		}
 		for _, administrator := range userList {
 			userMap[administrator.ID] = administrator
@@ -119,6 +130,9 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 			IsEnabled:        re.IsEnabled,
 			IsUsed:           re.IsUsed,
 			Mark:             re.Mark,
+			Expression:       re.Expression,
+			Rounding:         re.Rounding,
+			IsSumScore:       re.IsSumScore,
 			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
 			UpdatedBy:        updatedBy,
 		}
@@ -135,7 +149,7 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 	}
 	res, total, err := uc.repo.GetUsablePageList(ctx, req)
 	if err != nil {
-		l.Errorf("GetSalesPaperPageList.repo.GetPageList Failed, req:%v", req)
+		l.Errorf("GetSalesPaperPageList.repo.GetPageList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -150,6 +164,7 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 			IsEnabled:        re.IsEnabled,
 			IsUsed:           re.IsUsed,
 			Mark:             re.Mark,
+			IsSumScore:       re.IsSumScore,
 			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
 		}
 		resp.SalesPaperList = append(resp.SalesPaperList, cur)
@@ -165,7 +180,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 	}
 	res, err := uc.repo.GetByID(ctx, req.SalesPaperId)
 	if err != nil {
-		l.Errorf("GetSalesPaperDetail.repo.GetByID Failed, err:%v", err)
+		l.Errorf("GetSalesPaperDetail.repo.GetByID Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -182,6 +197,9 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 		IsEnabled:        res.IsEnabled,
 		IsUsed:           res.IsUsed,
 		Mark:             res.Mark,
+		Expression:       res.Expression,
+		Rounding:         res.Rounding,
+		IsSumScore:       res.IsSumScore,
 		UpdatedAt:        res.UpdatedAt.Format(time.DateTime),
 	}
 	return
@@ -204,13 +222,18 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 	}
 	list, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperName)
 	if err != nil {
-		l.Errorf("UpdateSalesPaper.repo.GetBySalesPaperName Failed, err:%v ", err)
+		l.Errorf("UpdateSalesPaper.repo.GetBySalesPaperName Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
 	for _, salesPaper := range list {
 		if salesPaper.ID != req.SalesPaperId {
 			err = errors.New("试卷名已存在")
+			return
+		}
+	}
+	if len(req.Expression) > 0 {
+		if err = iformula.ValidateExpression(req.Expression, _const.AllowedVars); err != nil {
 			return
 		}
 	}
@@ -222,10 +245,13 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		MinScore:         req.MinScore,
 		IsEnabled:        req.IsEnabled,
 		Mark:             req.Mark,
+		Expression:       req.Expression,
+		Rounding:         req.Rounding,
+		IsSumScore:       req.IsSumScore,
 		UpdatedBy:        userId,
 	})
 	if err != nil {
-		l.Errorf("UpdateSalesPaper.repo.Update Failed, err:%v", err)
+		l.Errorf("UpdateSalesPaper.repo.Update Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -245,7 +271,7 @@ func (uc *SalesPaperUseCase) SetSalesPaperStatus(ctx context.Context, req *v1.Se
 	}
 	err = uc.repo.SetSalesPaperStatus(ctx, req.SalesPaperId, req.SalesPaperStatus, userId)
 	if err != nil {
-		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, err:%v", err)
+		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -265,7 +291,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 	}
 	err = uc.repo.DeleteSalesPaper(ctx, req.SalesPaperId, userId)
 	if err != nil {
-		l.Errorf("DeleteSalesPaper.repo.DeleteSalesPaper Failed, err:%v", err)
+		l.Errorf("DeleteSalesPaper.repo.DeleteSalesPaper Failed, req:%v, err:%v", err, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -275,7 +301,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 func (uc *SalesPaperUseCase) checkSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (error, bool) {
 	salesPaper, err := uc.repo.GetByID(ctx, iSalesPaperId)
 	if err != nil {
-		l.Errorf("UpdateSalesPaper.repo.GetByID Failed, err:%v ", err)
+		l.Errorf("UpdateSalesPaper.repo.GetByID Failed, req:%v, err:%v", err, err.Error())
 		err = innErr.ErrInternalServer
 		return nil, false
 	}

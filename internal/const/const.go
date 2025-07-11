@@ -6,3 +6,9 @@ const (
 	SalesPaperPrefix        = "SPP"
 	SalesPaperCommentPrefix = "SPCP"
 )
+
+var AllowedVars = map[string]interface{}{
+	"raw_score":     0.0,
+	"average_mark":  0.0,
+	"standard_mark": 0.0,
+}

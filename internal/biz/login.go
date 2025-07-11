@@ -32,7 +32,7 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 	l := uc.log.WithContext(ctx)
 	user, err := uc.repo.GetByLoginAccount(ctx, req.LoginAccount)
 	if err != nil {
-		l.Errorf("Login.repo.GetByLoginAccount Failed, req:%v", req)
+		l.Errorf("Login.repo.GetByLoginAccount Failed, req:%v, err:%v", req, err.Error())
 		return nil, err
 	}
 	if user == nil {

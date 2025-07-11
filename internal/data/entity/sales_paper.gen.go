@@ -21,6 +21,9 @@ type SalesPaper struct {
 	MinScore         float64        `gorm:"column:min_score;not null;default:0.00;comment:最低分数下限" json:"min_score"`              // 最低分数下限
 	IsEnabled        bool           `gorm:"column:is_enabled;not null;comment:是否启用" json:"is_enabled"`                           // 是否启用
 	IsUsed           bool           `gorm:"column:is_used;not null;comment:是否已使用" json:"is_used"`                                // 是否已使用
+	Expression       string         `gorm:"column:expression;not null;comment:标准分计算公式" json:"expression"`                        // 标准分计算公式
+	Rounding         int32          `gorm:"column:rounding;not null;default:1;comment:保留小数位" json:"rounding"`                    // 保留小数位
+	IsSumScore       bool           `gorm:"column:is_sum_score;not null;comment:是否需要总分" json:"is_sum_score"`                     // 是否需要总分
 	Mark             string         `gorm:"column:mark;not null;comment:备注" json:"mark"`                                         // 备注
 	CreatedAt        time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt        time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
