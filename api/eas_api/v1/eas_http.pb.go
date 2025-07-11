@@ -8,6 +8,7 @@ package v1
 
 import (
 	context "context"
+	common "eas_api/api/common"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -19,65 +20,38 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationEasServiceCreateSalesPaper = "/eas_api.v1.EasService/CreateSalesPaper"
 const OperationEasServiceCreateUser = "/eas_api.v1.EasService/CreateUser"
-const OperationEasServiceDeleteSalesPaper = "/eas_api.v1.EasService/DeleteSalesPaper"
 const OperationEasServiceDeleteUser = "/eas_api.v1.EasService/DeleteUser"
 const OperationEasServiceGetPageList = "/eas_api.v1.EasService/GetPageList"
-const OperationEasServiceGetSalesPaperCommentList = "/eas_api.v1.EasService/GetSalesPaperCommentList"
-const OperationEasServiceGetSalesPaperDetail = "/eas_api.v1.EasService/GetSalesPaperDetail"
-const OperationEasServiceGetSalesPaperPageList = "/eas_api.v1.EasService/GetSalesPaperPageList"
-const OperationEasServiceGetUsableSalesPaperPageList = "/eas_api.v1.EasService/GetUsableSalesPaperPageList"
 const OperationEasServiceGetUserDetail = "/eas_api.v1.EasService/GetUserDetail"
 const OperationEasServiceGetUserSelfDetail = "/eas_api.v1.EasService/GetUserSelfDetail"
+const OperationEasServiceHealthy = "/eas_api.v1.EasService/Healthy"
 const OperationEasServiceLogin = "/eas_api.v1.EasService/Login"
 const OperationEasServiceResetUserPassWord = "/eas_api.v1.EasService/ResetUserPassWord"
-const OperationEasServiceSaveSalesPaperComment = "/eas_api.v1.EasService/SaveSalesPaperComment"
-const OperationEasServiceSetSalesPaperStatus = "/eas_api.v1.EasService/SetSalesPaperStatus"
 const OperationEasServiceSetUserStatus = "/eas_api.v1.EasService/SetUserStatus"
-const OperationEasServiceUpdateSalesPaper = "/eas_api.v1.EasService/UpdateSalesPaper"
 const OperationEasServiceUpdateUser = "/eas_api.v1.EasService/UpdateUser"
 const OperationEasServiceUpdateUserPassWord = "/eas_api.v1.EasService/UpdateUserPassWord"
 const OperationEasServiceUpdateUserSelf = "/eas_api.v1.EasService/UpdateUserSelf"
 
 type EasServiceHTTPServer interface {
-	// CreateSalesPaper===============================试卷模块=========================================
-	//创建试卷
-	CreateSalesPaper(context.Context, *CreateSalesPaperRequest) (*CreateSalesPaperResponse, error)
 	// CreateUser===============================用户模块=========================================
 	//创建用户
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	// DeleteSalesPaper删除试卷
-	DeleteSalesPaper(context.Context, *DeleteSalesPaperRequest) (*DeleteSalesPaperResponse, error)
 	// DeleteUser删除
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
 	// GetPageList用户列表
 	GetPageList(context.Context, *GetPageListRequest) (*GetPageListResponse, error)
-	// GetSalesPaperCommentList试卷评语列表
-	GetSalesPaperCommentList(context.Context, *GetSalesPaperCommentListRequest) (*GetSalesPaperCommentListResponse, error)
-	// GetSalesPaperDetail试卷详情
-	GetSalesPaperDetail(context.Context, *GetSalesPaperDetailRequest) (*GetSalesPaperDetailResponse, error)
-	// GetSalesPaperPageList试卷列表
-	GetSalesPaperPageList(context.Context, *GetSalesPaperPageListRequest) (*GetSalesPaperPageListResponse, error)
-	// GetUsableSalesPaperPageList可用试卷列表
-	GetUsableSalesPaperPageList(context.Context, *GetUsableSalesPaperPageListRequest) (*GetUsableSalesPaperPageListResponse, error)
 	// GetUserDetail用户详情
 	GetUserDetail(context.Context, *GetUserDetailRequest) (*GetUserDetailResponse, error)
 	// GetUserSelfDetail查询用户个人信息
 	GetUserSelfDetail(context.Context, *GetUserSelfDetailRequest) (*GetUserSelfDetailResponse, error)
+	Healthy(context.Context, *common.EmptyRequest) (*common.HealthyReply, error)
 	// Login 登录
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	// ResetUserPassWord重置用户密码
 	ResetUserPassWord(context.Context, *ResetUserPassWordRequest) (*ResetUserPassWordResponse, error)
-	// SaveSalesPaperComment===============================试卷评语模块=========================================
-	//保存试卷评语
-	SaveSalesPaperComment(context.Context, *SaveSalesPaperCommentRequest) (*SaveSalesPaperCommentResponse, error)
-	// SetSalesPaperStatus禁用/启用试卷
-	SetSalesPaperStatus(context.Context, *SetSalesPaperStatusRequest) (*SetSalesPaperStatusResponse, error)
 	// SetUserStatus禁用/启用用户
 	SetUserStatus(context.Context, *SetUserStatusRequest) (*SetUserStatusResponse, error)
-	// UpdateSalesPaper修改试卷信息
-	UpdateSalesPaper(context.Context, *UpdateSalesPaperRequest) (*UpdateSalesPaperResponse, error)
 	// UpdateUser修改用户信息
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	// UpdateUserPassWord修改密码
@@ -88,6 +62,7 @@ type EasServiceHTTPServer interface {
 
 func RegisterEasServiceHTTPServer(s *http.Server, srv EasServiceHTTPServer) {
 	r := s.Route("/")
+	r.GET("/healthz", _EasService_Healthy0_HTTP_Handler(srv))
 	r.POST("/v1/eas/login", _EasService_Login0_HTTP_Handler(srv))
 	r.POST("/v1/user/create", _EasService_CreateUser0_HTTP_Handler(srv))
 	r.GET("/v1/user/page_list", _EasService_GetPageList0_HTTP_Handler(srv))
@@ -99,15 +74,25 @@ func RegisterEasServiceHTTPServer(s *http.Server, srv EasServiceHTTPServer) {
 	r.POST("/v1/user/reset_password", _EasService_ResetUserPassWord0_HTTP_Handler(srv))
 	r.POST("/v1/user/update_password", _EasService_UpdateUserPassWord0_HTTP_Handler(srv))
 	r.POST("/v1/user/delete", _EasService_DeleteUser0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/create", _EasService_CreateSalesPaper0_HTTP_Handler(srv))
-	r.GET("/v1/sales_pager/page_list", _EasService_GetSalesPaperPageList0_HTTP_Handler(srv))
-	r.GET("/v1/sales_pager/usable_page_list", _EasService_GetUsableSalesPaperPageList0_HTTP_Handler(srv))
-	r.GET("/v1/sales_pager/detail", _EasService_GetSalesPaperDetail0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/update", _EasService_UpdateSalesPaper0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/set_status", _EasService_SetSalesPaperStatus0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/delete", _EasService_DeleteSalesPaper0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager_comment/save", _EasService_SaveSalesPaperComment0_HTTP_Handler(srv))
-	r.GET("/v1/sales_pager_comment/list", _EasService_GetSalesPaperCommentList0_HTTP_Handler(srv))
+}
+
+func _EasService_Healthy0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in common.EmptyRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasServiceHealthy)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Healthy(ctx, req.(*common.EmptyRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*common.HealthyReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _EasService_Login0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
@@ -343,210 +328,16 @@ func _EasService_DeleteUser0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx htt
 	}
 }
 
-func _EasService_CreateSalesPaper0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in CreateSalesPaperRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceCreateSalesPaper)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateSalesPaper(ctx, req.(*CreateSalesPaperRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*CreateSalesPaperResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_GetSalesPaperPageList0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetSalesPaperPageListRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceGetSalesPaperPageList)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetSalesPaperPageList(ctx, req.(*GetSalesPaperPageListRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetSalesPaperPageListResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_GetUsableSalesPaperPageList0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetUsableSalesPaperPageListRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceGetUsableSalesPaperPageList)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetUsableSalesPaperPageList(ctx, req.(*GetUsableSalesPaperPageListRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetUsableSalesPaperPageListResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_GetSalesPaperDetail0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetSalesPaperDetailRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceGetSalesPaperDetail)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetSalesPaperDetail(ctx, req.(*GetSalesPaperDetailRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetSalesPaperDetailResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_UpdateSalesPaper0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in UpdateSalesPaperRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceUpdateSalesPaper)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateSalesPaper(ctx, req.(*UpdateSalesPaperRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*UpdateSalesPaperResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_SetSalesPaperStatus0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in SetSalesPaperStatusRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceSetSalesPaperStatus)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SetSalesPaperStatus(ctx, req.(*SetSalesPaperStatusRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SetSalesPaperStatusResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_DeleteSalesPaper0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in DeleteSalesPaperRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceDeleteSalesPaper)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.DeleteSalesPaper(ctx, req.(*DeleteSalesPaperRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*DeleteSalesPaperResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_SaveSalesPaperComment0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in SaveSalesPaperCommentRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceSaveSalesPaperComment)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SaveSalesPaperComment(ctx, req.(*SaveSalesPaperCommentRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SaveSalesPaperCommentResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _EasService_GetSalesPaperCommentList0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetSalesPaperCommentListRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationEasServiceGetSalesPaperCommentList)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetSalesPaperCommentList(ctx, req.(*GetSalesPaperCommentListRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetSalesPaperCommentListResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
 type EasServiceHTTPClient interface {
-	CreateSalesPaper(ctx context.Context, req *CreateSalesPaperRequest, opts ...http.CallOption) (rsp *CreateSalesPaperResponse, err error)
 	CreateUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserResponse, err error)
-	DeleteSalesPaper(ctx context.Context, req *DeleteSalesPaperRequest, opts ...http.CallOption) (rsp *DeleteSalesPaperResponse, err error)
 	DeleteUser(ctx context.Context, req *DeleteUserRequest, opts ...http.CallOption) (rsp *DeleteUserResponse, err error)
 	GetPageList(ctx context.Context, req *GetPageListRequest, opts ...http.CallOption) (rsp *GetPageListResponse, err error)
-	GetSalesPaperCommentList(ctx context.Context, req *GetSalesPaperCommentListRequest, opts ...http.CallOption) (rsp *GetSalesPaperCommentListResponse, err error)
-	GetSalesPaperDetail(ctx context.Context, req *GetSalesPaperDetailRequest, opts ...http.CallOption) (rsp *GetSalesPaperDetailResponse, err error)
-	GetSalesPaperPageList(ctx context.Context, req *GetSalesPaperPageListRequest, opts ...http.CallOption) (rsp *GetSalesPaperPageListResponse, err error)
-	GetUsableSalesPaperPageList(ctx context.Context, req *GetUsableSalesPaperPageListRequest, opts ...http.CallOption) (rsp *GetUsableSalesPaperPageListResponse, err error)
 	GetUserDetail(ctx context.Context, req *GetUserDetailRequest, opts ...http.CallOption) (rsp *GetUserDetailResponse, err error)
 	GetUserSelfDetail(ctx context.Context, req *GetUserSelfDetailRequest, opts ...http.CallOption) (rsp *GetUserSelfDetailResponse, err error)
+	Healthy(ctx context.Context, req *common.EmptyRequest, opts ...http.CallOption) (rsp *common.HealthyReply, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginResponse, err error)
 	ResetUserPassWord(ctx context.Context, req *ResetUserPassWordRequest, opts ...http.CallOption) (rsp *ResetUserPassWordResponse, err error)
-	SaveSalesPaperComment(ctx context.Context, req *SaveSalesPaperCommentRequest, opts ...http.CallOption) (rsp *SaveSalesPaperCommentResponse, err error)
-	SetSalesPaperStatus(ctx context.Context, req *SetSalesPaperStatusRequest, opts ...http.CallOption) (rsp *SetSalesPaperStatusResponse, err error)
 	SetUserStatus(ctx context.Context, req *SetUserStatusRequest, opts ...http.CallOption) (rsp *SetUserStatusResponse, err error)
-	UpdateSalesPaper(ctx context.Context, req *UpdateSalesPaperRequest, opts ...http.CallOption) (rsp *UpdateSalesPaperResponse, err error)
 	UpdateUser(ctx context.Context, req *UpdateUserRequest, opts ...http.CallOption) (rsp *UpdateUserResponse, err error)
 	UpdateUserPassWord(ctx context.Context, req *UpdateUserPassWordRequest, opts ...http.CallOption) (rsp *UpdateUserPassWordResponse, err error)
 	UpdateUserSelf(ctx context.Context, req *UpdateUserSelfRequest, opts ...http.CallOption) (rsp *UpdateUserSelfResponse, err error)
@@ -560,37 +351,11 @@ func NewEasServiceHTTPClient(client *http.Client) EasServiceHTTPClient {
 	return &EasServiceHTTPClientImpl{client}
 }
 
-func (c *EasServiceHTTPClientImpl) CreateSalesPaper(ctx context.Context, in *CreateSalesPaperRequest, opts ...http.CallOption) (*CreateSalesPaperResponse, error) {
-	var out CreateSalesPaperResponse
-	pattern := "/v1/sales_pager/create"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationEasServiceCreateSalesPaper))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
 func (c *EasServiceHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...http.CallOption) (*CreateUserResponse, error) {
 	var out CreateUserResponse
 	pattern := "/v1/user/create"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceCreateUser))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *EasServiceHTTPClientImpl) DeleteSalesPaper(ctx context.Context, in *DeleteSalesPaperRequest, opts ...http.CallOption) (*DeleteSalesPaperResponse, error) {
-	var out DeleteSalesPaperResponse
-	pattern := "/v1/sales_pager/delete"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationEasServiceDeleteSalesPaper))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -625,58 +390,6 @@ func (c *EasServiceHTTPClientImpl) GetPageList(ctx context.Context, in *GetPageL
 	return &out, nil
 }
 
-func (c *EasServiceHTTPClientImpl) GetSalesPaperCommentList(ctx context.Context, in *GetSalesPaperCommentListRequest, opts ...http.CallOption) (*GetSalesPaperCommentListResponse, error) {
-	var out GetSalesPaperCommentListResponse
-	pattern := "/v1/sales_pager_comment/list"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationEasServiceGetSalesPaperCommentList))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *EasServiceHTTPClientImpl) GetSalesPaperDetail(ctx context.Context, in *GetSalesPaperDetailRequest, opts ...http.CallOption) (*GetSalesPaperDetailResponse, error) {
-	var out GetSalesPaperDetailResponse
-	pattern := "/v1/sales_pager/detail"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationEasServiceGetSalesPaperDetail))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *EasServiceHTTPClientImpl) GetSalesPaperPageList(ctx context.Context, in *GetSalesPaperPageListRequest, opts ...http.CallOption) (*GetSalesPaperPageListResponse, error) {
-	var out GetSalesPaperPageListResponse
-	pattern := "/v1/sales_pager/page_list"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationEasServiceGetSalesPaperPageList))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *EasServiceHTTPClientImpl) GetUsableSalesPaperPageList(ctx context.Context, in *GetUsableSalesPaperPageListRequest, opts ...http.CallOption) (*GetUsableSalesPaperPageListResponse, error) {
-	var out GetUsableSalesPaperPageListResponse
-	pattern := "/v1/sales_pager/usable_page_list"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationEasServiceGetUsableSalesPaperPageList))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
 func (c *EasServiceHTTPClientImpl) GetUserDetail(ctx context.Context, in *GetUserDetailRequest, opts ...http.CallOption) (*GetUserDetailResponse, error) {
 	var out GetUserDetailResponse
 	pattern := "/v1/user/detail"
@@ -695,6 +408,19 @@ func (c *EasServiceHTTPClientImpl) GetUserSelfDetail(ctx context.Context, in *Ge
 	pattern := "/v1/user/detail_self"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationEasServiceGetUserSelfDetail))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *EasServiceHTTPClientImpl) Healthy(ctx context.Context, in *common.EmptyRequest, opts ...http.CallOption) (*common.HealthyReply, error) {
+	var out common.HealthyReply
+	pattern := "/healthz"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationEasServiceHealthy))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -729,50 +455,11 @@ func (c *EasServiceHTTPClientImpl) ResetUserPassWord(ctx context.Context, in *Re
 	return &out, nil
 }
 
-func (c *EasServiceHTTPClientImpl) SaveSalesPaperComment(ctx context.Context, in *SaveSalesPaperCommentRequest, opts ...http.CallOption) (*SaveSalesPaperCommentResponse, error) {
-	var out SaveSalesPaperCommentResponse
-	pattern := "/v1/sales_pager_comment/save"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationEasServiceSaveSalesPaperComment))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *EasServiceHTTPClientImpl) SetSalesPaperStatus(ctx context.Context, in *SetSalesPaperStatusRequest, opts ...http.CallOption) (*SetSalesPaperStatusResponse, error) {
-	var out SetSalesPaperStatusResponse
-	pattern := "/v1/sales_pager/set_status"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationEasServiceSetSalesPaperStatus))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
 func (c *EasServiceHTTPClientImpl) SetUserStatus(ctx context.Context, in *SetUserStatusRequest, opts ...http.CallOption) (*SetUserStatusResponse, error) {
 	var out SetUserStatusResponse
 	pattern := "/v1/user/set_status"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceSetUserStatus))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *EasServiceHTTPClientImpl) UpdateSalesPaper(ctx context.Context, in *UpdateSalesPaperRequest, opts ...http.CallOption) (*UpdateSalesPaperResponse, error) {
-	var out UpdateSalesPaperResponse
-	pattern := "/v1/sales_pager/update"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationEasServiceUpdateSalesPaper))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

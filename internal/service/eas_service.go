@@ -7,20 +7,14 @@ import (
 
 type EasService struct {
 	v1.UnimplementedEasServiceServer
-	loginUc             *biz.LoginUseCase
-	userUc              *biz.UserUseCase
-	salesPaperUc        *biz.SalesPaperUseCase
-	salesPaperCommentUc *biz.SalesPaperCommentUseCase
+	loginUc *biz.LoginUseCase
+	userUc  *biz.UserUseCase
 }
 
 func NewEasService(loginUc *biz.LoginUseCase,
-	userUc *biz.UserUseCase,
-	salesPaperUc *biz.SalesPaperUseCase,
-	salesPaperCommentUc *biz.SalesPaperCommentUseCase) *EasService {
+	userUc *biz.UserUseCase) *EasService {
 	return &EasService{
-		loginUc:             loginUc,
-		userUc:              userUc,
-		salesPaperUc:        salesPaperUc,
-		salesPaperCommentUc: salesPaperCommentUc,
+		loginUc: loginUc,
+		userUc:  userUc,
 	}
 }

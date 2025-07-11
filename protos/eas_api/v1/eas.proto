@@ -5,7 +5,7 @@ package eas_api.v1;
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "common/common.proto";
-import "eas_api/v1/models.proto";
+import "eas_api/v1/eas_models.proto";
 option go_package = "eas_api/api/v1;v1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -37,658 +37,74 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service EasService {
+  rpc Healthy(common.EmptyRequest) returns (common.HealthyReply) {
+    option (google.api.http) = {get: "/healthz"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "健康检查",tags: ["安全"]};
+  }
   // 登录
   rpc Login(LoginRequest) returns (LoginResponse){
     option (google.api.http)={post:"/v1/eas/login", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "登录",tags: ["登录"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "登录",tags: ["登录"]};
   };
   //===============================用户模块=========================================
   //创建用户
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse){
     option (google.api.http)={post:"/v1/user/create", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建用户",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建用户",tags: ["用户模块"]};
   };
 
   //用户列表
   rpc GetPageList(GetPageListRequest) returns (GetPageListResponse){
     option (google.api.http)={get:"/v1/user/page_list"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "用户列表",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "用户列表",tags: ["用户模块"]};
   };
 
   //用户详情
   rpc GetUserDetail(GetUserDetailRequest) returns (GetUserDetailResponse){
     option (google.api.http)={get:"/v1/user/detail"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "用户详情",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "用户详情",tags: ["用户模块"]};
   };
 
   //查询用户个人信息
   rpc GetUserSelfDetail(GetUserSelfDetailRequest) returns (GetUserSelfDetailResponse){
     option (google.api.http)={get:"/v1/user/detail_self"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "查询用户个人信息",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "查询用户个人信息",tags: ["用户模块"]};
   };
 
   //禁用/启用用户
   rpc SetUserStatus(SetUserStatusRequest) returns (SetUserStatusResponse){
     option (google.api.http)={post:"/v1/user/set_status", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "禁用/启用用户",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "禁用/启用用户",tags: ["用户模块"]};
   };
 
   //修改用户信息
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse){
     option (google.api.http)={post:"/v1/user/update", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改用户信息",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改用户信息",tags: ["用户模块"]};
   };
 
   //修改用户个人信息
   rpc UpdateUserSelf(UpdateUserSelfRequest) returns (UpdateUserSelfResponse){
     option (google.api.http)={post:"/v1/user/update_self", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改用户个人信息",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改用户个人信息",tags: ["用户模块"]};
   };
 
   //重置用户密码
   rpc ResetUserPassWord(ResetUserPassWordRequest) returns (ResetUserPassWordResponse){
     option (google.api.http)={post:"/v1/user/reset_password", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "重置用户密码",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "重置用户密码",tags: ["用户模块"]};
   };
 
   //修改密码
   rpc UpdateUserPassWord(UpdateUserPassWordRequest) returns (UpdateUserPassWordResponse){
     option (google.api.http)={post:"/v1/user/update_password", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改密码",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改密码",tags: ["用户模块"]};
   };
 
   //删除
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse){
     option (google.api.http)={post:"/v1/user/delete", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除用户",tags: ["用户模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除用户",tags: ["用户模块"]};
   };
-
-  //===============================试卷模块=========================================
-  //创建试卷
-  rpc CreateSalesPaper(CreateSalesPaperRequest) returns (CreateSalesPaperResponse){
-    option (google.api.http)={post:"/v1/sales_pager/create", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-  //试卷列表
-  rpc GetSalesPaperPageList(GetSalesPaperPageListRequest) returns (GetSalesPaperPageListResponse){
-    option (google.api.http)={get:"/v1/sales_pager/page_list"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷列表",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-  //可用试卷列表
-  rpc GetUsableSalesPaperPageList(GetUsableSalesPaperPageListRequest) returns (GetUsableSalesPaperPageListResponse){
-    option (google.api.http)={get:"/v1/sales_pager/usable_page_list"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "可用试卷列表",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-  //试卷详情
-  rpc GetSalesPaperDetail(GetSalesPaperDetailRequest) returns (GetSalesPaperDetailResponse){
-    option (google.api.http)={get:"/v1/sales_pager/detail"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷详情",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-
-  //修改试卷信息
-  rpc UpdateSalesPaper(UpdateSalesPaperRequest) returns (UpdateSalesPaperResponse){
-    option (google.api.http)={post:"/v1/sales_pager/update", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷信息",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-  //禁用/启用试卷
-  rpc SetSalesPaperStatus(SetSalesPaperStatusRequest) returns (SetSalesPaperStatusResponse){
-    option (google.api.http)={post:"/v1/sales_pager/set_status", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "禁用/启用试卷",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-  //删除试卷
-  rpc DeleteSalesPaper(DeleteSalesPaperRequest) returns (DeleteSalesPaperResponse){
-    option (google.api.http)={post:"/v1/sales_pager/delete", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷",tags: ["试卷模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-  //===============================试卷评语模块=========================================
-  //保存试卷评语
-  rpc SaveSalesPaperComment(SaveSalesPaperCommentRequest) returns (SaveSalesPaperCommentResponse){
-    option (google.api.http)={post:"/v1/sales_pager_comment/save", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷评语",tags: ["试卷评语模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-  //试卷评语列表
-  rpc GetSalesPaperCommentList(GetSalesPaperCommentListRequest) returns (GetSalesPaperCommentListResponse){
-    option (google.api.http)={get:"/v1/sales_pager_comment/list"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷评语列表",tags: ["试卷评语模块"],
-      parameters: {
-        headers: [
-          {
-            name: "X-Forwarded-For"
-            type: STRING,
-            description: "客户端IP"
-          },
-          {
-            name: "UserKey"
-            type: STRING,
-            description: "用户token"
-          },
-          {
-            name: "X-Request-Id"
-            type: STRING,
-            description: "request_id"
-          }
-        ]
-      };
-    };
-  };
-
-//
-//  //===============================试卷维度模块=========================================
-//  //创建试卷维度
-//  rpc CreateDimension(CreateDimensionRequest) returns (CreateDimensionResponse){
-//    option (google.api.http)={post:"/v1/dimension/create", body:"*"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建维度",tags: ["维度模块"],
-//      parameters: {
-//        headers: [
-//          {
-//            name: "X-Forwarded-For"
-//            type: STRING,
-//            description: "客户端IP"
-//          },
-//          {
-//            name: "UserKey"
-//            type: STRING,
-//            description: "用户token"
-//          },
-//          {
-//            name: "X-Request-Id"
-//            type: STRING,
-//            description: "request_id"
-//          }
-//        ]
-//      };
-//    };
-//  };
-//
-//  //试卷维度列表
-//  rpc GetDimensionPageList(GetDimensionPageListRequest) returns (GetDimensionPageListResponse){
-//    option (google.api.http)={get:"/v1/dimension/page_list"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度列表",tags: ["试卷维度模块"],
-//      parameters: {
-//        headers: [
-//          {
-//            name: "X-Forwarded-For"
-//            type: STRING,
-//            description: "客户端IP"
-//          },
-//          {
-//            name: "UserKey"
-//            type: STRING,
-//            description: "用户token"
-//          },
-//          {
-//            name: "X-Request-Id"
-//            type: STRING,
-//            description: "request_id"
-//          }
-//        ]
-//      };
-//    };
-//  };
-//
-//  //试卷维度详情
-//  rpc GetDimensionDetail(GetDimensionDetailRequest) returns (GetDimensionDetailResponse){
-//    option (google.api.http)={get:"/v1/dimension/detail"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度详情",tags: ["试卷维度模块"],
-//      parameters: {
-//        headers: [
-//          {
-//            name: "X-Forwarded-For"
-//            type: STRING,
-//            description: "客户端IP"
-//          },
-//          {
-//            name: "UserKey"
-//            type: STRING,
-//            description: "用户token"
-//          },
-//          {
-//            name: "X-Request-Id"
-//            type: STRING,
-//            description: "request_id"
-//          }
-//        ]
-//      };
-//    };
-//  };
-//
-//
-//  //修改试卷维度信息
-//  rpc UpdateDimension(UpdateDimensionRequest) returns (UpdateDimensionResponse){
-//    option (google.api.http)={post:"/v1/dimension/update", body:"*"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷维度信息",tags: ["试卷维度模块"],
-//      parameters: {
-//        headers: [
-//          {
-//            name: "X-Forwarded-For"
-//            type: STRING,
-//            description: "客户端IP"
-//          },
-//          {
-//            name: "UserKey"
-//            type: STRING,
-//            description: "用户token"
-//          },
-//          {
-//            name: "X-Request-Id"
-//            type: STRING,
-//            description: "request_id"
-//          }
-//        ]
-//      };
-//    };
-//  };
-//
-//  //删除试卷维度
-//  rpc DeleteDimension(DeleteDimensionRequest) returns (DeleteDimensionResponse){
-//    option (google.api.http)={post:"/v1/dimension/delete", body:"*"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷维度",tags: ["试卷维度模块"],
-//      parameters: {
-//        headers: [
-//          {
-//            name: "X-Forwarded-For"
-//            type: STRING,
-//            description: "客户端IP"
-//          },
-//          {
-//            name: "UserKey"
-//            type: STRING,
-//            description: "用户token"
-//          },
-//          {
-//            name: "X-Request-Id"
-//            type: STRING,
-//            description: "request_id"
-//          }
-//        ]
-//      };
-//    };
-//  };
 }
 

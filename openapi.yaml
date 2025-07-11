@@ -3,9 +3,21 @@
 
 openapi: 3.0.3
 info:
-    title: EasService API
+    title: ""
     version: 0.0.1
 paths:
+    /healthz:
+        get:
+            tags:
+                - EasService
+            operationId: EasService_Healthy
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.HealthyReply'
     /v1/eas/login:
         post:
             tags:
@@ -28,11 +40,11 @@ paths:
     /v1/sales_pager/create:
         post:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: |-
                 ===============================试卷模块=========================================
                 创建试卷
-            operationId: EasService_CreateSalesPaper
+            operationId: EasSalesPaperService_CreateSalesPaper
             requestBody:
                 content:
                     application/json:
@@ -49,9 +61,9 @@ paths:
     /v1/sales_pager/delete:
         post:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 删除试卷
-            operationId: EasService_DeleteSalesPaper
+            operationId: EasSalesPaperService_DeleteSalesPaper
             requestBody:
                 content:
                     application/json:
@@ -68,9 +80,9 @@ paths:
     /v1/sales_pager/detail:
         get:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 试卷详情
-            operationId: EasService_GetSalesPaperDetail
+            operationId: EasSalesPaperService_GetSalesPaperDetail
             parameters:
                 - name: sales_paper_id
                   in: query
@@ -86,9 +98,9 @@ paths:
     /v1/sales_pager/page_list:
         get:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 试卷列表
-            operationId: EasService_GetSalesPaperPageList
+            operationId: EasSalesPaperService_GetSalesPaperPageList
             parameters:
                 - name: key_word
                   in: query
@@ -118,9 +130,9 @@ paths:
     /v1/sales_pager/set_status:
         post:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 禁用/启用试卷
-            operationId: EasService_SetSalesPaperStatus
+            operationId: EasSalesPaperService_SetSalesPaperStatus
             requestBody:
                 content:
                     application/json:
@@ -137,9 +149,9 @@ paths:
     /v1/sales_pager/update:
         post:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 修改试卷信息
-            operationId: EasService_UpdateSalesPaper
+            operationId: EasSalesPaperService_UpdateSalesPaper
             requestBody:
                 content:
                     application/json:
@@ -156,9 +168,9 @@ paths:
     /v1/sales_pager/usable_page_list:
         get:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 可用试卷列表
-            operationId: EasService_GetUsableSalesPaperPageList
+            operationId: EasSalesPaperService_GetUsableSalesPaperPageList
             parameters:
                 - name: key_word
                   in: query
@@ -184,9 +196,9 @@ paths:
     /v1/sales_pager_comment/list:
         get:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: 试卷评语列表
-            operationId: EasService_GetSalesPaperCommentList
+            operationId: EasSalesPaperService_GetSalesPaperCommentList
             parameters:
                 - name: sales_paper_id
                   in: query
@@ -202,11 +214,11 @@ paths:
     /v1/sales_pager_comment/save:
         post:
             tags:
-                - EasService
+                - EasSalesPaperService
             description: |-
                 ===============================试卷评语模块=========================================
                 保存试卷评语
-            operationId: EasService_SaveSalesPaperComment
+            operationId: EasSalesPaperService_SaveSalesPaperComment
             requestBody:
                 content:
                     application/json:
@@ -220,6 +232,111 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/eas_api.v1.SaveSalesPaperCommentResponse'
+    /v1/sales_paper_dimension/create:
+        post:
+            tags:
+                - EasSalesPaperService
+            description: |-
+                ===============================试卷维度模块=========================================
+                创建试卷维度
+            operationId: EasSalesPaperService_CreateSalesPaperDimension
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.CreateSalesPaperDimensionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.CreateSalesPaperDimensionResponse'
+    /v1/sales_paper_dimension/delete:
+        post:
+            tags:
+                - EasSalesPaperService
+            description: 删除试卷维度
+            operationId: EasSalesPaperService_DeleteSalesPaperDimension
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.DeleteSalesPaperDimensionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.DeleteSalesPaperDimensionResponse'
+    /v1/sales_paper_dimension/detail:
+        get:
+            tags:
+                - EasSalesPaperService
+            description: 试卷维度详情
+            operationId: EasSalesPaperService_GetSalesPaperDimensionDetail
+            parameters:
+                - name: sales_paper_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperDimensionDetailResponse'
+    /v1/sales_paper_dimension/page_list:
+        get:
+            tags:
+                - EasSalesPaperService
+            description: 试卷维度列表
+            operationId: EasSalesPaperService_GetSalesPaperDimensionPageList
+            parameters:
+                - name: sales_paper_id
+                  in: query
+                  schema:
+                    type: string
+                - name: page_index
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperDimensionPageListResponse'
+    /v1/sales_paper_dimension/update:
+        post:
+            tags:
+                - EasSalesPaperService
+            description: 修改试卷维度信息
+            operationId: EasSalesPaperService_UpdateSalesPaperDimension
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.UpdateSalesPaperDimensionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.UpdateSalesPaperDimensionResponse'
     /v1/user/create:
         post:
             tags:
@@ -424,6 +541,49 @@ paths:
                                 $ref: '#/components/schemas/eas_api.v1.UpdateUserSelfResponse'
 components:
     schemas:
+        common.HealthyReply:
+            type: object
+            properties:
+                status:
+                    type: integer
+                    format: enum
+        eas_api.v1.CreateSalesPaperDimensionData:
+            type: object
+            properties:
+                dimension_id:
+                    type: string
+                dimension_name:
+                    type: string
+                average_mark:
+                    type: number
+                    format: double
+                standard_mark:
+                    type: number
+                    format: double
+                description:
+                    type: string
+                max_score:
+                    type: number
+                    format: double
+                min_score:
+                    type: number
+                    format: double
+                is_choose:
+                    type: number
+                    format: double
+        eas_api.v1.CreateSalesPaperDimensionRequest:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                dimension_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.CreateSalesPaperDimensionData'
+            description: ===============================维度模块=========================================
+        eas_api.v1.CreateSalesPaperDimensionResponse:
+            type: object
+            properties: {}
         eas_api.v1.CreateSalesPaperRequest:
             type: object
             properties:
@@ -472,6 +632,14 @@ components:
         eas_api.v1.CreateUserResponse:
             type: object
             properties: {}
+        eas_api.v1.DeleteSalesPaperDimensionRequest:
+            type: object
+            properties:
+                sales_paper_dimension_id:
+                    type: string
+        eas_api.v1.DeleteSalesPaperDimensionResponse:
+            type: object
+            properties: {}
         eas_api.v1.DeleteSalesPaperRequest:
             type: object
             properties:
@@ -509,6 +677,20 @@ components:
             properties:
                 sales_paper:
                     $ref: '#/components/schemas/eas_api.v1.SalesPaperData'
+        eas_api.v1.GetSalesPaperDimensionDetailResponse:
+            type: object
+            properties:
+                sales_paper_dimension:
+                    $ref: '#/components/schemas/eas_api.v1.SalesPaperDimensionData'
+        eas_api.v1.GetSalesPaperDimensionPageListResponse:
+            type: object
+            properties:
+                dimension_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.SalesPaperDimensionData'
+                total:
+                    type: string
         eas_api.v1.GetSalesPaperPageListResponse:
             type: object
             properties:
@@ -613,6 +795,34 @@ components:
                     type: string
                 updated_by:
                     type: string
+        eas_api.v1.SalesPaperDimensionData:
+            type: object
+            properties:
+                dimension_id:
+                    type: string
+                dimension_name:
+                    type: string
+                average_mark:
+                    type: number
+                    format: double
+                standard_mark:
+                    type: number
+                    format: double
+                description:
+                    type: string
+                max_score:
+                    type: number
+                    format: double
+                min_score:
+                    type: number
+                    format: double
+                is_choose:
+                    type: number
+                    format: double
+                updated_at:
+                    type: string
+                updated_by:
+                    type: string
         eas_api.v1.SaveSalesPaperCommentData:
             type: object
             properties:
@@ -659,6 +869,16 @@ components:
                     type: integer
                     format: enum
         eas_api.v1.SetUserStatusResponse:
+            type: object
+            properties: {}
+        eas_api.v1.UpdateSalesPaperDimensionRequest:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                dimension:
+                    $ref: '#/components/schemas/eas_api.v1.CreateSalesPaperDimensionData'
+        eas_api.v1.UpdateSalesPaperDimensionResponse:
             type: object
             properties: {}
         eas_api.v1.UpdateSalesPaperRequest:
@@ -754,4 +974,5 @@ components:
                 updated_by:
                     type: string
 tags:
+    - name: EasSalesPaperService
     - name: EasService
