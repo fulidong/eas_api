@@ -68,12 +68,12 @@ func RegisterEasServiceHTTPServer(s *http.Server, srv EasServiceHTTPServer) {
 	r.GET("/v1/user/page_list", _EasService_GetPageList0_HTTP_Handler(srv))
 	r.GET("/v1/user/detail", _EasService_GetUserDetail0_HTTP_Handler(srv))
 	r.GET("/v1/user/detail_self", _EasService_GetUserSelfDetail0_HTTP_Handler(srv))
-	r.POST("/v1/user/set_status", _EasService_SetUserStatus0_HTTP_Handler(srv))
-	r.POST("/v1/user/update", _EasService_UpdateUser0_HTTP_Handler(srv))
-	r.POST("/v1/user/update_self", _EasService_UpdateUserSelf0_HTTP_Handler(srv))
-	r.POST("/v1/user/reset_password", _EasService_ResetUserPassWord0_HTTP_Handler(srv))
-	r.POST("/v1/user/update_password", _EasService_UpdateUserPassWord0_HTTP_Handler(srv))
-	r.POST("/v1/user/delete", _EasService_DeleteUser0_HTTP_Handler(srv))
+	r.PUT("/v1/user/set_status", _EasService_SetUserStatus0_HTTP_Handler(srv))
+	r.PUT("/v1/user/update", _EasService_UpdateUser0_HTTP_Handler(srv))
+	r.PUT("/v1/user/update_self", _EasService_UpdateUserSelf0_HTTP_Handler(srv))
+	r.PUT("/v1/user/reset_password", _EasService_ResetUserPassWord0_HTTP_Handler(srv))
+	r.PUT("/v1/user/update_password", _EasService_UpdateUserPassWord0_HTTP_Handler(srv))
+	r.PUT("/v1/user/delete", _EasService_DeleteUser0_HTTP_Handler(srv))
 }
 
 func _EasService_Healthy0_HTTP_Handler(srv EasServiceHTTPServer) func(ctx http.Context) error {
@@ -370,7 +370,7 @@ func (c *EasServiceHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUse
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceDeleteUser))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -448,7 +448,7 @@ func (c *EasServiceHTTPClientImpl) ResetUserPassWord(ctx context.Context, in *Re
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceResetUserPassWord))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -461,7 +461,7 @@ func (c *EasServiceHTTPClientImpl) SetUserStatus(ctx context.Context, in *SetUse
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceSetUserStatus))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -474,7 +474,7 @@ func (c *EasServiceHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUse
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceUpdateUser))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -487,7 +487,7 @@ func (c *EasServiceHTTPClientImpl) UpdateUserPassWord(ctx context.Context, in *U
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceUpdateUserPassWord))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -500,7 +500,7 @@ func (c *EasServiceHTTPClientImpl) UpdateUserSelf(ctx context.Context, in *Updat
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasServiceUpdateUserSelf))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

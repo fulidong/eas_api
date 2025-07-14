@@ -12,18 +12,22 @@ import (
 
 const TableNameSalesPaperDimension = "sales_paper_dimension"
 
-// SalesPaperDimension 一级维度表：当售卷是由大维度组成时，记录的就是大维度
+// SalesPaperDimension 维度表
 type SalesPaperDimension struct {
-	ID              string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
-	SalesPaperID    string         `gorm:"column:sales_paper_id;not null;comment:售卷表外键" json:"sales_paper_id"`                  // 售卷表外键
-	DimensionID     string         `gorm:"column:dimension_id;not null;comment:维度表外键" json:"dimension_id"`                      // 维度表外键
-	Weight          int32          `gorm:"column:weight;not null;comment:权重" json:"weight"`                                     // 权重
-	SelfDefineScore int32          `gorm:"column:self_define_score;not null;default:60;comment:自定义分数" json:"self_define_score"` // 自定义分数
-	CreatedAt       time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
-	UpdatedAt       time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
-	CreatedBy       string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
-	UpdatedBy       string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
-	DeletedAt       gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
+	ID           string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
+	SalesPaperID string         `gorm:"column:sales_paper_id;not null;comment:售卷表外键" json:"sales_paper_id"`                  // 售卷表外键
+	Name         string         `gorm:"column:name;not null;comment:维度名称" json:"name"`                                       // 维度名称
+	AverageMark  float64        `gorm:"column:average_mark;not null;default:0.00;comment:平均分" json:"average_mark"`           // 平均分
+	StandardMark float64        `gorm:"column:standard_mark;not null;default:0.00;comment:标准差" json:"standard_mark"`         // 标准差
+	Description  string         `gorm:"column:description;not null;comment:描述" json:"description"`                           // 描述
+	MaxScore     float64        `gorm:"column:max_score;not null;default:0.00;comment:最高分数上限" json:"max_score"`              // 最高分数上限
+	MinScore     float64        `gorm:"column:min_score;not null;default:0.00;comment:最低分数下限" json:"min_score"`              // 最低分数下限
+	IsChoose     bool           `gorm:"column:is_choose;not null;comment:是否可选择该维度" json:"is_choose"`                         // 是否可选择该维度
+	CreatedAt    time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
+	UpdatedAt    time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
+	CreatedBy    string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
+	UpdatedBy    string         `gorm:"column:updated_by;not null;comment:更新人标识" json:"updated_by"`                          // 更新人标识
+	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 
 // TableName SalesPaperDimension's table name

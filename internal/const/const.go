@@ -1,10 +1,12 @@
 package _const
 
 const (
-	AdministratorPrefix     = "A"
-	SysLoginRecordPrefix    = "SLR"
-	SalesPaperPrefix        = "SPP"
-	SalesPaperCommentPrefix = "SPCP"
+	AdministratorPrefix              = "A"
+	SysLoginRecordPrefix             = "SLR"
+	SalesPaperPrefix                 = "SPP"
+	SalesPaperCommentPrefix          = "SPCP"
+	SalesPaperDimensionPrefix        = "SPDP"
+	SalesPaperDimensionCommentPrefix = "SPDCP"
 )
 
 var AllowedVars = map[string]interface{}{

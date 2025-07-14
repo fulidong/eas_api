@@ -49,7 +49,7 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 	if user.Status != int32(v1.AccountStatus_Active) {
 		err = errors.New("用户未激活")
 	}
-	id, _ := isnowflake.SnowFlake.NextID(_const.AdministratorPrefix)
+	id, _ := isnowflake.SnowFlake.NextID(_const.SysLoginRecordPrefix)
 	uc.sysLogin.Create(ctx, &entity.SysLoginRecord{
 		ID:            id,
 		UserID:        user.ID,

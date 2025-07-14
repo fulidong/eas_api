@@ -7,18 +7,24 @@ import (
 
 type EasSalesPaperService struct {
 	v1.UnimplementedEasSalesPaperServiceServer
-	userUc              *biz.UserUseCase
-	salesPaperUc        *biz.SalesPaperUseCase
-	salesPaperCommentUc *biz.SalesPaperCommentUseCase
+	userUc                       *biz.UserUseCase
+	salesPaperUc                 *biz.SalesPaperUseCase
+	salesPaperCommentUc          *biz.SalesPaperCommentUseCase
+	salesPaperDimensionUc        *biz.SalesPaperDimensionUseCase
+	salesPaperDimensionCommentUc *biz.SalesPaperDimensionCommentUseCase
 }
 
 func NewEasSalesPaperService(
 	userUc *biz.UserUseCase,
 	salesPaperUc *biz.SalesPaperUseCase,
-	salesPaperCommentUc *biz.SalesPaperCommentUseCase) *EasSalesPaperService {
+	salesPaperCommentUc *biz.SalesPaperCommentUseCase,
+	salesPaperDimensionUc *biz.SalesPaperDimensionUseCase,
+	salesPaperDimensionCommentUc *biz.SalesPaperDimensionCommentUseCase) *EasSalesPaperService {
 	return &EasSalesPaperService{
-		userUc:              userUc,
-		salesPaperUc:        salesPaperUc,
-		salesPaperCommentUc: salesPaperCommentUc,
+		userUc:                       userUc,
+		salesPaperUc:                 salesPaperUc,
+		salesPaperCommentUc:          salesPaperCommentUc,
+		salesPaperDimensionUc:        salesPaperDimensionUc,
+		salesPaperDimensionCommentUc: salesPaperDimensionCommentUc,
 	}
 }

@@ -27,13 +27,13 @@ type SalesPaperRepo interface {
 }
 
 type SalesPaperUseCase struct {
-	repo     SalesPaperRepo
-	userRepo UserRepo
-	log      *log.Helper
+	repo        SalesPaperRepo
+	userUseCase *UserUseCase
+	log         *log.Helper
 }
 
-func NewSalesPaperUseCase(repo SalesPaperRepo, userRepo UserRepo, logger log.Logger) *SalesPaperUseCase {
-	return &SalesPaperUseCase{repo: repo, userRepo: userRepo, log: log.NewHelper(logger)}
+func NewSalesPaperUseCase(repo SalesPaperRepo, userUseCase *UserUseCase, logger log.Logger) *SalesPaperUseCase {
+	return &SalesPaperUseCase{repo: repo, userUseCase: userUseCase, log: log.NewHelper(logger)}
 }
 
 func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.CreateSalesPaperRequest) (resp *v1.CreateSalesPaperResponse, err error) {
@@ -105,9 +105,9 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 	})
 	if len(updatedIds) > 0 {
 		userMap = make(map[string]*entity.Administrator, len(updatedIds))
-		userList, e := uc.userRepo.GetByIDs(ctx, updatedIds)
+		userList, e := uc.userUseCase.GetUserListByIds(ctx, updatedIds)
 		if e != nil {
-			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v, err:%v", updatedIds, err.Error())
+			l.Errorf("GetSalesPaperPageList.userUseCase.GetUserListByIds Failed, updatedIds:%v, err:%v", updatedIds, err.Error())
 			err = innErr.ErrInternalServer
 			return
 		}
@@ -216,7 +216,7 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.checkSalesPaper(ctx, req.SalesPaperId, l)
+	err, ok := uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if !ok {
 		return
 	}
@@ -265,7 +265,7 @@ func (uc *SalesPaperUseCase) SetSalesPaperStatus(ctx context.Context, req *v1.Se
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.checkSalesPaper(ctx, req.SalesPaperId, l)
+	err, ok := uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if !ok {
 		return
 	}
@@ -285,7 +285,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.checkSalesPaper(ctx, req.SalesPaperId, l)
+	err, ok := uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if !ok {
 		return
 	}
@@ -298,7 +298,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 	return
 }
 
-func (uc *SalesPaperUseCase) checkSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (error, bool) {
+func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (error, bool) {
 	salesPaper, err := uc.repo.GetByID(ctx, iSalesPaperId)
 	if err != nil {
 		l.Errorf("UpdateSalesPaper.repo.GetByID Failed, req:%v, err:%v", err, err.Error())

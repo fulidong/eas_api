@@ -25,11 +25,13 @@ const OperationEasSalesPaperServiceDeleteSalesPaper = "/eas_api.v1.EasSalesPaper
 const OperationEasSalesPaperServiceDeleteSalesPaperDimension = "/eas_api.v1.EasSalesPaperService/DeleteSalesPaperDimension"
 const OperationEasSalesPaperServiceGetSalesPaperCommentList = "/eas_api.v1.EasSalesPaperService/GetSalesPaperCommentList"
 const OperationEasSalesPaperServiceGetSalesPaperDetail = "/eas_api.v1.EasSalesPaperService/GetSalesPaperDetail"
+const OperationEasSalesPaperServiceGetSalesPaperDimensionCommentList = "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionCommentList"
 const OperationEasSalesPaperServiceGetSalesPaperDimensionDetail = "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionDetail"
-const OperationEasSalesPaperServiceGetSalesPaperDimensionPageList = "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionPageList"
+const OperationEasSalesPaperServiceGetSalesPaperDimensionList = "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionList"
 const OperationEasSalesPaperServiceGetSalesPaperPageList = "/eas_api.v1.EasSalesPaperService/GetSalesPaperPageList"
 const OperationEasSalesPaperServiceGetUsableSalesPaperPageList = "/eas_api.v1.EasSalesPaperService/GetUsableSalesPaperPageList"
 const OperationEasSalesPaperServiceSaveSalesPaperComment = "/eas_api.v1.EasSalesPaperService/SaveSalesPaperComment"
+const OperationEasSalesPaperServiceSaveSalesPaperDimensionComment = "/eas_api.v1.EasSalesPaperService/SaveSalesPaperDimensionComment"
 const OperationEasSalesPaperServiceSetSalesPaperStatus = "/eas_api.v1.EasSalesPaperService/SetSalesPaperStatus"
 const OperationEasSalesPaperServiceUpdateSalesPaper = "/eas_api.v1.EasSalesPaperService/UpdateSalesPaper"
 const OperationEasSalesPaperServiceUpdateSalesPaperDimension = "/eas_api.v1.EasSalesPaperService/UpdateSalesPaperDimension"
@@ -49,10 +51,12 @@ type EasSalesPaperServiceHTTPServer interface {
 	GetSalesPaperCommentList(context.Context, *GetSalesPaperCommentListRequest) (*GetSalesPaperCommentListResponse, error)
 	// GetSalesPaperDetail试卷详情
 	GetSalesPaperDetail(context.Context, *GetSalesPaperDetailRequest) (*GetSalesPaperDetailResponse, error)
+	// GetSalesPaperDimensionCommentList试卷维度评语列表
+	GetSalesPaperDimensionCommentList(context.Context, *GetSalesPaperDimensionCommentListRequest) (*GetSalesPaperDimensionCommentListResponse, error)
 	// GetSalesPaperDimensionDetail试卷维度详情
 	GetSalesPaperDimensionDetail(context.Context, *GetSalesPaperDimensionDetailRequest) (*GetSalesPaperDimensionDetailResponse, error)
-	// GetSalesPaperDimensionPageList试卷维度列表
-	GetSalesPaperDimensionPageList(context.Context, *GetSalesPaperDimensionPageListRequest) (*GetSalesPaperDimensionPageListResponse, error)
+	// GetSalesPaperDimensionList试卷维度列表
+	GetSalesPaperDimensionList(context.Context, *GetSalesPaperDimensionListRequest) (*GetSalesPaperDimensionListResponse, error)
 	// GetSalesPaperPageList试卷列表
 	GetSalesPaperPageList(context.Context, *GetSalesPaperPageListRequest) (*GetSalesPaperPageListResponse, error)
 	// GetUsableSalesPaperPageList可用试卷列表
@@ -60,6 +64,9 @@ type EasSalesPaperServiceHTTPServer interface {
 	// SaveSalesPaperComment===============================试卷评语模块=========================================
 	//保存试卷评语
 	SaveSalesPaperComment(context.Context, *SaveSalesPaperCommentRequest) (*SaveSalesPaperCommentResponse, error)
+	// SaveSalesPaperDimensionComment===============================试卷维度评语模块=========================================
+	//保存试卷维度评语
+	SaveSalesPaperDimensionComment(context.Context, *SaveSalesPaperDimensionCommentRequest) (*SaveSalesPaperDimensionCommentResponse, error)
 	// SetSalesPaperStatus禁用/启用试卷
 	SetSalesPaperStatus(context.Context, *SetSalesPaperStatusRequest) (*SetSalesPaperStatusResponse, error)
 	// UpdateSalesPaper修改试卷信息
@@ -74,16 +81,18 @@ func RegisterEasSalesPaperServiceHTTPServer(s *http.Server, srv EasSalesPaperSer
 	r.GET("/v1/sales_pager/page_list", _EasSalesPaperService_GetSalesPaperPageList0_HTTP_Handler(srv))
 	r.GET("/v1/sales_pager/usable_page_list", _EasSalesPaperService_GetUsableSalesPaperPageList0_HTTP_Handler(srv))
 	r.GET("/v1/sales_pager/detail", _EasSalesPaperService_GetSalesPaperDetail0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/update", _EasSalesPaperService_UpdateSalesPaper0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/set_status", _EasSalesPaperService_SetSalesPaperStatus0_HTTP_Handler(srv))
-	r.POST("/v1/sales_pager/delete", _EasSalesPaperService_DeleteSalesPaper0_HTTP_Handler(srv))
+	r.PUT("/v1/sales_pager/update", _EasSalesPaperService_UpdateSalesPaper0_HTTP_Handler(srv))
+	r.PUT("/v1/sales_pager/set_status", _EasSalesPaperService_SetSalesPaperStatus0_HTTP_Handler(srv))
+	r.PUT("/v1/sales_pager/delete", _EasSalesPaperService_DeleteSalesPaper0_HTTP_Handler(srv))
 	r.POST("/v1/sales_pager_comment/save", _EasSalesPaperService_SaveSalesPaperComment0_HTTP_Handler(srv))
 	r.GET("/v1/sales_pager_comment/list", _EasSalesPaperService_GetSalesPaperCommentList0_HTTP_Handler(srv))
 	r.POST("/v1/sales_paper_dimension/create", _EasSalesPaperService_CreateSalesPaperDimension0_HTTP_Handler(srv))
-	r.GET("/v1/sales_paper_dimension/page_list", _EasSalesPaperService_GetSalesPaperDimensionPageList0_HTTP_Handler(srv))
+	r.GET("/v1/sales_paper_dimension/page_list", _EasSalesPaperService_GetSalesPaperDimensionList0_HTTP_Handler(srv))
 	r.GET("/v1/sales_paper_dimension/detail", _EasSalesPaperService_GetSalesPaperDimensionDetail0_HTTP_Handler(srv))
-	r.POST("/v1/sales_paper_dimension/update", _EasSalesPaperService_UpdateSalesPaperDimension0_HTTP_Handler(srv))
-	r.POST("/v1/sales_paper_dimension/delete", _EasSalesPaperService_DeleteSalesPaperDimension0_HTTP_Handler(srv))
+	r.PUT("/v1/sales_paper_dimension/update", _EasSalesPaperService_UpdateSalesPaperDimension0_HTTP_Handler(srv))
+	r.PUT("/v1/sales_paper_dimension/delete", _EasSalesPaperService_DeleteSalesPaperDimension0_HTTP_Handler(srv))
+	r.POST("/v1/sales_pager_dimension_comment/save", _EasSalesPaperService_SaveSalesPaperDimensionComment0_HTTP_Handler(srv))
+	r.GET("/v1/sales_pager_dimension_comment/list", _EasSalesPaperService_GetSalesPaperDimensionCommentList0_HTTP_Handler(srv))
 }
 
 func _EasSalesPaperService_CreateSalesPaper0_HTTP_Handler(srv EasSalesPaperServiceHTTPServer) func(ctx http.Context) error {
@@ -294,21 +303,21 @@ func _EasSalesPaperService_CreateSalesPaperDimension0_HTTP_Handler(srv EasSalesP
 	}
 }
 
-func _EasSalesPaperService_GetSalesPaperDimensionPageList0_HTTP_Handler(srv EasSalesPaperServiceHTTPServer) func(ctx http.Context) error {
+func _EasSalesPaperService_GetSalesPaperDimensionList0_HTTP_Handler(srv EasSalesPaperServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetSalesPaperDimensionPageListRequest
+		var in GetSalesPaperDimensionListRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationEasSalesPaperServiceGetSalesPaperDimensionPageList)
+		http.SetOperation(ctx, OperationEasSalesPaperServiceGetSalesPaperDimensionList)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetSalesPaperDimensionPageList(ctx, req.(*GetSalesPaperDimensionPageListRequest))
+			return srv.GetSalesPaperDimensionList(ctx, req.(*GetSalesPaperDimensionListRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetSalesPaperDimensionPageListResponse)
+		reply := out.(*GetSalesPaperDimensionListResponse)
 		return ctx.Result(200, reply)
 	}
 }
@@ -376,6 +385,47 @@ func _EasSalesPaperService_DeleteSalesPaperDimension0_HTTP_Handler(srv EasSalesP
 	}
 }
 
+func _EasSalesPaperService_SaveSalesPaperDimensionComment0_HTTP_Handler(srv EasSalesPaperServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SaveSalesPaperDimensionCommentRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasSalesPaperServiceSaveSalesPaperDimensionComment)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SaveSalesPaperDimensionComment(ctx, req.(*SaveSalesPaperDimensionCommentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SaveSalesPaperDimensionCommentResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _EasSalesPaperService_GetSalesPaperDimensionCommentList0_HTTP_Handler(srv EasSalesPaperServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetSalesPaperDimensionCommentListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasSalesPaperServiceGetSalesPaperDimensionCommentList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetSalesPaperDimensionCommentList(ctx, req.(*GetSalesPaperDimensionCommentListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetSalesPaperDimensionCommentListResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EasSalesPaperServiceHTTPClient interface {
 	CreateSalesPaper(ctx context.Context, req *CreateSalesPaperRequest, opts ...http.CallOption) (rsp *CreateSalesPaperResponse, err error)
 	CreateSalesPaperDimension(ctx context.Context, req *CreateSalesPaperDimensionRequest, opts ...http.CallOption) (rsp *CreateSalesPaperDimensionResponse, err error)
@@ -383,11 +433,13 @@ type EasSalesPaperServiceHTTPClient interface {
 	DeleteSalesPaperDimension(ctx context.Context, req *DeleteSalesPaperDimensionRequest, opts ...http.CallOption) (rsp *DeleteSalesPaperDimensionResponse, err error)
 	GetSalesPaperCommentList(ctx context.Context, req *GetSalesPaperCommentListRequest, opts ...http.CallOption) (rsp *GetSalesPaperCommentListResponse, err error)
 	GetSalesPaperDetail(ctx context.Context, req *GetSalesPaperDetailRequest, opts ...http.CallOption) (rsp *GetSalesPaperDetailResponse, err error)
+	GetSalesPaperDimensionCommentList(ctx context.Context, req *GetSalesPaperDimensionCommentListRequest, opts ...http.CallOption) (rsp *GetSalesPaperDimensionCommentListResponse, err error)
 	GetSalesPaperDimensionDetail(ctx context.Context, req *GetSalesPaperDimensionDetailRequest, opts ...http.CallOption) (rsp *GetSalesPaperDimensionDetailResponse, err error)
-	GetSalesPaperDimensionPageList(ctx context.Context, req *GetSalesPaperDimensionPageListRequest, opts ...http.CallOption) (rsp *GetSalesPaperDimensionPageListResponse, err error)
+	GetSalesPaperDimensionList(ctx context.Context, req *GetSalesPaperDimensionListRequest, opts ...http.CallOption) (rsp *GetSalesPaperDimensionListResponse, err error)
 	GetSalesPaperPageList(ctx context.Context, req *GetSalesPaperPageListRequest, opts ...http.CallOption) (rsp *GetSalesPaperPageListResponse, err error)
 	GetUsableSalesPaperPageList(ctx context.Context, req *GetUsableSalesPaperPageListRequest, opts ...http.CallOption) (rsp *GetUsableSalesPaperPageListResponse, err error)
 	SaveSalesPaperComment(ctx context.Context, req *SaveSalesPaperCommentRequest, opts ...http.CallOption) (rsp *SaveSalesPaperCommentResponse, err error)
+	SaveSalesPaperDimensionComment(ctx context.Context, req *SaveSalesPaperDimensionCommentRequest, opts ...http.CallOption) (rsp *SaveSalesPaperDimensionCommentResponse, err error)
 	SetSalesPaperStatus(ctx context.Context, req *SetSalesPaperStatusRequest, opts ...http.CallOption) (rsp *SetSalesPaperStatusResponse, err error)
 	UpdateSalesPaper(ctx context.Context, req *UpdateSalesPaperRequest, opts ...http.CallOption) (rsp *UpdateSalesPaperResponse, err error)
 	UpdateSalesPaperDimension(ctx context.Context, req *UpdateSalesPaperDimensionRequest, opts ...http.CallOption) (rsp *UpdateSalesPaperDimensionResponse, err error)
@@ -433,7 +485,7 @@ func (c *EasSalesPaperServiceHTTPClientImpl) DeleteSalesPaper(ctx context.Contex
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasSalesPaperServiceDeleteSalesPaper))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -446,7 +498,7 @@ func (c *EasSalesPaperServiceHTTPClientImpl) DeleteSalesPaperDimension(ctx conte
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasSalesPaperServiceDeleteSalesPaperDimension))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -479,6 +531,19 @@ func (c *EasSalesPaperServiceHTTPClientImpl) GetSalesPaperDetail(ctx context.Con
 	return &out, nil
 }
 
+func (c *EasSalesPaperServiceHTTPClientImpl) GetSalesPaperDimensionCommentList(ctx context.Context, in *GetSalesPaperDimensionCommentListRequest, opts ...http.CallOption) (*GetSalesPaperDimensionCommentListResponse, error) {
+	var out GetSalesPaperDimensionCommentListResponse
+	pattern := "/v1/sales_pager_dimension_comment/list"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationEasSalesPaperServiceGetSalesPaperDimensionCommentList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 func (c *EasSalesPaperServiceHTTPClientImpl) GetSalesPaperDimensionDetail(ctx context.Context, in *GetSalesPaperDimensionDetailRequest, opts ...http.CallOption) (*GetSalesPaperDimensionDetailResponse, error) {
 	var out GetSalesPaperDimensionDetailResponse
 	pattern := "/v1/sales_paper_dimension/detail"
@@ -492,11 +557,11 @@ func (c *EasSalesPaperServiceHTTPClientImpl) GetSalesPaperDimensionDetail(ctx co
 	return &out, nil
 }
 
-func (c *EasSalesPaperServiceHTTPClientImpl) GetSalesPaperDimensionPageList(ctx context.Context, in *GetSalesPaperDimensionPageListRequest, opts ...http.CallOption) (*GetSalesPaperDimensionPageListResponse, error) {
-	var out GetSalesPaperDimensionPageListResponse
+func (c *EasSalesPaperServiceHTTPClientImpl) GetSalesPaperDimensionList(ctx context.Context, in *GetSalesPaperDimensionListRequest, opts ...http.CallOption) (*GetSalesPaperDimensionListResponse, error) {
+	var out GetSalesPaperDimensionListResponse
 	pattern := "/v1/sales_paper_dimension/page_list"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationEasSalesPaperServiceGetSalesPaperDimensionPageList))
+	opts = append(opts, http.Operation(OperationEasSalesPaperServiceGetSalesPaperDimensionList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -544,13 +609,26 @@ func (c *EasSalesPaperServiceHTTPClientImpl) SaveSalesPaperComment(ctx context.C
 	return &out, nil
 }
 
+func (c *EasSalesPaperServiceHTTPClientImpl) SaveSalesPaperDimensionComment(ctx context.Context, in *SaveSalesPaperDimensionCommentRequest, opts ...http.CallOption) (*SaveSalesPaperDimensionCommentResponse, error) {
+	var out SaveSalesPaperDimensionCommentResponse
+	pattern := "/v1/sales_pager_dimension_comment/save"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEasSalesPaperServiceSaveSalesPaperDimensionComment))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 func (c *EasSalesPaperServiceHTTPClientImpl) SetSalesPaperStatus(ctx context.Context, in *SetSalesPaperStatusRequest, opts ...http.CallOption) (*SetSalesPaperStatusResponse, error) {
 	var out SetSalesPaperStatusResponse
 	pattern := "/v1/sales_pager/set_status"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasSalesPaperServiceSetSalesPaperStatus))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -563,7 +641,7 @@ func (c *EasSalesPaperServiceHTTPClientImpl) UpdateSalesPaper(ctx context.Contex
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasSalesPaperServiceUpdateSalesPaper))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -576,7 +654,7 @@ func (c *EasSalesPaperServiceHTTPClientImpl) UpdateSalesPaperDimension(ctx conte
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEasSalesPaperServiceUpdateSalesPaperDimension))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

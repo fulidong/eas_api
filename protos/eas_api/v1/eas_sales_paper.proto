@@ -64,21 +64,22 @@ service EasSalesPaperService {
 
   //修改试卷信息
   rpc UpdateSalesPaper(UpdateSalesPaperRequest) returns (UpdateSalesPaperResponse){
-    option (google.api.http)={post:"/v1/sales_pager/update", body:"*"};
+    option (google.api.http)={put:"/v1/sales_pager/update", body:"*"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷信息",tags: ["试卷模块"]};
   };
 
   //禁用/启用试卷
   rpc SetSalesPaperStatus(SetSalesPaperStatusRequest) returns (SetSalesPaperStatusResponse){
-    option (google.api.http)={post:"/v1/sales_pager/set_status", body:"*"};
+    option (google.api.http)={put:"/v1/sales_pager/set_status", body:"*"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "禁用/启用试卷",tags: ["试卷模块"]};
   };
 
   //删除试卷
   rpc DeleteSalesPaper(DeleteSalesPaperRequest) returns (DeleteSalesPaperResponse){
-    option (google.api.http)={post:"/v1/sales_pager/delete", body:"*"};
+    option (google.api.http)={put:"/v1/sales_pager/delete", body:"*"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷",tags: ["试卷模块"]};
   };
+
   //===============================试卷评语模块=========================================
   //保存试卷评语
   rpc SaveSalesPaperComment(SaveSalesPaperCommentRequest) returns (SaveSalesPaperCommentResponse){
@@ -97,11 +98,11 @@ service EasSalesPaperService {
   //创建试卷维度
   rpc CreateSalesPaperDimension(CreateSalesPaperDimensionRequest) returns (CreateSalesPaperDimensionResponse){
     option (google.api.http)={post:"/v1/sales_paper_dimension/create", body:"*"};
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建维度",tags: ["维度模块"]};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建维度",tags: ["试卷维度模块"]};
   };
 
   //试卷维度列表
-  rpc GetSalesPaperDimensionPageList(GetSalesPaperDimensionPageListRequest) returns (GetSalesPaperDimensionPageListResponse){
+  rpc GetSalesPaperDimensionList(GetSalesPaperDimensionListRequest) returns (GetSalesPaperDimensionListResponse){
     option (google.api.http)={get:"/v1/sales_paper_dimension/page_list"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度列表",tags: ["试卷维度模块"]};
   };
@@ -115,14 +116,29 @@ service EasSalesPaperService {
 
   //修改试卷维度信息
   rpc UpdateSalesPaperDimension(UpdateSalesPaperDimensionRequest) returns (UpdateSalesPaperDimensionResponse){
-    option (google.api.http)={post:"/v1/sales_paper_dimension/update", body:"*"};
+    option (google.api.http)={put:"/v1/sales_paper_dimension/update", body:"*"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷维度信息",tags: ["试卷维度模块"]};
   };
 
   //删除试卷维度
   rpc DeleteSalesPaperDimension(DeleteSalesPaperDimensionRequest) returns (DeleteSalesPaperDimensionResponse){
-    option (google.api.http)={post:"/v1/sales_paper_dimension/delete", body:"*"};
+    option (google.api.http)={put:"/v1/sales_paper_dimension/delete", body:"*"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷维度",tags: ["试卷维度模块"]};
   };
+
+
+  //===============================试卷维度评语模块=========================================
+  //保存试卷维度评语
+  rpc SaveSalesPaperDimensionComment(SaveSalesPaperDimensionCommentRequest) returns (SaveSalesPaperDimensionCommentResponse){
+    option (google.api.http)={post:"/v1/sales_pager_dimension_comment/save", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷维度评语",tags: ["试卷维度评语模块"]};
+  };
+
+  //试卷维度评语列表
+  rpc GetSalesPaperDimensionCommentList(GetSalesPaperDimensionCommentListRequest) returns (GetSalesPaperDimensionCommentListResponse){
+    option (google.api.http)={get:"/v1/sales_pager_dimension_comment/list"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度评语列表",tags: ["试卷维度评语模块"]};
+  };
+
 }
 

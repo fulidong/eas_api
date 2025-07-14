@@ -341,6 +341,11 @@ func (uc *UserUseCase) UpdateUserPassWord(ctx context.Context, req *v1.UpdateUse
 	}
 	user, err := uc.repo.GetByID(ctx, userId)
 	if err != nil {
+		l.Errorf("UpdateUserPassWord.repo.GetByID Failed, req:%v, err:%v", req, err.Error())
+		err = innErr.ErrInternalServer
+		return
+	}
+	if user == nil {
 		err = errors.New("用户不存在")
 		return
 	}
@@ -357,6 +362,23 @@ func (uc *UserUseCase) UpdateUserPassWord(ctx context.Context, req *v1.UpdateUse
 	err = uc.repo.UpdateUserPassWord(ctx, userId, hashPassWord, userId)
 	if err != nil {
 		l.Errorf("UpdateUserPassWord.repo.UpdateUserPassWord Failed, req:%v, err:%v", req, err.Error())
+		err = innErr.ErrInternalServer
+		return
+	}
+	return
+}
+
+func (uc *UserUseCase) GetUserListByIds(ctx context.Context, userIds []string) (resp []*entity.Administrator, err error) {
+	resp = make([]*entity.Administrator, 0, len(userIds))
+	l := uc.log.WithContext(ctx)
+	userId, _ := icontext.UserIdFrom(ctx)
+	if userId == "" {
+		err = innErr.ErrLogin
+		return
+	}
+	resp, err = uc.repo.GetByIDs(ctx, userIds)
+	if err != nil {
+		l.Errorf("GetUserListByIds.repo.GetByIDs Failed, userIds:%v, err:%v", userIds, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}

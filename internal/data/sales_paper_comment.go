@@ -21,7 +21,7 @@ func NewSalesPaperCommentRepo(data *Data, logger log.Logger) biz.SalesPaperComme
 	}
 }
 
-func (r *SalesPaperCommentRepo) GetSalesPaperCommentList(ctx context.Context, salesPaperId string) (res []*entity.SalesPaperComment, err error) {
+func (r *SalesPaperCommentRepo) GetList(ctx context.Context, salesPaperId string) (res []*entity.SalesPaperComment, err error) {
 	err = r.data.db.WithContext(ctx).Model(&entity.SalesPaperComment{}).
 		Where(" sales_paper_id = ?", salesPaperId).
 		Order("up_score asc").
@@ -34,7 +34,7 @@ func (r *SalesPaperCommentRepo) GetSalesPaperCommentList(ctx context.Context, sa
 }
 
 // 创建方法
-func (r *SalesPaperCommentRepo) SaveSalesPaperComment(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []string, updatedBy string) error {
+func (r *SalesPaperCommentRepo) Save(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []string, updatedBy string) error {
 	if err := r.data.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if len(addComments) > 0 {
 			for _, comment := range addComments {

@@ -46,13 +46,18 @@ type EasSalesPaperServiceClient interface {
 	// 创建试卷维度
 	CreateSalesPaperDimension(ctx context.Context, in *CreateSalesPaperDimensionRequest, opts ...grpc.CallOption) (*CreateSalesPaperDimensionResponse, error)
 	// 试卷维度列表
-	GetSalesPaperDimensionPageList(ctx context.Context, in *GetSalesPaperDimensionPageListRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionPageListResponse, error)
+	GetSalesPaperDimensionList(ctx context.Context, in *GetSalesPaperDimensionListRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionListResponse, error)
 	// 试卷维度详情
 	GetSalesPaperDimensionDetail(ctx context.Context, in *GetSalesPaperDimensionDetailRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionDetailResponse, error)
 	// 修改试卷维度信息
 	UpdateSalesPaperDimension(ctx context.Context, in *UpdateSalesPaperDimensionRequest, opts ...grpc.CallOption) (*UpdateSalesPaperDimensionResponse, error)
 	// 删除试卷维度
 	DeleteSalesPaperDimension(ctx context.Context, in *DeleteSalesPaperDimensionRequest, opts ...grpc.CallOption) (*DeleteSalesPaperDimensionResponse, error)
+	// ===============================试卷维度评语模块=========================================
+	// 保存试卷维度评语
+	SaveSalesPaperDimensionComment(ctx context.Context, in *SaveSalesPaperDimensionCommentRequest, opts ...grpc.CallOption) (*SaveSalesPaperDimensionCommentResponse, error)
+	// 试卷维度评语列表
+	GetSalesPaperDimensionCommentList(ctx context.Context, in *GetSalesPaperDimensionCommentListRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionCommentListResponse, error)
 }
 
 type easSalesPaperServiceClient struct {
@@ -153,9 +158,9 @@ func (c *easSalesPaperServiceClient) CreateSalesPaperDimension(ctx context.Conte
 	return out, nil
 }
 
-func (c *easSalesPaperServiceClient) GetSalesPaperDimensionPageList(ctx context.Context, in *GetSalesPaperDimensionPageListRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionPageListResponse, error) {
-	out := new(GetSalesPaperDimensionPageListResponse)
-	err := c.cc.Invoke(ctx, "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionPageList", in, out, opts...)
+func (c *easSalesPaperServiceClient) GetSalesPaperDimensionList(ctx context.Context, in *GetSalesPaperDimensionListRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionListResponse, error) {
+	out := new(GetSalesPaperDimensionListResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -183,6 +188,24 @@ func (c *easSalesPaperServiceClient) UpdateSalesPaperDimension(ctx context.Conte
 func (c *easSalesPaperServiceClient) DeleteSalesPaperDimension(ctx context.Context, in *DeleteSalesPaperDimensionRequest, opts ...grpc.CallOption) (*DeleteSalesPaperDimensionResponse, error) {
 	out := new(DeleteSalesPaperDimensionResponse)
 	err := c.cc.Invoke(ctx, "/eas_api.v1.EasSalesPaperService/DeleteSalesPaperDimension", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easSalesPaperServiceClient) SaveSalesPaperDimensionComment(ctx context.Context, in *SaveSalesPaperDimensionCommentRequest, opts ...grpc.CallOption) (*SaveSalesPaperDimensionCommentResponse, error) {
+	out := new(SaveSalesPaperDimensionCommentResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasSalesPaperService/SaveSalesPaperDimensionComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easSalesPaperServiceClient) GetSalesPaperDimensionCommentList(ctx context.Context, in *GetSalesPaperDimensionCommentListRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionCommentListResponse, error) {
+	out := new(GetSalesPaperDimensionCommentListResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionCommentList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -217,13 +240,18 @@ type EasSalesPaperServiceServer interface {
 	// 创建试卷维度
 	CreateSalesPaperDimension(context.Context, *CreateSalesPaperDimensionRequest) (*CreateSalesPaperDimensionResponse, error)
 	// 试卷维度列表
-	GetSalesPaperDimensionPageList(context.Context, *GetSalesPaperDimensionPageListRequest) (*GetSalesPaperDimensionPageListResponse, error)
+	GetSalesPaperDimensionList(context.Context, *GetSalesPaperDimensionListRequest) (*GetSalesPaperDimensionListResponse, error)
 	// 试卷维度详情
 	GetSalesPaperDimensionDetail(context.Context, *GetSalesPaperDimensionDetailRequest) (*GetSalesPaperDimensionDetailResponse, error)
 	// 修改试卷维度信息
 	UpdateSalesPaperDimension(context.Context, *UpdateSalesPaperDimensionRequest) (*UpdateSalesPaperDimensionResponse, error)
 	// 删除试卷维度
 	DeleteSalesPaperDimension(context.Context, *DeleteSalesPaperDimensionRequest) (*DeleteSalesPaperDimensionResponse, error)
+	// ===============================试卷维度评语模块=========================================
+	// 保存试卷维度评语
+	SaveSalesPaperDimensionComment(context.Context, *SaveSalesPaperDimensionCommentRequest) (*SaveSalesPaperDimensionCommentResponse, error)
+	// 试卷维度评语列表
+	GetSalesPaperDimensionCommentList(context.Context, *GetSalesPaperDimensionCommentListRequest) (*GetSalesPaperDimensionCommentListResponse, error)
 	mustEmbedUnimplementedEasSalesPaperServiceServer()
 }
 
@@ -261,8 +289,8 @@ func (UnimplementedEasSalesPaperServiceServer) GetSalesPaperCommentList(context.
 func (UnimplementedEasSalesPaperServiceServer) CreateSalesPaperDimension(context.Context, *CreateSalesPaperDimensionRequest) (*CreateSalesPaperDimensionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSalesPaperDimension not implemented")
 }
-func (UnimplementedEasSalesPaperServiceServer) GetSalesPaperDimensionPageList(context.Context, *GetSalesPaperDimensionPageListRequest) (*GetSalesPaperDimensionPageListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperDimensionPageList not implemented")
+func (UnimplementedEasSalesPaperServiceServer) GetSalesPaperDimensionList(context.Context, *GetSalesPaperDimensionListRequest) (*GetSalesPaperDimensionListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperDimensionList not implemented")
 }
 func (UnimplementedEasSalesPaperServiceServer) GetSalesPaperDimensionDetail(context.Context, *GetSalesPaperDimensionDetailRequest) (*GetSalesPaperDimensionDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperDimensionDetail not implemented")
@@ -272,6 +300,12 @@ func (UnimplementedEasSalesPaperServiceServer) UpdateSalesPaperDimension(context
 }
 func (UnimplementedEasSalesPaperServiceServer) DeleteSalesPaperDimension(context.Context, *DeleteSalesPaperDimensionRequest) (*DeleteSalesPaperDimensionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSalesPaperDimension not implemented")
+}
+func (UnimplementedEasSalesPaperServiceServer) SaveSalesPaperDimensionComment(context.Context, *SaveSalesPaperDimensionCommentRequest) (*SaveSalesPaperDimensionCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveSalesPaperDimensionComment not implemented")
+}
+func (UnimplementedEasSalesPaperServiceServer) GetSalesPaperDimensionCommentList(context.Context, *GetSalesPaperDimensionCommentListRequest) (*GetSalesPaperDimensionCommentListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSalesPaperDimensionCommentList not implemented")
 }
 func (UnimplementedEasSalesPaperServiceServer) mustEmbedUnimplementedEasSalesPaperServiceServer() {}
 
@@ -466,20 +500,20 @@ func _EasSalesPaperService_CreateSalesPaperDimension_Handler(srv interface{}, ct
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EasSalesPaperService_GetSalesPaperDimensionPageList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSalesPaperDimensionPageListRequest)
+func _EasSalesPaperService_GetSalesPaperDimensionList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSalesPaperDimensionListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EasSalesPaperServiceServer).GetSalesPaperDimensionPageList(ctx, in)
+		return srv.(EasSalesPaperServiceServer).GetSalesPaperDimensionList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionPageList",
+		FullMethod: "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EasSalesPaperServiceServer).GetSalesPaperDimensionPageList(ctx, req.(*GetSalesPaperDimensionPageListRequest))
+		return srv.(EasSalesPaperServiceServer).GetSalesPaperDimensionList(ctx, req.(*GetSalesPaperDimensionListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -538,6 +572,42 @@ func _EasSalesPaperService_DeleteSalesPaperDimension_Handler(srv interface{}, ct
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EasSalesPaperService_SaveSalesPaperDimensionComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveSalesPaperDimensionCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasSalesPaperServiceServer).SaveSalesPaperDimensionComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasSalesPaperService/SaveSalesPaperDimensionComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasSalesPaperServiceServer).SaveSalesPaperDimensionComment(ctx, req.(*SaveSalesPaperDimensionCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasSalesPaperService_GetSalesPaperDimensionCommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSalesPaperDimensionCommentListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasSalesPaperServiceServer).GetSalesPaperDimensionCommentList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasSalesPaperService/GetSalesPaperDimensionCommentList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasSalesPaperServiceServer).GetSalesPaperDimensionCommentList(ctx, req.(*GetSalesPaperDimensionCommentListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EasSalesPaperService_ServiceDesc is the grpc.ServiceDesc for EasSalesPaperService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -586,8 +656,8 @@ var EasSalesPaperService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _EasSalesPaperService_CreateSalesPaperDimension_Handler,
 		},
 		{
-			MethodName: "GetSalesPaperDimensionPageList",
-			Handler:    _EasSalesPaperService_GetSalesPaperDimensionPageList_Handler,
+			MethodName: "GetSalesPaperDimensionList",
+			Handler:    _EasSalesPaperService_GetSalesPaperDimensionList_Handler,
 		},
 		{
 			MethodName: "GetSalesPaperDimensionDetail",
@@ -600,6 +670,14 @@ var EasSalesPaperService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteSalesPaperDimension",
 			Handler:    _EasSalesPaperService_DeleteSalesPaperDimension_Handler,
+		},
+		{
+			MethodName: "SaveSalesPaperDimensionComment",
+			Handler:    _EasSalesPaperService_SaveSalesPaperDimensionComment_Handler,
+		},
+		{
+			MethodName: "GetSalesPaperDimensionCommentList",
+			Handler:    _EasSalesPaperService_GetSalesPaperDimensionCommentList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -145,41 +145,38 @@ message CreateSalesPaperDimensionResponse {
 
 message CreateSalesPaperDimensionData {
   string dimension_id=1 [json_name="dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"dimension_id"}];
-  string dimension_name=2 [json_name="dimension_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容",required:["dimension_name"]}];
+  string dimension_name=2 [json_name="dimension_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"维度名称",required:["dimension_name"]}];
   double average_mark=3 [json_name="average_mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"平均分",required:["average_mark"]}];
   double standard_mark=4 [json_name="standard_mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"标准差",required:["standard_mark"]}];
   string description=5 [json_name="description",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"描述",required:["description"]}];
   double max_score=6 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限",required:["max_score"]}];
   double min_score=7 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限",required:["min_score"]}];
-  double is_choose=8 [json_name="is_choose",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否可选择该维度",required:["is_choose"]}];
+  bool is_choose=8 [json_name="is_choose",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否可选择该维度",required:["is_choose"]}];
 }
 
 message SalesPaperDimensionData {
   string dimension_id=1 [json_name="dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"dimension_id"}];
-  string dimension_name=2 [json_name="dimension_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容"}];
+  string dimension_name=2 [json_name="dimension_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"维度名称"}];
   double average_mark=3 [json_name="average_mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"平均分"}];
   double standard_mark=4 [json_name="standard_mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"标准差"}];
   string description=5 [json_name="description",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"描述"}];
   double max_score=6 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限"}];
   double min_score=7 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限"}];
-  double is_choose=8 [json_name="is_choose",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否可选择该维度"}];
+  bool is_choose=8 [json_name="is_choose",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否可选择该维度"}];
   string updated_at=9 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
   string updated_by=10 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
 }
 
-message GetSalesPaperDimensionPageListRequest {
+message GetSalesPaperDimensionListRequest {
   string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id", required:["sales_paper_id"]}];
-  int32 page_index=2 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
-  int32 page_size=3 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
 }
 
-message GetSalesPaperDimensionPageListResponse {
+message GetSalesPaperDimensionListResponse {
   repeated SalesPaperDimensionData dimension_data=1 [json_name="dimension_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"维度内容"}];
-  int64 total=2 [json_name="total",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"总数"}];
 }
 
 message GetSalesPaperDimensionDetailRequest {
-  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id", required:["sales_paper_id"]}];
+  string dimension_id=1 [json_name="dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷维度id", required:["dimension_id"]}];
 }
 message GetSalesPaperDimensionDetailResponse {
   SalesPaperDimensionData sales_paper_dimension=1 [json_name="sales_paper_dimension",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷维度信息"}];
@@ -187,15 +184,49 @@ message GetSalesPaperDimensionDetailResponse {
 
 message UpdateSalesPaperDimensionRequest {
   string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id",required:["sales_paper_id"]}];
-  CreateSalesPaperDimensionData dimension=2  [json_name="dimension",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"维度信息",required:["dimension"]}];
+  repeated CreateSalesPaperDimensionData dimension_data=2  [json_name="dimension_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"维度信息",required:["dimension_data"]}];
 }
 message UpdateSalesPaperDimensionResponse {
 }
 
 
 message DeleteSalesPaperDimensionRequest {
-  string sales_paper_dimension_id=1 [json_name="sales_paper_dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷维度id", required:["sales_paper_dimension_id"]}];
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id",required:["sales_paper_id"]}];
+  string sales_paper_dimension_id=2 [json_name="sales_paper_dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷维度id", required:["sales_paper_dimension_id"]}];
 }
 message DeleteSalesPaperDimensionResponse {
 
+}
+
+//===============================试卷维度评语模块=========================================
+message SaveSalesPaperDimensionCommentRequest {
+  string sales_paper_dimension_id=1 [json_name="sales_paper_dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_dimension_id", required:["sales_paper_dimension_id"]}];
+  repeated SaveSalesPaperDimensionCommentData dimension_comment_data=2 [json_name="dimension_comment_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语集合", required:["dimension_comment_data"]}];
+}
+message SaveSalesPaperDimensionCommentResponse {
+
+}
+
+message SaveSalesPaperDimensionCommentData {
+  string sales_paper_dimension_comment_id=1 [json_name="sales_paper_dimension_comment_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_dimension_comment_id"}];
+  string content=2 [json_name="content",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容",required:["content"]}];
+  double up_score=3 [json_name="up_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"上限分数区分点",required:["up_score"]}];
+  double low_score=4 [json_name="low_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"下限分数区分点",required:["low_score"]}];
+}
+
+message SalesPaperDimensionCommentData {
+  string sales_paper_dimension_comment_id=1 [json_name="sales_paper_dimension_comment_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_dimension_comment_id"}];
+  string content=2 [json_name="content",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容"}];
+  double up_score=3 [json_name="up_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"上限分数区分点"}];
+  double low_score=4 [json_name="low_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"下限分数区分点"}];
+  string updated_at=5 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
+  string updated_by=6 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
+}
+
+message GetSalesPaperDimensionCommentListRequest {
+  string sales_paper_dimension_id=1 [json_name="sales_paper_dimension_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_dimension_id", required:["sales_paper_dimension_id"]}];
+}
+
+message GetSalesPaperDimensionCommentListResponse {
+  repeated SalesPaperDimensionCommentData dimension_comment_data=1 [json_name="dimension_comment_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"评语内容"}];
 }

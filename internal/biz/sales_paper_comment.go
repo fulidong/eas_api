@@ -14,18 +14,18 @@ import (
 )
 
 type SalesPaperCommentRepo interface {
-	GetSalesPaperCommentList(ctx context.Context, salesPaperId string) (res []*entity.SalesPaperComment, err error)
-	SaveSalesPaperComment(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []string, updatedBy string) error
+	GetList(ctx context.Context, salesPaperId string) (res []*entity.SalesPaperComment, err error)
+	Save(ctx context.Context, addComments []*entity.SalesPaperComment, updateComments []*entity.SalesPaperComment, delComments []string, updatedBy string) error
 }
 
 type SalesPaperCommentUseCase struct {
-	repo     SalesPaperCommentRepo
-	userRepo UserRepo
-	log      *log.Helper
+	repo        SalesPaperCommentRepo
+	userUseCase *UserUseCase
+	log         *log.Helper
 }
 
-func NewSalesPaperCommentUseCase(repo SalesPaperCommentRepo, userRepo UserRepo, logger log.Logger) *SalesPaperCommentUseCase {
-	return &SalesPaperCommentUseCase{repo: repo, userRepo: userRepo, log: log.NewHelper(logger)}
+func NewSalesPaperCommentUseCase(repo SalesPaperCommentRepo, userUseCase *UserUseCase, logger log.Logger) *SalesPaperCommentUseCase {
+	return &SalesPaperCommentUseCase{repo: repo, userUseCase: userUseCase, log: log.NewHelper(logger)}
 }
 
 func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, req *v1.SaveSalesPaperCommentRequest) (resp *v1.SaveSalesPaperCommentResponse, err error) {
@@ -35,7 +35,7 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	salesPaperComments, err := uc.repo.GetSalesPaperCommentList(ctx, req.SalesPaperId)
+	salesPaperComments, err := uc.repo.GetList(ctx, req.SalesPaperId)
 	if err != nil {
 		l.Errorf("GetSalesPaperCommentList.repo.GetSalesPaperCommentList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
@@ -66,9 +66,9 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 		}
 	}
 
-	err = uc.repo.SaveSalesPaperComment(ctx, addComments, updateComments, delComments, userId)
+	err = uc.repo.Save(ctx, addComments, updateComments, delComments, userId)
 	if err != nil {
-		l.Errorf("SaveSalesPaperComment.repo.SaveSalesPaperComment Failed, req:%v, err:%v", req, err.Error())
+		l.Errorf("SaveSalesPaperComment.repo.Save Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
 	return resp, nil
@@ -81,9 +81,9 @@ func (uc *SalesPaperCommentUseCase) GetSalesPaperCommentList(ctx context.Context
 		return
 	}
 
-	res, err := uc.repo.GetSalesPaperCommentList(ctx, req.SalesPaperId)
+	res, err := uc.repo.GetList(ctx, req.SalesPaperId)
 	if err != nil {
-		l.Errorf("GetSalesPaperCommentList.repo.GetSalesPaperCommentList Failed, req:%v, err:%v", req, err.Error())
+		l.Errorf("GetSalesPaperCommentList.repo.GetList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -93,9 +93,9 @@ func (uc *SalesPaperCommentUseCase) GetSalesPaperCommentList(ctx context.Context
 	})
 	if len(updatedIds) > 0 {
 		userMap = make(map[string]*entity.Administrator, len(updatedIds))
-		userList, err := uc.userRepo.GetByIDs(ctx, updatedIds)
+		userList, err := uc.userUseCase.GetUserListByIds(ctx, updatedIds)
 		if err != nil {
-			l.Errorf("GetPageList.repo.GetByIDs Failed, updatedIds:%v, err:%v", updatedIds, err.Error())
+			l.Errorf("GetSalesPaperCommentList.userUseCase.GetUserListByIds Failed, updatedIds:%v, err:%v", updatedIds, err.Error())
 			err = innErr.ErrInternalServer
 			return resp, err
 		}
