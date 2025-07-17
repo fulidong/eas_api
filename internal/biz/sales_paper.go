@@ -12,6 +12,7 @@ import (
 	"eas_api/internal/pkg/iutils"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"strings"
 	"time"
 )
 
@@ -208,7 +209,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.UpdateSalesPaperRequest) (resp *v1.UpdateSalesPaperResponse, err error) {
 	resp = &v1.UpdateSalesPaperResponse{}
 	l := uc.log.WithContext(ctx)
-	if req.SalesPaperId == "" {
+	if strings.Trim(req.SalesPaperId, " ") == "" {
 		err = errors.New("参数无效")
 		return
 	}
@@ -216,8 +217,8 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
-	if !ok {
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	if err != nil {
 		return
 	}
 	list, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperName)
@@ -265,8 +266,8 @@ func (uc *SalesPaperUseCase) SetSalesPaperStatus(ctx context.Context, req *v1.Se
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
-	if !ok {
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	if err != nil {
 		return
 	}
 	err = uc.repo.SetSalesPaperStatus(ctx, req.SalesPaperId, req.SalesPaperStatus, userId)
@@ -285,8 +286,8 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
-	if !ok {
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	if err != nil {
 		return
 	}
 	err = uc.repo.DeleteSalesPaper(ctx, req.SalesPaperId, userId)
@@ -298,20 +299,20 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 	return
 }
 
-func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (error, bool) {
+func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (err error) {
 	salesPaper, err := uc.repo.GetByID(ctx, iSalesPaperId)
 	if err != nil {
 		l.Errorf("UpdateSalesPaper.repo.GetByID Failed, req:%v, err:%v", err, err.Error())
 		err = innErr.ErrInternalServer
-		return nil, false
+		return
 	}
 	if salesPaper == nil {
 		err = errors.New("试卷不存在")
-		return nil, false
+		return
 	}
 	if salesPaper.IsUsed {
 		err = errors.New("试卷已被使用，不可更新")
-		return nil, false
+		return
 	}
-	return nil, true
+	return
 }

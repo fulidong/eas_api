@@ -21,6 +21,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type QuestionType int32
+
+const (
+	QuestionType_RadioChoice    QuestionType = 0
+	QuestionType_MultipleChoice QuestionType = 1
+	QuestionType_Judge          QuestionType = 2
+)
+
+// Enum value maps for QuestionType.
+var (
+	QuestionType_name = map[int32]string{
+		0: "RadioChoice",
+		1: "MultipleChoice",
+		2: "Judge",
+	}
+	QuestionType_value = map[string]int32{
+		"RadioChoice":    0,
+		"MultipleChoice": 1,
+		"Judge":          2,
+	}
+)
+
+func (x QuestionType) Enum() *QuestionType {
+	p := new(QuestionType)
+	*p = x
+	return p
+}
+
+func (x QuestionType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (QuestionType) Descriptor() protoreflect.EnumDescriptor {
+	return file_eas_api_v1_eas_sales_paper_models_proto_enumTypes[0].Descriptor()
+}
+
+func (QuestionType) Type() protoreflect.EnumType {
+	return &file_eas_api_v1_eas_sales_paper_models_proto_enumTypes[0]
+}
+
+func (x QuestionType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use QuestionType.Descriptor instead.
+func (QuestionType) EnumDescriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{0}
+}
+
 // ===============================试卷模块=========================================
 type CreateSalesPaperRequest struct {
 	state         protoimpl.MessageState
@@ -2369,6 +2418,855 @@ func (x *GetSalesPaperDimensionCommentListResponse) GetDimensionCommentData() []
 	return nil
 }
 
+// ===============================试卷维度题目模块=========================================
+type SaveSalesPaperDimensionQuestionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SalesPaperId          string            `protobuf:"bytes,1,opt,name=sales_paper_id,json=sales_paper_id,proto3" json:"sales_paper_id"`
+	SalesPaperDimensionId string            `protobuf:"bytes,2,opt,name=sales_paper_dimension_id,json=sales_paper_dimension_id,proto3" json:"sales_paper_dimension_id"`
+	QuestionData          *SaveQuestionData `protobuf:"bytes,3,opt,name=question_data,json=question_data,proto3" json:"question_data"`
+}
+
+func (x *SaveSalesPaperDimensionQuestionRequest) Reset() {
+	*x = SaveSalesPaperDimensionQuestionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[39]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SaveSalesPaperDimensionQuestionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveSalesPaperDimensionQuestionRequest) ProtoMessage() {}
+
+func (x *SaveSalesPaperDimensionQuestionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[39]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveSalesPaperDimensionQuestionRequest.ProtoReflect.Descriptor instead.
+func (*SaveSalesPaperDimensionQuestionRequest) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *SaveSalesPaperDimensionQuestionRequest) GetSalesPaperId() string {
+	if x != nil {
+		return x.SalesPaperId
+	}
+	return ""
+}
+
+func (x *SaveSalesPaperDimensionQuestionRequest) GetSalesPaperDimensionId() string {
+	if x != nil {
+		return x.SalesPaperDimensionId
+	}
+	return ""
+}
+
+func (x *SaveSalesPaperDimensionQuestionRequest) GetQuestionData() *SaveQuestionData {
+	if x != nil {
+		return x.QuestionData
+	}
+	return nil
+}
+
+type SaveSalesPaperDimensionQuestionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *SaveSalesPaperDimensionQuestionResponse) Reset() {
+	*x = SaveSalesPaperDimensionQuestionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[40]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SaveSalesPaperDimensionQuestionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveSalesPaperDimensionQuestionResponse) ProtoMessage() {}
+
+func (x *SaveSalesPaperDimensionQuestionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[40]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveSalesPaperDimensionQuestionResponse.ProtoReflect.Descriptor instead.
+func (*SaveSalesPaperDimensionQuestionResponse) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{40}
+}
+
+type SaveQuestionData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionId     string                    `protobuf:"bytes,1,opt,name=question_id,json=question_id,proto3" json:"question_id"`
+	Title          string                    `protobuf:"bytes,2,opt,name=title,json=title,proto3" json:"title"`
+	Remark         string                    `protobuf:"bytes,3,opt,name=remark,json=remark,proto3" json:"remark"`
+	QuestionTypeId QuestionType              `protobuf:"varint,4,opt,name=question_type_id,json=question_type_id,proto3,enum=eas_api.v1.QuestionType" json:"question_type_id"`
+	Order          int32                     `protobuf:"varint,5,opt,name=order,json=order,proto3" json:"order"`
+	Options        []*SaveQuestionOptionData `protobuf:"bytes,6,rep,name=options,json=options,proto3" json:"options"`
+}
+
+func (x *SaveQuestionData) Reset() {
+	*x = SaveQuestionData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[41]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SaveQuestionData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveQuestionData) ProtoMessage() {}
+
+func (x *SaveQuestionData) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[41]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveQuestionData.ProtoReflect.Descriptor instead.
+func (*SaveQuestionData) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *SaveQuestionData) GetQuestionId() string {
+	if x != nil {
+		return x.QuestionId
+	}
+	return ""
+}
+
+func (x *SaveQuestionData) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *SaveQuestionData) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+func (x *SaveQuestionData) GetQuestionTypeId() QuestionType {
+	if x != nil {
+		return x.QuestionTypeId
+	}
+	return QuestionType_RadioChoice
+}
+
+func (x *SaveQuestionData) GetOrder() int32 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+func (x *SaveQuestionData) GetOptions() []*SaveQuestionOptionData {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+type SaveQuestionOptionData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionOptionId string  `protobuf:"bytes,1,opt,name=question_option_id,json=question_option_id,proto3" json:"question_option_id"`
+	Description      string  `protobuf:"bytes,2,opt,name=description,json=description,proto3" json:"description"`
+	Score            float64 `protobuf:"fixed64,3,opt,name=score,json=score,proto3" json:"score"`
+	Order            int32   `protobuf:"varint,4,opt,name=order,json=order,proto3" json:"order"`
+}
+
+func (x *SaveQuestionOptionData) Reset() {
+	*x = SaveQuestionOptionData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[42]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SaveQuestionOptionData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveQuestionOptionData) ProtoMessage() {}
+
+func (x *SaveQuestionOptionData) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[42]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveQuestionOptionData.ProtoReflect.Descriptor instead.
+func (*SaveQuestionOptionData) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *SaveQuestionOptionData) GetQuestionOptionId() string {
+	if x != nil {
+		return x.QuestionOptionId
+	}
+	return ""
+}
+
+func (x *SaveQuestionOptionData) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *SaveQuestionOptionData) GetScore() float64 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
+}
+
+func (x *SaveQuestionOptionData) GetOrder() int32 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+type QuestionData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionId           string                `protobuf:"bytes,1,opt,name=question_id,json=question_id,proto3" json:"question_id"`
+	Title                string                `protobuf:"bytes,2,opt,name=title,json=title,proto3" json:"title"`
+	Remark               string                `protobuf:"bytes,3,opt,name=remark,json=remark,proto3" json:"remark"`
+	QuestionTypeId       QuestionType          `protobuf:"varint,4,opt,name=question_type_id,json=question_type_id,proto3,enum=eas_api.v1.QuestionType" json:"question_type_id"`
+	Order                int32                 `protobuf:"varint,5,opt,name=order,json=order,proto3" json:"order"`
+	SalePaperId          string                `protobuf:"bytes,6,opt,name=sale_paper_id,json=sale_paper_id,proto3" json:"sale_paper_id"`
+	SalePaperDimensionId string                `protobuf:"bytes,7,opt,name=sale_paper_dimension_id,json=sale_paper_dimension_id,proto3" json:"sale_paper_dimension_id"`
+	UpdatedAt            string                `protobuf:"bytes,8,opt,name=updated_at,json=updated_at,proto3" json:"updated_at"`
+	UpdatedBy            string                `protobuf:"bytes,9,opt,name=updated_by,json=updated_by,proto3" json:"updated_by"`
+	QuestionOptionsData  []*QuestionOptionData `protobuf:"bytes,10,rep,name=question_options_data,json=question_options_data,proto3" json:"question_options_data"`
+}
+
+func (x *QuestionData) Reset() {
+	*x = QuestionData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[43]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QuestionData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestionData) ProtoMessage() {}
+
+func (x *QuestionData) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[43]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestionData.ProtoReflect.Descriptor instead.
+func (*QuestionData) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *QuestionData) GetQuestionId() string {
+	if x != nil {
+		return x.QuestionId
+	}
+	return ""
+}
+
+func (x *QuestionData) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *QuestionData) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+func (x *QuestionData) GetQuestionTypeId() QuestionType {
+	if x != nil {
+		return x.QuestionTypeId
+	}
+	return QuestionType_RadioChoice
+}
+
+func (x *QuestionData) GetOrder() int32 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+func (x *QuestionData) GetSalePaperId() string {
+	if x != nil {
+		return x.SalePaperId
+	}
+	return ""
+}
+
+func (x *QuestionData) GetSalePaperDimensionId() string {
+	if x != nil {
+		return x.SalePaperDimensionId
+	}
+	return ""
+}
+
+func (x *QuestionData) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+func (x *QuestionData) GetUpdatedBy() string {
+	if x != nil {
+		return x.UpdatedBy
+	}
+	return ""
+}
+
+func (x *QuestionData) GetQuestionOptionsData() []*QuestionOptionData {
+	if x != nil {
+		return x.QuestionOptionsData
+	}
+	return nil
+}
+
+type QuestionOptionData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionOptionId string  `protobuf:"bytes,1,opt,name=question_option_id,json=question_option_id,proto3" json:"question_option_id"`
+	Description      string  `protobuf:"bytes,2,opt,name=description,json=description,proto3" json:"description"`
+	Score            float64 `protobuf:"fixed64,3,opt,name=score,json=score,proto3" json:"score"`
+	Order            int32   `protobuf:"varint,4,opt,name=order,json=order,proto3" json:"order"`
+	UpdatedAt        string  `protobuf:"bytes,5,opt,name=updated_at,json=updated_at,proto3" json:"updated_at"`
+	UpdatedBy        string  `protobuf:"bytes,6,opt,name=updated_by,json=updated_by,proto3" json:"updated_by"`
+	SerialNumber     string  `protobuf:"bytes,7,opt,name=serial_number,json=serial_number,proto3" json:"serial_number"`
+}
+
+func (x *QuestionOptionData) Reset() {
+	*x = QuestionOptionData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[44]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QuestionOptionData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestionOptionData) ProtoMessage() {}
+
+func (x *QuestionOptionData) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[44]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestionOptionData.ProtoReflect.Descriptor instead.
+func (*QuestionOptionData) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *QuestionOptionData) GetQuestionOptionId() string {
+	if x != nil {
+		return x.QuestionOptionId
+	}
+	return ""
+}
+
+func (x *QuestionOptionData) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *QuestionOptionData) GetScore() float64 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
+}
+
+func (x *QuestionOptionData) GetOrder() int32 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+func (x *QuestionOptionData) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+func (x *QuestionOptionData) GetUpdatedBy() string {
+	if x != nil {
+		return x.UpdatedBy
+	}
+	return ""
+}
+
+func (x *QuestionOptionData) GetSerialNumber() string {
+	if x != nil {
+		return x.SerialNumber
+	}
+	return ""
+}
+
+type GetSalesPaperDimensionQuestionListRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SalesPaperId string `protobuf:"bytes,1,opt,name=sales_paper_id,json=sales_paper_id,proto3" json:"sales_paper_id"`
+}
+
+func (x *GetSalesPaperDimensionQuestionListRequest) Reset() {
+	*x = GetSalesPaperDimensionQuestionListRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[45]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSalesPaperDimensionQuestionListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSalesPaperDimensionQuestionListRequest) ProtoMessage() {}
+
+func (x *GetSalesPaperDimensionQuestionListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[45]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSalesPaperDimensionQuestionListRequest.ProtoReflect.Descriptor instead.
+func (*GetSalesPaperDimensionQuestionListRequest) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *GetSalesPaperDimensionQuestionListRequest) GetSalesPaperId() string {
+	if x != nil {
+		return x.SalesPaperId
+	}
+	return ""
+}
+
+type GetSalesPaperDimensionQuestionListResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionData []*QuestionData `protobuf:"bytes,1,rep,name=question_data,json=question_data,proto3" json:"question_data"`
+}
+
+func (x *GetSalesPaperDimensionQuestionListResponse) Reset() {
+	*x = GetSalesPaperDimensionQuestionListResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[46]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSalesPaperDimensionQuestionListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSalesPaperDimensionQuestionListResponse) ProtoMessage() {}
+
+func (x *GetSalesPaperDimensionQuestionListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[46]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSalesPaperDimensionQuestionListResponse.ProtoReflect.Descriptor instead.
+func (*GetSalesPaperDimensionQuestionListResponse) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *GetSalesPaperDimensionQuestionListResponse) GetQuestionData() []*QuestionData {
+	if x != nil {
+		return x.QuestionData
+	}
+	return nil
+}
+
+type GetSalesPaperDimensionQuestionDetailRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionId string `protobuf:"bytes,1,opt,name=question_id,json=question_id,proto3" json:"question_id"`
+}
+
+func (x *GetSalesPaperDimensionQuestionDetailRequest) Reset() {
+	*x = GetSalesPaperDimensionQuestionDetailRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[47]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSalesPaperDimensionQuestionDetailRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSalesPaperDimensionQuestionDetailRequest) ProtoMessage() {}
+
+func (x *GetSalesPaperDimensionQuestionDetailRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[47]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSalesPaperDimensionQuestionDetailRequest.ProtoReflect.Descriptor instead.
+func (*GetSalesPaperDimensionQuestionDetailRequest) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *GetSalesPaperDimensionQuestionDetailRequest) GetQuestionId() string {
+	if x != nil {
+		return x.QuestionId
+	}
+	return ""
+}
+
+type GetSalesPaperDimensionQuestionDetailResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionData *QuestionData `protobuf:"bytes,1,opt,name=question_data,json=question_data,proto3" json:"question_data"`
+}
+
+func (x *GetSalesPaperDimensionQuestionDetailResponse) Reset() {
+	*x = GetSalesPaperDimensionQuestionDetailResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[48]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSalesPaperDimensionQuestionDetailResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSalesPaperDimensionQuestionDetailResponse) ProtoMessage() {}
+
+func (x *GetSalesPaperDimensionQuestionDetailResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[48]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSalesPaperDimensionQuestionDetailResponse.ProtoReflect.Descriptor instead.
+func (*GetSalesPaperDimensionQuestionDetailResponse) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *GetSalesPaperDimensionQuestionDetailResponse) GetQuestionData() *QuestionData {
+	if x != nil {
+		return x.QuestionData
+	}
+	return nil
+}
+
+type DeleteSalesPaperDimensionQuestionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SalesPaperId string `protobuf:"bytes,1,opt,name=sales_paper_id,json=sales_paper_id,proto3" json:"sales_paper_id"`
+	QuestionId   string `protobuf:"bytes,2,opt,name=question_id,json=question_id,proto3" json:"question_id"`
+}
+
+func (x *DeleteSalesPaperDimensionQuestionRequest) Reset() {
+	*x = DeleteSalesPaperDimensionQuestionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[49]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteSalesPaperDimensionQuestionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSalesPaperDimensionQuestionRequest) ProtoMessage() {}
+
+func (x *DeleteSalesPaperDimensionQuestionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[49]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSalesPaperDimensionQuestionRequest.ProtoReflect.Descriptor instead.
+func (*DeleteSalesPaperDimensionQuestionRequest) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *DeleteSalesPaperDimensionQuestionRequest) GetSalesPaperId() string {
+	if x != nil {
+		return x.SalesPaperId
+	}
+	return ""
+}
+
+func (x *DeleteSalesPaperDimensionQuestionRequest) GetQuestionId() string {
+	if x != nil {
+		return x.QuestionId
+	}
+	return ""
+}
+
+type DeleteSalesPaperDimensionQuestionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DeleteSalesPaperDimensionQuestionResponse) Reset() {
+	*x = DeleteSalesPaperDimensionQuestionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[50]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteSalesPaperDimensionQuestionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSalesPaperDimensionQuestionResponse) ProtoMessage() {}
+
+func (x *DeleteSalesPaperDimensionQuestionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[50]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSalesPaperDimensionQuestionResponse.ProtoReflect.Descriptor instead.
+func (*DeleteSalesPaperDimensionQuestionResponse) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{50}
+}
+
+type GetSalesPaperDimensionQuestionPreViewRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SalesPaperId string `protobuf:"bytes,1,opt,name=sales_paper_id,json=sales_paper_id,proto3" json:"sales_paper_id"`
+}
+
+func (x *GetSalesPaperDimensionQuestionPreViewRequest) Reset() {
+	*x = GetSalesPaperDimensionQuestionPreViewRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[51]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSalesPaperDimensionQuestionPreViewRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSalesPaperDimensionQuestionPreViewRequest) ProtoMessage() {}
+
+func (x *GetSalesPaperDimensionQuestionPreViewRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[51]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSalesPaperDimensionQuestionPreViewRequest.ProtoReflect.Descriptor instead.
+func (*GetSalesPaperDimensionQuestionPreViewRequest) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *GetSalesPaperDimensionQuestionPreViewRequest) GetSalesPaperId() string {
+	if x != nil {
+		return x.SalesPaperId
+	}
+	return ""
+}
+
+type GetSalesPaperDimensionQuestionPreViewResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	QuestionData []*QuestionData `protobuf:"bytes,1,rep,name=question_data,json=question_data,proto3" json:"question_data"`
+}
+
+func (x *GetSalesPaperDimensionQuestionPreViewResponse) Reset() {
+	*x = GetSalesPaperDimensionQuestionPreViewResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[52]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSalesPaperDimensionQuestionPreViewResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSalesPaperDimensionQuestionPreViewResponse) ProtoMessage() {}
+
+func (x *GetSalesPaperDimensionQuestionPreViewResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[52]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSalesPaperDimensionQuestionPreViewResponse.ProtoReflect.Descriptor instead.
+func (*GetSalesPaperDimensionQuestionPreViewResponse) Descriptor() ([]byte, []int) {
+	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *GetSalesPaperDimensionQuestionPreViewResponse) GetQuestionData() []*QuestionData {
+	if x != nil {
+		return x.QuestionData
+	}
+	return nil
+}
+
 var File_eas_api_v1_eas_sales_paper_models_proto protoreflect.FileDescriptor
 
 var file_eas_api_v1_eas_sales_paper_models_proto_rawDesc = []byte{
@@ -2922,8 +3820,212 @@ var file_eas_api_v1_eas_sales_paper_models_proto_rawDesc = []byte{
 	0x74, 0x44, 0x61, 0x74, 0x61, 0x42, 0x11, 0x92, 0x41, 0x0e, 0x2a, 0x0c, 0xe8, 0xaf, 0x84, 0xe8,
 	0xaf, 0xad, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9, 0x52, 0x16, 0x64, 0x69, 0x6d, 0x65, 0x6e, 0x73,
 	0x69, 0x6f, 0x6e, 0x5f, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x64, 0x61, 0x74, 0x61,
-	0x42, 0x13, 0x5a, 0x11, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0xd3, 0x02, 0x0a, 0x26, 0x53, 0x61, 0x76, 0x65, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61,
+	0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4c, 0x0a, 0x0e, 0x73,
+	0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x24, 0x92, 0x41, 0x21, 0x2a, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f,
+	0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0xd2, 0x01, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73,
+	0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x52, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73,
+	0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x12, 0x74, 0x0a, 0x18, 0x73, 0x61, 0x6c,
+	0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x64, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69,
+	0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x38, 0x92, 0x41, 0x35,
+	0x2a, 0x18, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x64, 0x69,
+	0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0xd2, 0x01, 0x18, 0x73, 0x61, 0x6c,
+	0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x64, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69,
+	0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52, 0x18, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x70,
+	0x65, 0x72, 0x5f, 0x64, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x12,
+	0x65, 0x0a, 0x0d, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69,
+	0x2e, 0x76, 0x31, 0x2e, 0x53, 0x61, 0x76, 0x65, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e,
+	0x44, 0x61, 0x74, 0x61, 0x42, 0x21, 0x92, 0x41, 0x1e, 0x2a, 0x0c, 0xe9, 0xa2, 0x98, 0xe7, 0x9b,
+	0xae, 0xe9, 0x9b, 0x86, 0xe5, 0x90, 0x88, 0xd2, 0x01, 0x0d, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x52, 0x0d, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x22, 0x29, 0x0a, 0x27, 0x53, 0x61, 0x76, 0x65, 0x53, 0x61,
+	0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f,
+	0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0xab, 0x03, 0x0a, 0x10, 0x53, 0x61, 0x76, 0x65, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x12, 0x32, 0x0a, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0x92, 0x41, 0x0d,
+	0x2a, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52, 0x0b, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x12, 0x2f, 0x0a, 0x05, 0x74, 0x69,
+	0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x19, 0x92, 0x41, 0x16, 0x2a, 0x0c,
+	0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe6, 0xa0, 0x87, 0xe9, 0xa2, 0x98, 0xd2, 0x01, 0x05, 0x74,
+	0x69, 0x74, 0x6c, 0x65, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x23, 0x0a, 0x06, 0x72,
+	0x65, 0x6d, 0x61, 0x72, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0b, 0x92, 0x41, 0x08,
+	0x2a, 0x06, 0xe5, 0xa4, 0x87, 0xe6, 0xb3, 0xa8, 0x52, 0x06, 0x72, 0x65, 0x6d, 0x61, 0x72, 0x6b,
+	0x12, 0x80, 0x01, 0x0a, 0x10, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x79,
+	0x70, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x65, 0x61,
+	0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f,
+	0x6e, 0x54, 0x79, 0x70, 0x65, 0x42, 0x3a, 0x92, 0x41, 0x37, 0x2a, 0x22, 0xe7, 0x8a, 0xb6, 0xe6,
+	0x80, 0x81, 0x3a, 0x30, 0xe5, 0x8d, 0x95, 0xe9, 0x80, 0x89, 0xe3, 0x80, 0x81, 0x31, 0xe5, 0xa4,
+	0x9a, 0xe9, 0x80, 0x89, 0xe3, 0x80, 0x81, 0x32, 0xe5, 0x88, 0xa4, 0xe6, 0x96, 0xad, 0xd2, 0x01,
+	0x10, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x69,
+	0x64, 0x52, 0x10, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x5f, 0x69, 0x64, 0x12, 0x2f, 0x0a, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x18, 0x05, 0x20, 0x01,
+	0x28, 0x05, 0x42, 0x19, 0x92, 0x41, 0x16, 0x2a, 0x0c, 0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe5,
+	0xba, 0x8f, 0xe5, 0x8f, 0xb7, 0xd2, 0x01, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x52, 0x05, 0x6f,
+	0x72, 0x64, 0x65, 0x72, 0x12, 0x59, 0x0a, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
+	0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e,
+	0x76, 0x31, 0x2e, 0x53, 0x61, 0x76, 0x65, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x4f,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x1b, 0x92, 0x41, 0x18, 0x2a, 0x0c,
+	0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe9, 0x80, 0x89, 0xe9, 0xa1, 0xb9, 0xd2, 0x01, 0x07, 0x6f,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22,
+	0xf8, 0x01, 0x0a, 0x16, 0x53, 0x61, 0x76, 0x65, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e,
+	0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x12, 0x47, 0x0a, 0x12, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x17, 0x92, 0x41, 0x14, 0x2a, 0x12, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52,
+	0x12, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x5f, 0x69, 0x64, 0x12, 0x41, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1f, 0x92, 0x41, 0x1c, 0x2a, 0x0c, 0xe9,
+	0x80, 0x89, 0xe9, 0xa1, 0xb9, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9, 0xd2, 0x01, 0x0b, 0x64, 0x65,
+	0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x21, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x01, 0x42, 0x0b, 0x92, 0x41, 0x08, 0x2a, 0x06, 0xe5, 0x88, 0x86, 0xe6,
+	0x95, 0xb0, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x2f, 0x0a, 0x05, 0x6f, 0x72, 0x64,
+	0x65, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x42, 0x19, 0x92, 0x41, 0x16, 0x2a, 0x0c, 0xe9,
+	0x80, 0x89, 0xe9, 0xa1, 0xb9, 0xe5, 0xba, 0x8f, 0xe5, 0x8f, 0xb7, 0xd2, 0x01, 0x05, 0x6f, 0x72,
+	0x64, 0x65, 0x72, 0x52, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x22, 0xd2, 0x05, 0x0a, 0x0c, 0x51,
+	0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x12, 0x32, 0x0a, 0x0b, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x10, 0x92, 0x41, 0x0d, 0x2a, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
+	0x69, 0x64, 0x52, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x12,
+	0x2f, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x19,
+	0x92, 0x41, 0x16, 0x2a, 0x0c, 0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe6, 0xa0, 0x87, 0xe9, 0xa2,
+	0x98, 0xd2, 0x01, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65,
+	0x12, 0x23, 0x0a, 0x06, 0x72, 0x65, 0x6d, 0x61, 0x72, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x0b, 0x92, 0x41, 0x08, 0x2a, 0x06, 0xe5, 0xa4, 0x87, 0xe6, 0xb3, 0xa8, 0x52, 0x06, 0x72,
+	0x65, 0x6d, 0x61, 0x72, 0x6b, 0x12, 0x80, 0x01, 0x0a, 0x10, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x18, 0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75,
+	0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x42, 0x3a, 0x92, 0x41, 0x37, 0x2a,
+	0x22, 0xe7, 0x8a, 0xb6, 0xe6, 0x80, 0x81, 0x3a, 0x30, 0xe5, 0x8d, 0x95, 0xe9, 0x80, 0x89, 0xe3,
+	0x80, 0x81, 0x31, 0xe5, 0xa4, 0x9a, 0xe9, 0x80, 0x89, 0xe3, 0x80, 0x81, 0x32, 0xe5, 0x88, 0xa4,
+	0xe6, 0x96, 0xad, 0xd2, 0x01, 0x10, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74,
+	0x79, 0x70, 0x65, 0x5f, 0x69, 0x64, 0x52, 0x10, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e,
+	0x5f, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x69, 0x64, 0x12, 0x2f, 0x0a, 0x05, 0x6f, 0x72, 0x64, 0x65,
+	0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x42, 0x19, 0x92, 0x41, 0x16, 0x2a, 0x0c, 0xe9, 0xa2,
+	0x98, 0xe7, 0x9b, 0xae, 0xe5, 0xba, 0x8f, 0xe5, 0x8f, 0xb7, 0xd2, 0x01, 0x05, 0x6f, 0x72, 0x64,
+	0x65, 0x72, 0x52, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x43, 0x0a, 0x0d, 0x73, 0x61, 0x6c,
+	0x65, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x1d, 0x92, 0x41, 0x1a, 0x2a, 0x08, 0xe8, 0xaf, 0x95, 0xe5, 0x8d, 0xb7, 0x69, 0x64, 0xd2,
+	0x01, 0x0d, 0x73, 0x61, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x52,
+	0x0d, 0x73, 0x61, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x12, 0x61,
+	0x0a, 0x17, 0x73, 0x61, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x64, 0x69, 0x6d,
+	0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x27, 0x92, 0x41, 0x24, 0x2a, 0x08, 0xe7, 0xbb, 0xb4, 0xe5, 0xba, 0xa6, 0x69, 0x64, 0xd2, 0x01,
+	0x17, 0x73, 0x61, 0x6c, 0x65, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x64, 0x69, 0x6d, 0x65,
+	0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52, 0x17, 0x73, 0x61, 0x6c, 0x65, 0x5f, 0x70,
+	0x61, 0x70, 0x65, 0x72, 0x5f, 0x64, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69,
+	0x64, 0x12, 0x37, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18,
+	0x08, 0x20, 0x01, 0x28, 0x09, 0x42, 0x17, 0x92, 0x41, 0x14, 0x2a, 0x12, 0xe6, 0x9c, 0x80, 0xe5,
+	0x90, 0x8e, 0xe6, 0x9b, 0xb4, 0xe6, 0x96, 0xb0, 0xe6, 0x97, 0xb6, 0xe9, 0x97, 0xb4, 0x52, 0x0a,
+	0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x12, 0x34, 0x0a, 0x0a, 0x75, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x62, 0x79, 0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x42, 0x14,
+	0x92, 0x41, 0x11, 0x2a, 0x0f, 0xe6, 0x9c, 0x80, 0xe5, 0x90, 0x8e, 0xe6, 0x9b, 0xb4, 0xe6, 0x96,
+	0xb0, 0xe4, 0xba, 0xba, 0x52, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x62, 0x79,
+	0x12, 0x6d, 0x0a, 0x15, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x1e, 0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x42,
+	0x17, 0x92, 0x41, 0x14, 0x2a, 0x12, 0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe9, 0x80, 0x89, 0xe9,
+	0xa1, 0xb9, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9, 0x52, 0x15, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x22,
+	0x9c, 0x03, 0x0a, 0x12, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x4f, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x12, 0x47, 0x0a, 0x12, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x17, 0x92, 0x41, 0x14, 0x2a, 0x12, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52, 0x12, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x12,
+	0x41, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x1f, 0x92, 0x41, 0x1c, 0x2a, 0x0c, 0xe9, 0x80, 0x89, 0xe9, 0xa1,
+	0xb9, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9, 0xd2, 0x01, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x21, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x01, 0x42, 0x0b, 0x92, 0x41, 0x08, 0x2a, 0x06, 0xe5, 0x88, 0x86, 0xe6, 0x95, 0xb0, 0x52, 0x05,
+	0x73, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x2f, 0x0a, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x05, 0x42, 0x19, 0x92, 0x41, 0x16, 0x2a, 0x0c, 0xe9, 0x80, 0x89, 0xe9, 0xa1,
+	0xb9, 0xe5, 0xba, 0x8f, 0xe5, 0x8f, 0xb7, 0xd2, 0x01, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x52,
+	0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x37, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x64, 0x5f, 0x61, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x17, 0x92, 0x41, 0x14, 0x2a,
+	0x12, 0xe6, 0x9c, 0x80, 0xe5, 0x90, 0x8e, 0xe6, 0x9b, 0xb4, 0xe6, 0x96, 0xb0, 0xe6, 0x97, 0xb6,
+	0xe9, 0x97, 0xb4, 0x52, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x12,
+	0x34, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x62, 0x79, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x14, 0x92, 0x41, 0x11, 0x2a, 0x0f, 0xe6, 0x9c, 0x80, 0xe5, 0x90, 0x8e,
+	0xe6, 0x9b, 0xb4, 0xe6, 0x96, 0xb0, 0xe4, 0xba, 0xba, 0x52, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x64, 0x5f, 0x62, 0x79, 0x12, 0x37, 0x0a, 0x0d, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x5f,
+	0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x42, 0x11, 0x92, 0x41,
+	0x0e, 0x2a, 0x0c, 0xe9, 0x80, 0x89, 0xe9, 0xa1, 0xb9, 0xe5, 0xba, 0x8f, 0xe5, 0x8f, 0xb7, 0x52,
+	0x0d, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x22, 0x79,
+	0x0a, 0x29, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44,
+	0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e,
+	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4c, 0x0a, 0x0e, 0x73,
+	0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x24, 0x92, 0x41, 0x21, 0x2a, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f,
+	0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0xd2, 0x01, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73,
+	0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x52, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73,
+	0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x22, 0x7f, 0x0a, 0x2a, 0x47, 0x65, 0x74,
+	0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73,
+	0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x69, 0x73, 0x74, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0d, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18,
+	0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x73,
+	0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x11, 0x92, 0x41, 0x0e, 0x2a, 0x0c, 0xe9,
+	0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9, 0x52, 0x0d, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x22, 0x6f, 0x0a, 0x2b, 0x47, 0x65,
+	0x74, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e,
+	0x73, 0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x74, 0x61,
+	0x69, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x40, 0x0a, 0x0b, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x1e,
+	0x92, 0x41, 0x1b, 0x2a, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64,
+	0xd2, 0x01, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52, 0x0b,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x22, 0x81, 0x01, 0x0a, 0x2c,
+	0x47, 0x65, 0x74, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d,
+	0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65,
+	0x74, 0x61, 0x69, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0d,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x76, 0x31,
+	0x2e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x11, 0x92,
+	0x41, 0x0e, 0x2a, 0x0c, 0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9,
+	0x52, 0x0d, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x22,
+	0xba, 0x01, 0x0a, 0x28, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x50,
+	0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4c, 0x0a, 0x0e,
+	0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x24, 0x92, 0x41, 0x21, 0x2a, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73,
+	0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0xd2, 0x01, 0x0e, 0x73, 0x61, 0x6c, 0x65,
+	0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x52, 0x0e, 0x73, 0x61, 0x6c, 0x65,
+	0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x12, 0x40, 0x0a, 0x0b, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x1e, 0x92, 0x41, 0x1b, 0x2a, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69,
+	0x64, 0xd2, 0x01, 0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x52,
+	0x0b, 0x71, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x22, 0x2b, 0x0a, 0x29,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72,
+	0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f,
+	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7c, 0x0a, 0x2c, 0x47, 0x65, 0x74,
+	0x53, 0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73,
+	0x69, 0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x65, 0x56, 0x69,
+	0x65, 0x77, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x4c, 0x0a, 0x0e, 0x73, 0x61, 0x6c,
+	0x65, 0x73, 0x5f, 0x70, 0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x42, 0x24, 0x92, 0x41, 0x21, 0x2a, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70, 0x61,
+	0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0xd2, 0x01, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70,
+	0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x52, 0x0e, 0x73, 0x61, 0x6c, 0x65, 0x73, 0x5f, 0x70,
+	0x61, 0x70, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x22, 0x82, 0x01, 0x0a, 0x2d, 0x47, 0x65, 0x74, 0x53,
+	0x61, 0x6c, 0x65, 0x73, 0x50, 0x61, 0x70, 0x65, 0x72, 0x44, 0x69, 0x6d, 0x65, 0x6e, 0x73, 0x69,
+	0x6f, 0x6e, 0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x65, 0x56, 0x69, 0x65,
+	0x77, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0d, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x18, 0x2e, 0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75,
+	0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x61, 0x74, 0x61, 0x42, 0x11, 0x92, 0x41, 0x0e, 0x2a,
+	0x0c, 0xe9, 0xa2, 0x98, 0xe7, 0x9b, 0xae, 0xe5, 0x86, 0x85, 0xe5, 0xae, 0xb9, 0x52, 0x0d, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x2a, 0x3e, 0x0a, 0x0c,
+	0x51, 0x75, 0x65, 0x73, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b,
+	0x52, 0x61, 0x64, 0x69, 0x6f, 0x43, 0x68, 0x6f, 0x69, 0x63, 0x65, 0x10, 0x00, 0x12, 0x12, 0x0a,
+	0x0e, 0x4d, 0x75, 0x6c, 0x74, 0x69, 0x70, 0x6c, 0x65, 0x43, 0x68, 0x6f, 0x69, 0x63, 0x65, 0x10,
+	0x01, 0x12, 0x09, 0x0a, 0x05, 0x4a, 0x75, 0x64, 0x67, 0x65, 0x10, 0x02, 0x42, 0x13, 0x5a, 0x11,
+	0x65, 0x61, 0x73, 0x5f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x3b, 0x76,
+	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2938,67 +4040,91 @@ func file_eas_api_v1_eas_sales_paper_models_proto_rawDescGZIP() []byte {
 	return file_eas_api_v1_eas_sales_paper_models_proto_rawDescData
 }
 
-var file_eas_api_v1_eas_sales_paper_models_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
+var file_eas_api_v1_eas_sales_paper_models_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_eas_api_v1_eas_sales_paper_models_proto_msgTypes = make([]protoimpl.MessageInfo, 53)
 var file_eas_api_v1_eas_sales_paper_models_proto_goTypes = []interface{}{
-	(*CreateSalesPaperRequest)(nil),                   // 0: eas_api.v1.CreateSalesPaperRequest
-	(*CreateSalesPaperResponse)(nil),                  // 1: eas_api.v1.CreateSalesPaperResponse
-	(*SalesPaperData)(nil),                            // 2: eas_api.v1.SalesPaperData
-	(*GetSalesPaperPageListRequest)(nil),              // 3: eas_api.v1.GetSalesPaperPageListRequest
-	(*GetSalesPaperPageListResponse)(nil),             // 4: eas_api.v1.GetSalesPaperPageListResponse
-	(*GetUsableSalesPaperPageListRequest)(nil),        // 5: eas_api.v1.GetUsableSalesPaperPageListRequest
-	(*GetUsableSalesPaperPageListResponse)(nil),       // 6: eas_api.v1.GetUsableSalesPaperPageListResponse
-	(*GetSalesPaperDetailRequest)(nil),                // 7: eas_api.v1.GetSalesPaperDetailRequest
-	(*GetSalesPaperDetailResponse)(nil),               // 8: eas_api.v1.GetSalesPaperDetailResponse
-	(*SetSalesPaperStatusRequest)(nil),                // 9: eas_api.v1.SetSalesPaperStatusRequest
-	(*SetSalesPaperStatusResponse)(nil),               // 10: eas_api.v1.SetSalesPaperStatusResponse
-	(*UpdateSalesPaperRequest)(nil),                   // 11: eas_api.v1.UpdateSalesPaperRequest
-	(*UpdateSalesPaperResponse)(nil),                  // 12: eas_api.v1.UpdateSalesPaperResponse
-	(*DeleteSalesPaperRequest)(nil),                   // 13: eas_api.v1.DeleteSalesPaperRequest
-	(*DeleteSalesPaperResponse)(nil),                  // 14: eas_api.v1.DeleteSalesPaperResponse
-	(*SaveSalesPaperCommentRequest)(nil),              // 15: eas_api.v1.SaveSalesPaperCommentRequest
-	(*SaveSalesPaperCommentResponse)(nil),             // 16: eas_api.v1.SaveSalesPaperCommentResponse
-	(*SaveSalesPaperCommentData)(nil),                 // 17: eas_api.v1.SaveSalesPaperCommentData
-	(*SalesPaperCommentData)(nil),                     // 18: eas_api.v1.SalesPaperCommentData
-	(*GetSalesPaperCommentListRequest)(nil),           // 19: eas_api.v1.GetSalesPaperCommentListRequest
-	(*GetSalesPaperCommentListResponse)(nil),          // 20: eas_api.v1.GetSalesPaperCommentListResponse
-	(*CreateSalesPaperDimensionRequest)(nil),          // 21: eas_api.v1.CreateSalesPaperDimensionRequest
-	(*CreateSalesPaperDimensionResponse)(nil),         // 22: eas_api.v1.CreateSalesPaperDimensionResponse
-	(*CreateSalesPaperDimensionData)(nil),             // 23: eas_api.v1.CreateSalesPaperDimensionData
-	(*SalesPaperDimensionData)(nil),                   // 24: eas_api.v1.SalesPaperDimensionData
-	(*GetSalesPaperDimensionListRequest)(nil),         // 25: eas_api.v1.GetSalesPaperDimensionListRequest
-	(*GetSalesPaperDimensionListResponse)(nil),        // 26: eas_api.v1.GetSalesPaperDimensionListResponse
-	(*GetSalesPaperDimensionDetailRequest)(nil),       // 27: eas_api.v1.GetSalesPaperDimensionDetailRequest
-	(*GetSalesPaperDimensionDetailResponse)(nil),      // 28: eas_api.v1.GetSalesPaperDimensionDetailResponse
-	(*UpdateSalesPaperDimensionRequest)(nil),          // 29: eas_api.v1.UpdateSalesPaperDimensionRequest
-	(*UpdateSalesPaperDimensionResponse)(nil),         // 30: eas_api.v1.UpdateSalesPaperDimensionResponse
-	(*DeleteSalesPaperDimensionRequest)(nil),          // 31: eas_api.v1.DeleteSalesPaperDimensionRequest
-	(*DeleteSalesPaperDimensionResponse)(nil),         // 32: eas_api.v1.DeleteSalesPaperDimensionResponse
-	(*SaveSalesPaperDimensionCommentRequest)(nil),     // 33: eas_api.v1.SaveSalesPaperDimensionCommentRequest
-	(*SaveSalesPaperDimensionCommentResponse)(nil),    // 34: eas_api.v1.SaveSalesPaperDimensionCommentResponse
-	(*SaveSalesPaperDimensionCommentData)(nil),        // 35: eas_api.v1.SaveSalesPaperDimensionCommentData
-	(*SalesPaperDimensionCommentData)(nil),            // 36: eas_api.v1.SalesPaperDimensionCommentData
-	(*GetSalesPaperDimensionCommentListRequest)(nil),  // 37: eas_api.v1.GetSalesPaperDimensionCommentListRequest
-	(*GetSalesPaperDimensionCommentListResponse)(nil), // 38: eas_api.v1.GetSalesPaperDimensionCommentListResponse
-	(SalesPaperStatus)(0),                             // 39: eas_api.v1.SalesPaperStatus
+	(QuestionType)(0),                                     // 0: eas_api.v1.QuestionType
+	(*CreateSalesPaperRequest)(nil),                       // 1: eas_api.v1.CreateSalesPaperRequest
+	(*CreateSalesPaperResponse)(nil),                      // 2: eas_api.v1.CreateSalesPaperResponse
+	(*SalesPaperData)(nil),                                // 3: eas_api.v1.SalesPaperData
+	(*GetSalesPaperPageListRequest)(nil),                  // 4: eas_api.v1.GetSalesPaperPageListRequest
+	(*GetSalesPaperPageListResponse)(nil),                 // 5: eas_api.v1.GetSalesPaperPageListResponse
+	(*GetUsableSalesPaperPageListRequest)(nil),            // 6: eas_api.v1.GetUsableSalesPaperPageListRequest
+	(*GetUsableSalesPaperPageListResponse)(nil),           // 7: eas_api.v1.GetUsableSalesPaperPageListResponse
+	(*GetSalesPaperDetailRequest)(nil),                    // 8: eas_api.v1.GetSalesPaperDetailRequest
+	(*GetSalesPaperDetailResponse)(nil),                   // 9: eas_api.v1.GetSalesPaperDetailResponse
+	(*SetSalesPaperStatusRequest)(nil),                    // 10: eas_api.v1.SetSalesPaperStatusRequest
+	(*SetSalesPaperStatusResponse)(nil),                   // 11: eas_api.v1.SetSalesPaperStatusResponse
+	(*UpdateSalesPaperRequest)(nil),                       // 12: eas_api.v1.UpdateSalesPaperRequest
+	(*UpdateSalesPaperResponse)(nil),                      // 13: eas_api.v1.UpdateSalesPaperResponse
+	(*DeleteSalesPaperRequest)(nil),                       // 14: eas_api.v1.DeleteSalesPaperRequest
+	(*DeleteSalesPaperResponse)(nil),                      // 15: eas_api.v1.DeleteSalesPaperResponse
+	(*SaveSalesPaperCommentRequest)(nil),                  // 16: eas_api.v1.SaveSalesPaperCommentRequest
+	(*SaveSalesPaperCommentResponse)(nil),                 // 17: eas_api.v1.SaveSalesPaperCommentResponse
+	(*SaveSalesPaperCommentData)(nil),                     // 18: eas_api.v1.SaveSalesPaperCommentData
+	(*SalesPaperCommentData)(nil),                         // 19: eas_api.v1.SalesPaperCommentData
+	(*GetSalesPaperCommentListRequest)(nil),               // 20: eas_api.v1.GetSalesPaperCommentListRequest
+	(*GetSalesPaperCommentListResponse)(nil),              // 21: eas_api.v1.GetSalesPaperCommentListResponse
+	(*CreateSalesPaperDimensionRequest)(nil),              // 22: eas_api.v1.CreateSalesPaperDimensionRequest
+	(*CreateSalesPaperDimensionResponse)(nil),             // 23: eas_api.v1.CreateSalesPaperDimensionResponse
+	(*CreateSalesPaperDimensionData)(nil),                 // 24: eas_api.v1.CreateSalesPaperDimensionData
+	(*SalesPaperDimensionData)(nil),                       // 25: eas_api.v1.SalesPaperDimensionData
+	(*GetSalesPaperDimensionListRequest)(nil),             // 26: eas_api.v1.GetSalesPaperDimensionListRequest
+	(*GetSalesPaperDimensionListResponse)(nil),            // 27: eas_api.v1.GetSalesPaperDimensionListResponse
+	(*GetSalesPaperDimensionDetailRequest)(nil),           // 28: eas_api.v1.GetSalesPaperDimensionDetailRequest
+	(*GetSalesPaperDimensionDetailResponse)(nil),          // 29: eas_api.v1.GetSalesPaperDimensionDetailResponse
+	(*UpdateSalesPaperDimensionRequest)(nil),              // 30: eas_api.v1.UpdateSalesPaperDimensionRequest
+	(*UpdateSalesPaperDimensionResponse)(nil),             // 31: eas_api.v1.UpdateSalesPaperDimensionResponse
+	(*DeleteSalesPaperDimensionRequest)(nil),              // 32: eas_api.v1.DeleteSalesPaperDimensionRequest
+	(*DeleteSalesPaperDimensionResponse)(nil),             // 33: eas_api.v1.DeleteSalesPaperDimensionResponse
+	(*SaveSalesPaperDimensionCommentRequest)(nil),         // 34: eas_api.v1.SaveSalesPaperDimensionCommentRequest
+	(*SaveSalesPaperDimensionCommentResponse)(nil),        // 35: eas_api.v1.SaveSalesPaperDimensionCommentResponse
+	(*SaveSalesPaperDimensionCommentData)(nil),            // 36: eas_api.v1.SaveSalesPaperDimensionCommentData
+	(*SalesPaperDimensionCommentData)(nil),                // 37: eas_api.v1.SalesPaperDimensionCommentData
+	(*GetSalesPaperDimensionCommentListRequest)(nil),      // 38: eas_api.v1.GetSalesPaperDimensionCommentListRequest
+	(*GetSalesPaperDimensionCommentListResponse)(nil),     // 39: eas_api.v1.GetSalesPaperDimensionCommentListResponse
+	(*SaveSalesPaperDimensionQuestionRequest)(nil),        // 40: eas_api.v1.SaveSalesPaperDimensionQuestionRequest
+	(*SaveSalesPaperDimensionQuestionResponse)(nil),       // 41: eas_api.v1.SaveSalesPaperDimensionQuestionResponse
+	(*SaveQuestionData)(nil),                              // 42: eas_api.v1.SaveQuestionData
+	(*SaveQuestionOptionData)(nil),                        // 43: eas_api.v1.SaveQuestionOptionData
+	(*QuestionData)(nil),                                  // 44: eas_api.v1.QuestionData
+	(*QuestionOptionData)(nil),                            // 45: eas_api.v1.QuestionOptionData
+	(*GetSalesPaperDimensionQuestionListRequest)(nil),     // 46: eas_api.v1.GetSalesPaperDimensionQuestionListRequest
+	(*GetSalesPaperDimensionQuestionListResponse)(nil),    // 47: eas_api.v1.GetSalesPaperDimensionQuestionListResponse
+	(*GetSalesPaperDimensionQuestionDetailRequest)(nil),   // 48: eas_api.v1.GetSalesPaperDimensionQuestionDetailRequest
+	(*GetSalesPaperDimensionQuestionDetailResponse)(nil),  // 49: eas_api.v1.GetSalesPaperDimensionQuestionDetailResponse
+	(*DeleteSalesPaperDimensionQuestionRequest)(nil),      // 50: eas_api.v1.DeleteSalesPaperDimensionQuestionRequest
+	(*DeleteSalesPaperDimensionQuestionResponse)(nil),     // 51: eas_api.v1.DeleteSalesPaperDimensionQuestionResponse
+	(*GetSalesPaperDimensionQuestionPreViewRequest)(nil),  // 52: eas_api.v1.GetSalesPaperDimensionQuestionPreViewRequest
+	(*GetSalesPaperDimensionQuestionPreViewResponse)(nil), // 53: eas_api.v1.GetSalesPaperDimensionQuestionPreViewResponse
+	(SalesPaperStatus)(0),                                 // 54: eas_api.v1.SalesPaperStatus
 }
 var file_eas_api_v1_eas_sales_paper_models_proto_depIdxs = []int32{
-	2,  // 0: eas_api.v1.GetSalesPaperPageListResponse.sales_paper_list:type_name -> eas_api.v1.SalesPaperData
-	2,  // 1: eas_api.v1.GetUsableSalesPaperPageListResponse.sales_paper_list:type_name -> eas_api.v1.SalesPaperData
-	2,  // 2: eas_api.v1.GetSalesPaperDetailResponse.sales_paper:type_name -> eas_api.v1.SalesPaperData
-	39, // 3: eas_api.v1.SetSalesPaperStatusRequest.sales_paper_status:type_name -> eas_api.v1.SalesPaperStatus
-	17, // 4: eas_api.v1.SaveSalesPaperCommentRequest.comment_data:type_name -> eas_api.v1.SaveSalesPaperCommentData
-	18, // 5: eas_api.v1.GetSalesPaperCommentListResponse.comment_data:type_name -> eas_api.v1.SalesPaperCommentData
-	23, // 6: eas_api.v1.CreateSalesPaperDimensionRequest.dimension_data:type_name -> eas_api.v1.CreateSalesPaperDimensionData
-	24, // 7: eas_api.v1.GetSalesPaperDimensionListResponse.dimension_data:type_name -> eas_api.v1.SalesPaperDimensionData
-	24, // 8: eas_api.v1.GetSalesPaperDimensionDetailResponse.sales_paper_dimension:type_name -> eas_api.v1.SalesPaperDimensionData
-	23, // 9: eas_api.v1.UpdateSalesPaperDimensionRequest.dimension_data:type_name -> eas_api.v1.CreateSalesPaperDimensionData
-	35, // 10: eas_api.v1.SaveSalesPaperDimensionCommentRequest.dimension_comment_data:type_name -> eas_api.v1.SaveSalesPaperDimensionCommentData
-	36, // 11: eas_api.v1.GetSalesPaperDimensionCommentListResponse.dimension_comment_data:type_name -> eas_api.v1.SalesPaperDimensionCommentData
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	3,  // 0: eas_api.v1.GetSalesPaperPageListResponse.sales_paper_list:type_name -> eas_api.v1.SalesPaperData
+	3,  // 1: eas_api.v1.GetUsableSalesPaperPageListResponse.sales_paper_list:type_name -> eas_api.v1.SalesPaperData
+	3,  // 2: eas_api.v1.GetSalesPaperDetailResponse.sales_paper:type_name -> eas_api.v1.SalesPaperData
+	54, // 3: eas_api.v1.SetSalesPaperStatusRequest.sales_paper_status:type_name -> eas_api.v1.SalesPaperStatus
+	18, // 4: eas_api.v1.SaveSalesPaperCommentRequest.comment_data:type_name -> eas_api.v1.SaveSalesPaperCommentData
+	19, // 5: eas_api.v1.GetSalesPaperCommentListResponse.comment_data:type_name -> eas_api.v1.SalesPaperCommentData
+	24, // 6: eas_api.v1.CreateSalesPaperDimensionRequest.dimension_data:type_name -> eas_api.v1.CreateSalesPaperDimensionData
+	25, // 7: eas_api.v1.GetSalesPaperDimensionListResponse.dimension_data:type_name -> eas_api.v1.SalesPaperDimensionData
+	25, // 8: eas_api.v1.GetSalesPaperDimensionDetailResponse.sales_paper_dimension:type_name -> eas_api.v1.SalesPaperDimensionData
+	24, // 9: eas_api.v1.UpdateSalesPaperDimensionRequest.dimension_data:type_name -> eas_api.v1.CreateSalesPaperDimensionData
+	36, // 10: eas_api.v1.SaveSalesPaperDimensionCommentRequest.dimension_comment_data:type_name -> eas_api.v1.SaveSalesPaperDimensionCommentData
+	37, // 11: eas_api.v1.GetSalesPaperDimensionCommentListResponse.dimension_comment_data:type_name -> eas_api.v1.SalesPaperDimensionCommentData
+	42, // 12: eas_api.v1.SaveSalesPaperDimensionQuestionRequest.question_data:type_name -> eas_api.v1.SaveQuestionData
+	0,  // 13: eas_api.v1.SaveQuestionData.question_type_id:type_name -> eas_api.v1.QuestionType
+	43, // 14: eas_api.v1.SaveQuestionData.options:type_name -> eas_api.v1.SaveQuestionOptionData
+	0,  // 15: eas_api.v1.QuestionData.question_type_id:type_name -> eas_api.v1.QuestionType
+	45, // 16: eas_api.v1.QuestionData.question_options_data:type_name -> eas_api.v1.QuestionOptionData
+	44, // 17: eas_api.v1.GetSalesPaperDimensionQuestionListResponse.question_data:type_name -> eas_api.v1.QuestionData
+	44, // 18: eas_api.v1.GetSalesPaperDimensionQuestionDetailResponse.question_data:type_name -> eas_api.v1.QuestionData
+	44, // 19: eas_api.v1.GetSalesPaperDimensionQuestionPreViewResponse.question_data:type_name -> eas_api.v1.QuestionData
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_eas_api_v1_eas_sales_paper_models_proto_init() }
@@ -3476,19 +4602,188 @@ func file_eas_api_v1_eas_sales_paper_models_proto_init() {
 				return nil
 			}
 		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SaveSalesPaperDimensionQuestionRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[40].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SaveSalesPaperDimensionQuestionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[41].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SaveQuestionData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[42].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SaveQuestionOptionData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[43].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QuestionData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[44].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QuestionOptionData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[45].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSalesPaperDimensionQuestionListRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[46].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSalesPaperDimensionQuestionListResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[47].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSalesPaperDimensionQuestionDetailRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSalesPaperDimensionQuestionDetailResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[49].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteSalesPaperDimensionQuestionRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteSalesPaperDimensionQuestionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSalesPaperDimensionQuestionPreViewRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_eas_api_v1_eas_sales_paper_models_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSalesPaperDimensionQuestionPreViewResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_eas_api_v1_eas_sales_paper_models_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   39,
+			NumEnums:      1,
+			NumMessages:   53,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_eas_api_v1_eas_sales_paper_models_proto_goTypes,
 		DependencyIndexes: file_eas_api_v1_eas_sales_paper_models_proto_depIdxs,
+		EnumInfos:         file_eas_api_v1_eas_sales_paper_models_proto_enumTypes,
 		MessageInfos:      file_eas_api_v1_eas_sales_paper_models_proto_msgTypes,
 	}.Build()
 	File_eas_api_v1_eas_sales_paper_models_proto = out.File

@@ -16,9 +16,9 @@ const TableNameQuestion = "question"
 type Question struct {
 	ID             string         `gorm:"column:id;primaryKey;comment:主键" json:"id"`                                           // 主键
 	DimensionID    string         `gorm:"column:dimension_id;not null;comment:维度表外键" json:"dimension_id"`                      // 维度表外键
+	SalesPaperID   string         `gorm:"column:sales_paper_id;not null;comment:试卷表外键" json:"sales_paper_id"`                  // 试卷表外键
 	Title          string         `gorm:"column:title;not null;comment:题干" json:"title"`                                       // 题干
 	Remark         string         `gorm:"column:remark;not null;comment:备注" json:"remark"`                                     // 备注
-	Status         bool           `gorm:"column:status;not null;comment:状态" json:"status"`                                     // 状态
 	QuestionTypeID int32          `gorm:"column:question_type_id;not null;comment:试题类型ID" json:"question_type_id"`             // 试题类型ID
 	Order          int32          `gorm:"column:order;not null;comment:排序" json:"order"`                                       // 排序
 	CreatedAt      time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间

@@ -9,4 +9,5 @@ var ProviderSet = wire.NewSet(
 	NewSalesPaperUseCase,
 	NewSalesPaperCommentUseCase,
 	NewSalesPaperDimensionUseCase,
-	NewSalesPaperDimensionCommentUseCase)
+	NewSalesPaperDimensionCommentUseCase,
+	NewQuestionUseCase)

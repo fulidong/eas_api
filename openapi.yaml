@@ -271,6 +271,100 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/eas_api.v1.SaveSalesPaperDimensionCommentResponse'
+    /v1/sales_pager_dimension_question/delete:
+        put:
+            tags:
+                - EasSalesPaperService
+            description: 删除试卷维度题目
+            operationId: EasSalesPaperService_DeleteSalesPaperDimensionQuestion
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.DeleteSalesPaperDimensionQuestionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.DeleteSalesPaperDimensionQuestionResponse'
+    /v1/sales_pager_dimension_question/detail:
+        get:
+            tags:
+                - EasSalesPaperService
+            description: 试卷维度题目详情
+            operationId: EasSalesPaperService_GetSalesPaperDimensionQuestionDetail
+            parameters:
+                - name: question_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperDimensionQuestionDetailResponse'
+    /v1/sales_pager_dimension_question/list:
+        get:
+            tags:
+                - EasSalesPaperService
+            description: 试卷维度题目列表
+            operationId: EasSalesPaperService_GetSalesPaperDimensionQuestionList
+            parameters:
+                - name: sales_paper_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperDimensionQuestionListResponse'
+    /v1/sales_pager_dimension_question/preview:
+        get:
+            tags:
+                - EasSalesPaperService
+            description: 试卷维度题目预览
+            operationId: EasSalesPaperService_GetSalesPaperDimensionQuestionPreView
+            parameters:
+                - name: sales_paper_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetSalesPaperDimensionQuestionPreViewResponse'
+    /v1/sales_pager_dimension_question/save:
+        post:
+            tags:
+                - EasSalesPaperService
+            description: |-
+                ===============================试卷维度题目模块=========================================
+                保存试卷维度题目
+            operationId: EasSalesPaperService_SaveSalesPaperDimensionQuestion
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.SaveSalesPaperDimensionQuestionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.SaveSalesPaperDimensionQuestionResponse'
     /v1/sales_paper_dimension/create:
         post:
             tags:
@@ -660,6 +754,16 @@ components:
         eas_api.v1.CreateUserResponse:
             type: object
             properties: {}
+        eas_api.v1.DeleteSalesPaperDimensionQuestionRequest:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                question_id:
+                    type: string
+        eas_api.v1.DeleteSalesPaperDimensionQuestionResponse:
+            type: object
+            properties: {}
         eas_api.v1.DeleteSalesPaperDimensionRequest:
             type: object
             properties:
@@ -726,6 +830,25 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/eas_api.v1.SalesPaperDimensionData'
+        eas_api.v1.GetSalesPaperDimensionQuestionDetailResponse:
+            type: object
+            properties:
+                question_data:
+                    $ref: '#/components/schemas/eas_api.v1.QuestionData'
+        eas_api.v1.GetSalesPaperDimensionQuestionListResponse:
+            type: object
+            properties:
+                question_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.QuestionData'
+        eas_api.v1.GetSalesPaperDimensionQuestionPreViewResponse:
+            type: object
+            properties:
+                question_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.QuestionData'
         eas_api.v1.GetSalesPaperPageListResponse:
             type: object
             properties:
@@ -770,6 +893,52 @@ components:
                     type: integer
                     format: enum
                 token=:
+                    type: string
+        eas_api.v1.QuestionData:
+            type: object
+            properties:
+                question_id:
+                    type: string
+                title:
+                    type: string
+                remark:
+                    type: string
+                question_type_id:
+                    type: integer
+                    format: enum
+                order:
+                    type: integer
+                    format: int32
+                sale_paper_id:
+                    type: string
+                sale_paper_dimension_id:
+                    type: string
+                updated_at:
+                    type: string
+                updated_by:
+                    type: string
+                question_options_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.QuestionOptionData'
+        eas_api.v1.QuestionOptionData:
+            type: object
+            properties:
+                question_option_id:
+                    type: string
+                description:
+                    type: string
+                score:
+                    type: number
+                    format: double
+                order:
+                    type: integer
+                    format: int32
+                updated_at:
+                    type: string
+                updated_by:
+                    type: string
+                serial_number:
                     type: string
         eas_api.v1.ResetUserPassWordRequest:
             type: object
@@ -874,6 +1043,38 @@ components:
                     type: string
                 updated_by:
                     type: string
+        eas_api.v1.SaveQuestionData:
+            type: object
+            properties:
+                question_id:
+                    type: string
+                title:
+                    type: string
+                remark:
+                    type: string
+                question_type_id:
+                    type: integer
+                    format: enum
+                order:
+                    type: integer
+                    format: int32
+                options:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.SaveQuestionOptionData'
+        eas_api.v1.SaveQuestionOptionData:
+            type: object
+            properties:
+                question_option_id:
+                    type: string
+                description:
+                    type: string
+                score:
+                    type: number
+                    format: double
+                order:
+                    type: integer
+                    format: int32
         eas_api.v1.SaveSalesPaperCommentData:
             type: object
             properties:
@@ -924,6 +1125,19 @@ components:
                         $ref: '#/components/schemas/eas_api.v1.SaveSalesPaperDimensionCommentData'
             description: ===============================试卷维度评语模块=========================================
         eas_api.v1.SaveSalesPaperDimensionCommentResponse:
+            type: object
+            properties: {}
+        eas_api.v1.SaveSalesPaperDimensionQuestionRequest:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                sales_paper_dimension_id:
+                    type: string
+                question_data:
+                    $ref: '#/components/schemas/eas_api.v1.SaveQuestionData'
+            description: ===============================试卷维度题目模块=========================================
+        eas_api.v1.SaveSalesPaperDimensionQuestionResponse:
             type: object
             properties: {}
         eas_api.v1.SetSalesPaperStatusRequest:

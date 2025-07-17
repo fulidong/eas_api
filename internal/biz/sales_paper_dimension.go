@@ -40,7 +40,10 @@ func (uc *SalesPaperDimensionUseCase) CreateSalesPaperDimension(ctx context.Cont
 		return
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
-
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	if err != nil {
+		return
+	}
 	entities := make([]*entity.SalesPaperDimension, 0, len(req.DimensionData))
 	for _, datum := range req.DimensionData {
 
@@ -165,8 +168,8 @@ func (uc *SalesPaperDimensionUseCase) UpdateSalesPaperDimension(ctx context.Cont
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
-	if !ok {
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	if err != nil {
 		return
 	}
 	dimensions := make([]*entity.SalesPaperDimension, 0, len(req.DimensionData))
@@ -200,8 +203,8 @@ func (uc *SalesPaperDimensionUseCase) DeleteSalesPaperDimension(ctx context.Cont
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err, ok := uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
-	if !ok {
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	if err != nil {
 		return
 	}
 	err = uc.repo.Delete(ctx, req.SalesPaperDimensionId, userId)

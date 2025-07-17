@@ -51,8 +51,17 @@ func (uc *SalesPaperDimensionCommentUseCase) SaveSalesPaperDimensionComment(ctx 
 		func(data *v1.SaveSalesPaperDimensionCommentData) string {
 			return data.SalesPaperDimensionCommentId
 		},
-		func() *entity.SalesPaperDimensionComment {
-			return &entity.SalesPaperDimensionComment{}
+		func(comment *entity.SalesPaperDimensionComment, data *v1.SaveSalesPaperDimensionCommentData) *entity.SalesPaperDimensionComment {
+			if comment == nil {
+				comment = &entity.SalesPaperDimensionComment{}
+			}
+			comment.Content = data.Content
+			comment.SalesPaperDimensionID = req.SalesPaperDimensionId
+			comment.UpScore = data.UpScore
+			comment.LowScore = data.LowScore
+			comment.CreatedBy = userId
+			comment.UpdatedBy = userId
+			return comment
 		})
 
 	if len(addComments) > 0 {

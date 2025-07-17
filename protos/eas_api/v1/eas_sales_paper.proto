@@ -140,5 +140,36 @@ service EasSalesPaperService {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度评语列表",tags: ["试卷维度评语模块"]};
   };
 
+
+  //===============================试卷维度题目模块=========================================
+  //保存试卷维度题目
+  rpc SaveSalesPaperDimensionQuestion(SaveSalesPaperDimensionQuestionRequest) returns (SaveSalesPaperDimensionQuestionResponse){
+    option (google.api.http)={post:"/v1/sales_pager_dimension_question/save", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "保存试卷维度题目",tags: ["试卷维度题目模块"]};
+  };
+
+  //试卷维度题目列表
+  rpc GetSalesPaperDimensionQuestionList(GetSalesPaperDimensionQuestionListRequest) returns (GetSalesPaperDimensionQuestionListResponse){
+    option (google.api.http)={get:"/v1/sales_pager_dimension_question/list"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度题目列表",tags: ["试卷维度题目模块"]};
+  };
+
+  //试卷维度题目详情
+  rpc GetSalesPaperDimensionQuestionDetail(GetSalesPaperDimensionQuestionDetailRequest) returns (GetSalesPaperDimensionQuestionDetailResponse){
+    option (google.api.http)={get:"/v1/sales_pager_dimension_question/detail"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度题目详情",tags: ["试卷维度题目模块"]};
+  };
+
+  //删除试卷维度题目
+  rpc DeleteSalesPaperDimensionQuestion(DeleteSalesPaperDimensionQuestionRequest) returns (DeleteSalesPaperDimensionQuestionResponse){
+    option (google.api.http)={put:"/v1/sales_pager_dimension_question/delete", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷维度题目",tags: ["试卷维度题目模块"]};
+  };
+
+  //试卷维度题目预览
+  rpc GetSalesPaperDimensionQuestionPreView(GetSalesPaperDimensionQuestionPreViewRequest) returns (GetSalesPaperDimensionQuestionPreViewResponse){
+    option (google.api.http)={get:"/v1/sales_pager_dimension_question/preview"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度题目预览",tags: ["试卷维度题目模块"]};
+  };
 }
 

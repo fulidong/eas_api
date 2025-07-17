@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
+	"strings"
 	"time"
 )
 
@@ -179,7 +180,7 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest
 		return
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
-	if req.UserId == "" {
+	if strings.Trim(req.UserId, " ") == "" {
 		err = errors.New("参数无效")
 		return
 	}
@@ -335,7 +336,7 @@ func (uc *UserUseCase) UpdateUserPassWord(ctx context.Context, req *v1.UpdateUse
 	resp = &v1.UpdateUserPassWordResponse{}
 	l := uc.log.WithContext(ctx)
 	userId, _ := icontext.UserIdFrom(ctx)
-	if userId == "" {
+	if strings.Trim(userId, " ") == "" {
 		err = innErr.ErrLogin
 		return
 	}
@@ -372,7 +373,7 @@ func (uc *UserUseCase) GetUserListByIds(ctx context.Context, userIds []string) (
 	resp = make([]*entity.Administrator, 0, len(userIds))
 	l := uc.log.WithContext(ctx)
 	userId, _ := icontext.UserIdFrom(ctx)
-	if userId == "" {
+	if strings.Trim(userId, " ") == "" {
 		err = innErr.ErrLogin
 		return
 	}

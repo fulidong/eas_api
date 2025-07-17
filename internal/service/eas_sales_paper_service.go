@@ -12,6 +12,7 @@ type EasSalesPaperService struct {
 	salesPaperCommentUc          *biz.SalesPaperCommentUseCase
 	salesPaperDimensionUc        *biz.SalesPaperDimensionUseCase
 	salesPaperDimensionCommentUc *biz.SalesPaperDimensionCommentUseCase
+	questionUc                   *biz.QuestionUseCase
 }
 
 func NewEasSalesPaperService(
@@ -19,12 +20,14 @@ func NewEasSalesPaperService(
 	salesPaperUc *biz.SalesPaperUseCase,
 	salesPaperCommentUc *biz.SalesPaperCommentUseCase,
 	salesPaperDimensionUc *biz.SalesPaperDimensionUseCase,
-	salesPaperDimensionCommentUc *biz.SalesPaperDimensionCommentUseCase) *EasSalesPaperService {
+	salesPaperDimensionCommentUc *biz.SalesPaperDimensionCommentUseCase,
+	questionUc *biz.QuestionUseCase) *EasSalesPaperService {
 	return &EasSalesPaperService{
 		userUc:                       userUc,
 		salesPaperUc:                 salesPaperUc,
 		salesPaperCommentUc:          salesPaperCommentUc,
 		salesPaperDimensionUc:        salesPaperDimensionUc,
 		salesPaperDimensionCommentUc: salesPaperDimensionCommentUc,
+		questionUc:                   questionUc,
 	}
 }

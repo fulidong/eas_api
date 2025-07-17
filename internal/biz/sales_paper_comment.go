@@ -51,8 +51,17 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 		func(data *v1.SaveSalesPaperCommentData) string {
 			return data.SalesPaperCommentId
 		},
-		func() *entity.SalesPaperComment {
-			return &entity.SalesPaperComment{}
+		func(comment *entity.SalesPaperComment, data *v1.SaveSalesPaperCommentData) *entity.SalesPaperComment {
+			if comment == nil {
+				comment = &entity.SalesPaperComment{}
+			}
+			comment.Content = data.Content
+			comment.SalesPaperID = req.SalesPaperId
+			comment.UpScore = data.UpScore
+			comment.LowScore = data.LowScore
+			comment.CreatedBy = userId
+			comment.UpdatedBy = userId
+			return comment
 		})
 
 	if len(addComments) > 0 {

@@ -19,6 +19,7 @@ type QuestionOption struct {
 	Score       float64        `gorm:"column:score;not null;default:0.00;comment:选项分数" json:"score"`                        // 选项分数
 	Description string         `gorm:"column:description;not null;comment:描述" json:"description"`                           // 描述
 	DimensionID string         `gorm:"column:dimension_id;not null;comment:维度ID，适用于选项直接绑定维" json:"dimension_id"`            // 维度ID，适用于选项直接绑定维
+	Order       int32          `gorm:"column:order;not null;comment:排序" json:"order"`                                       // 排序
 	CreatedAt   time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt   time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
 	CreatedBy   string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
