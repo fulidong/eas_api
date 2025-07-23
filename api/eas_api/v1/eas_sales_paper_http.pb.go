@@ -68,7 +68,7 @@ type EasSalesPaperServiceHTTPServer interface {
 	GetSalesPaperDimensionQuestionDetail(context.Context, *GetSalesPaperDimensionQuestionDetailRequest) (*GetSalesPaperDimensionQuestionDetailResponse, error)
 	// GetSalesPaperDimensionQuestionList试卷维度题目列表
 	GetSalesPaperDimensionQuestionList(context.Context, *GetSalesPaperDimensionQuestionListRequest) (*GetSalesPaperDimensionQuestionListResponse, error)
-	// GetSalesPaperDimensionQuestionPreView试卷维度题目预览
+	// GetSalesPaperDimensionQuestionPreView试卷题目预览
 	GetSalesPaperDimensionQuestionPreView(context.Context, *GetSalesPaperDimensionQuestionPreViewRequest) (*GetSalesPaperDimensionQuestionPreViewResponse, error)
 	// GetSalesPaperPageList试卷列表
 	GetSalesPaperPageList(context.Context, *GetSalesPaperPageListRequest) (*GetSalesPaperPageListResponse, error)

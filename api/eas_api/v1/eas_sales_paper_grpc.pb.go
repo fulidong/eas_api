@@ -67,7 +67,7 @@ type EasSalesPaperServiceClient interface {
 	GetSalesPaperDimensionQuestionDetail(ctx context.Context, in *GetSalesPaperDimensionQuestionDetailRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionQuestionDetailResponse, error)
 	// 删除试卷维度题目
 	DeleteSalesPaperDimensionQuestion(ctx context.Context, in *DeleteSalesPaperDimensionQuestionRequest, opts ...grpc.CallOption) (*DeleteSalesPaperDimensionQuestionResponse, error)
-	// 试卷维度题目预览
+	// 试卷题目预览
 	GetSalesPaperDimensionQuestionPreView(ctx context.Context, in *GetSalesPaperDimensionQuestionPreViewRequest, opts ...grpc.CallOption) (*GetSalesPaperDimensionQuestionPreViewResponse, error)
 }
 
@@ -317,7 +317,7 @@ type EasSalesPaperServiceServer interface {
 	GetSalesPaperDimensionQuestionDetail(context.Context, *GetSalesPaperDimensionQuestionDetailRequest) (*GetSalesPaperDimensionQuestionDetailResponse, error)
 	// 删除试卷维度题目
 	DeleteSalesPaperDimensionQuestion(context.Context, *DeleteSalesPaperDimensionQuestionRequest) (*DeleteSalesPaperDimensionQuestionResponse, error)
-	// 试卷维度题目预览
+	// 试卷题目预览
 	GetSalesPaperDimensionQuestionPreView(context.Context, *GetSalesPaperDimensionQuestionPreViewRequest) (*GetSalesPaperDimensionQuestionPreViewResponse, error)
 	mustEmbedUnimplementedEasSalesPaperServiceServer()
 }

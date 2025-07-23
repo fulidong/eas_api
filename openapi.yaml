@@ -435,7 +435,7 @@ paths:
         get:
             tags:
                 - EasSalesPaperService
-            description: 试卷维度题目预览
+            description: 试卷题目预览
             operationId: EasSalesPaperService_GetSalesPaperDimensionQuestionPreView
             parameters:
                 - name: sales_paper_id
