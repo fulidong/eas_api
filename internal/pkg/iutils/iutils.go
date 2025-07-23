@@ -63,6 +63,33 @@ func zero[T comparable]() T {
 	return t
 }
 
+func FindCreateAndUpdate[T1, T2 any](
+	dbList []T1,
+	inputList []T2,
+	compareFunc func(T1, T2) bool,
+	mapFunc func(T1, T2) T1,
+) (toCreate, toUpdate []T1) {
+
+	for _, input := range inputList {
+		found := false
+		for _, db := range dbList {
+			if compareFunc(db, input) {
+				// 匹配成功：更新
+				toUpdate = append(toUpdate, mapFunc(db, input))
+				found = true
+				break
+			}
+		}
+		if !found {
+			// 没有匹配项：新增
+			var nilT1 T1
+			toCreate = append(toCreate, mapFunc(nilT1, input))
+		}
+	}
+
+	return toCreate, toUpdate
+}
+
 // OrderToLetter 将从 0 开始的整数转换为 A/B/C/D...
 func OrderToLetter(order int32) string {
 	if order < 0 {

@@ -45,7 +45,7 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
 	//判断试卷是否存在
-	salesPaperList, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperName)
+	salesPaperList, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperData.SalesPaperName)
 	if err != nil {
 		l.Errorf("CreateSalesPaper.repo.GetBySalesPaperName Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
@@ -54,8 +54,8 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 		return resp, errors.New("该试卷已存在！")
 	}
 
-	if len(req.Expression) > 0 {
-		if e := iformula.ValidateExpression(req.Expression, _const.AllowedVars); e != nil {
+	if len(req.SalesPaperData.Expression) > 0 {
+		if e := iformula.ValidateExpression(req.SalesPaperData.Expression, _const.AllowedVars); e != nil {
 			err = e
 			return resp, err
 		}
@@ -68,15 +68,15 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 
 	salesPaper := &entity.SalesPaper{
 		ID:               id,
-		Name:             req.SalesPaperName,
-		RecommendTimeLim: int32(req.RecommendTimeLim),
-		MaxScore:         req.MaxScore,
-		MinScore:         req.MinScore,
-		IsEnabled:        req.IsEnabled,
-		Mark:             req.Mark,
-		Expression:       req.Expression,
-		Rounding:         req.Rounding,
-		IsSumScore:       req.IsSumScore,
+		Name:             req.SalesPaperData.SalesPaperName,
+		RecommendTimeLim: int32(req.SalesPaperData.RecommendTimeLim),
+		MaxScore:         req.SalesPaperData.MaxScore,
+		MinScore:         req.SalesPaperData.MinScore,
+		IsEnabled:        req.SalesPaperData.IsEnabled,
+		Mark:             req.SalesPaperData.Mark,
+		Expression:       req.SalesPaperData.Expression,
+		Rounding:         req.SalesPaperData.Rounding,
+		IsSumScore:       req.SalesPaperData.IsSumScore,
 		CreatedBy:        curUserId,
 		UpdatedBy:        curUserId,
 	}
@@ -209,7 +209,7 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.UpdateSalesPaperRequest) (resp *v1.UpdateSalesPaperResponse, err error) {
 	resp = &v1.UpdateSalesPaperResponse{}
 	l := uc.log.WithContext(ctx)
-	if strings.Trim(req.SalesPaperId, " ") == "" {
+	if strings.Trim(req.SalesPaperData.SalesPaperId, " ") == "" {
 		err = errors.New("参数无效")
 		return
 	}
@@ -217,38 +217,38 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperData.SalesPaperId, l)
 	if err != nil {
 		return
 	}
-	list, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperName)
+	list, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperData.SalesPaperName)
 	if err != nil {
 		l.Errorf("UpdateSalesPaper.repo.GetBySalesPaperName Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
 	for _, salesPaper := range list {
-		if salesPaper.ID != req.SalesPaperId {
+		if salesPaper.ID != req.SalesPaperData.SalesPaperId {
 			err = errors.New("试卷名已存在")
 			return
 		}
 	}
-	if len(req.Expression) > 0 {
-		if err = iformula.ValidateExpression(req.Expression, _const.AllowedVars); err != nil {
+	if len(req.SalesPaperData.Expression) > 0 {
+		if err = iformula.ValidateExpression(req.SalesPaperData.Expression, _const.AllowedVars); err != nil {
 			return
 		}
 	}
 	err = uc.repo.Update(ctx, &entity.SalesPaper{
-		ID:               req.SalesPaperId,
-		Name:             req.SalesPaperName,
-		RecommendTimeLim: int32(req.RecommendTimeLim),
-		MaxScore:         req.MaxScore,
-		MinScore:         req.MinScore,
-		IsEnabled:        req.IsEnabled,
-		Mark:             req.Mark,
-		Expression:       req.Expression,
-		Rounding:         req.Rounding,
-		IsSumScore:       req.IsSumScore,
+		ID:               req.SalesPaperData.SalesPaperId,
+		Name:             req.SalesPaperData.SalesPaperName,
+		RecommendTimeLim: int32(req.SalesPaperData.RecommendTimeLim),
+		MaxScore:         req.SalesPaperData.MaxScore,
+		MinScore:         req.SalesPaperData.MinScore,
+		IsEnabled:        req.SalesPaperData.IsEnabled,
+		Mark:             req.SalesPaperData.Mark,
+		Expression:       req.SalesPaperData.Expression,
+		Rounding:         req.SalesPaperData.Rounding,
+		IsSumScore:       req.SalesPaperData.IsSumScore,
 		UpdatedBy:        userId,
 	})
 	if err != nil {

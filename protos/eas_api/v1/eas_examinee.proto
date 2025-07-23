@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package eas_api.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "common/common.proto";
+import "eas_api/v1/eas_examinee_models.proto";
+option go_package = "eas_api/api/v1;v1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "考试后台试卷接口";
+    version: "1.0";
+  };
+
+
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "application/json";
+  security_definitions: {
+    security: {
+      key: "ApiKeyAuth";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "x-token";
+      }
+    }
+  };
+  security: {
+    security_requirement: {
+      key: "ApiKeyAuth";
+      value: {};
+    }
+  };
+
+};
+
+service EasExamineeService {
+  //===============================考生模块=========================================
+  //创建考生
+  rpc SaveExaminee(SaveExamineeRequest) returns (SaveExamineeResponse){
+    option (google.api.http)={post:"/v1/examinee/save", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建考生",tags: ["考生模块"]};
+  };
+
+  //查询考生列表
+  rpc GetExamineePageList(GetExamineePageListRequest) returns (GetExamineePageListResponse){
+    option (google.api.http)={get:"/v1/examinee/page_list"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "查询考生列表",tags: ["考生模块"]};
+  };
+
+  //考生详情
+  rpc GetExamineeDetail(GetExamineeDetailRequest) returns (GetExamineeDetailResponse){
+    option (google.api.http)={get:"/v1/examinee/detail"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "考生详情",tags: ["考生模块"]};
+  };
+
+
+  //修改考生信息
+  rpc UpdateExaminee(UpdateExamineeRequest) returns (UpdateExamineeResponse){
+    option (google.api.http)={put:"/v1/examinee/update", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改考生信息",tags: ["考生模块"]};
+  };
+
+  //删除考生信息
+  rpc DeleteExaminee(DeleteExamineeRequest) returns (DeleteExamineeResponse){
+    option (google.api.http)={put:"/v1/examinee/delete", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除考生信息",tags: ["考生模块"]};
+  };
+
+//
+//  //===============================试卷评语模块=========================================
+//  //保存试卷评语
+//  rpc SaveSalesPaperComment(SaveSalesPaperCommentRequest) returns (SaveSalesPaperCommentResponse){
+//    option (google.api.http)={post:"/v1/sales_pager_comment/save", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷评语",tags: ["试卷评语模块"]};
+//  };
+//
+//  //试卷评语列表
+//  rpc GetSalesPaperCommentList(GetSalesPaperCommentListRequest) returns (GetSalesPaperCommentListResponse){
+//    option (google.api.http)={get:"/v1/sales_pager_comment/list"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷评语列表",tags: ["试卷评语模块"]};
+//  };
+//
+//
+//  //===============================试卷维度模块=========================================
+//  //创建试卷维度
+//  rpc CreateSalesPaperDimension(CreateSalesPaperDimensionRequest) returns (CreateSalesPaperDimensionResponse){
+//    option (google.api.http)={post:"/v1/sales_paper_dimension/create", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建维度",tags: ["试卷维度模块"]};
+//  };
+//
+//  //试卷维度列表
+//  rpc GetSalesPaperDimensionList(GetSalesPaperDimensionListRequest) returns (GetSalesPaperDimensionListResponse){
+//    option (google.api.http)={get:"/v1/sales_paper_dimension/page_list"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度列表",tags: ["试卷维度模块"]};
+//  };
+//
+//  //试卷维度详情
+//  rpc GetSalesPaperDimensionDetail(GetSalesPaperDimensionDetailRequest) returns (GetSalesPaperDimensionDetailResponse){
+//    option (google.api.http)={get:"/v1/sales_paper_dimension/detail"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度详情",tags: ["试卷维度模块"]};
+//  };
+//
+//
+//  //修改试卷维度信息
+//  rpc UpdateSalesPaperDimension(UpdateSalesPaperDimensionRequest) returns (UpdateSalesPaperDimensionResponse){
+//    option (google.api.http)={put:"/v1/sales_paper_dimension/update", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "修改试卷维度信息",tags: ["试卷维度模块"]};
+//  };
+//
+//  //删除试卷维度
+//  rpc DeleteSalesPaperDimension(DeleteSalesPaperDimensionRequest) returns (DeleteSalesPaperDimensionResponse){
+//    option (google.api.http)={put:"/v1/sales_paper_dimension/delete", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷维度",tags: ["试卷维度模块"]};
+//  };
+//
+//
+//  //===============================试卷维度评语模块=========================================
+//  //保存试卷维度评语
+//  rpc SaveSalesPaperDimensionComment(SaveSalesPaperDimensionCommentRequest) returns (SaveSalesPaperDimensionCommentResponse){
+//    option (google.api.http)={post:"/v1/sales_pager_dimension_comment/save", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷维度评语",tags: ["试卷维度评语模块"]};
+//  };
+//
+//  //试卷维度评语列表
+//  rpc GetSalesPaperDimensionCommentList(GetSalesPaperDimensionCommentListRequest) returns (GetSalesPaperDimensionCommentListResponse){
+//    option (google.api.http)={get:"/v1/sales_pager_dimension_comment/list"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度评语列表",tags: ["试卷维度评语模块"]};
+//  };
+//
+//
+//  //===============================试卷维度题目模块=========================================
+//  //保存试卷维度题目
+//  rpc SaveSalesPaperDimensionQuestion(SaveSalesPaperDimensionQuestionRequest) returns (SaveSalesPaperDimensionQuestionResponse){
+//    option (google.api.http)={post:"/v1/sales_pager_dimension_question/save", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "保存试卷维度题目",tags: ["试卷维度题目模块"]};
+//  };
+//
+//  //试卷维度题目列表
+//  rpc GetSalesPaperDimensionQuestionList(GetSalesPaperDimensionQuestionListRequest) returns (GetSalesPaperDimensionQuestionListResponse){
+//    option (google.api.http)={get:"/v1/sales_pager_dimension_question/list"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度题目列表",tags: ["试卷维度题目模块"]};
+//  };
+//
+//  //试卷维度题目详情
+//  rpc GetSalesPaperDimensionQuestionDetail(GetSalesPaperDimensionQuestionDetailRequest) returns (GetSalesPaperDimensionQuestionDetailResponse){
+//    option (google.api.http)={get:"/v1/sales_pager_dimension_question/detail"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度题目详情",tags: ["试卷维度题目模块"]};
+//  };
+//
+//  //删除试卷维度题目
+//  rpc DeleteSalesPaperDimensionQuestion(DeleteSalesPaperDimensionQuestionRequest) returns (DeleteSalesPaperDimensionQuestionResponse){
+//    option (google.api.http)={put:"/v1/sales_pager_dimension_question/delete", body:"*"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除试卷维度题目",tags: ["试卷维度题目模块"]};
+//  };
+//
+//  //试卷维度题目预览
+//  rpc GetSalesPaperDimensionQuestionPreView(GetSalesPaperDimensionQuestionPreViewRequest) returns (GetSalesPaperDimensionQuestionPreViewResponse){
+//    option (google.api.http)={get:"/v1/sales_pager_dimension_question/preview"};
+//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷维度题目预览",tags: ["试卷维度题目模块"]};
+//  };
+}
+

@@ -37,6 +37,111 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/eas_api.v1.LoginResponse'
+    /v1/examinee/delete:
+        put:
+            tags:
+                - EasExamineeService
+            description: 删除考生信息
+            operationId: EasExamineeService_DeleteExaminee
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.DeleteExamineeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.DeleteExamineeResponse'
+    /v1/examinee/detail:
+        get:
+            tags:
+                - EasExamineeService
+            description: 考生详情
+            operationId: EasExamineeService_GetExamineeDetail
+            parameters:
+                - name: examinee_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetExamineeDetailResponse'
+    /v1/examinee/page_list:
+        get:
+            tags:
+                - EasExamineeService
+            description: 查询考生列表
+            operationId: EasExamineeService_GetExamineePageList
+            parameters:
+                - name: key_word
+                  in: query
+                  schema:
+                    type: string
+                - name: page_index
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetExamineePageListResponse'
+    /v1/examinee/save:
+        post:
+            tags:
+                - EasExamineeService
+            description: |-
+                ===============================考生模块=========================================
+                创建考生
+            operationId: EasExamineeService_SaveExaminee
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.SaveExamineeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.SaveExamineeResponse'
+    /v1/examinee/update:
+        put:
+            tags:
+                - EasExamineeService
+            description: 修改考生信息
+            operationId: EasExamineeService_UpdateExaminee
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.UpdateExamineeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.UpdateExamineeResponse'
     /v1/sales_pager/create:
         post:
             tags:
@@ -670,6 +775,32 @@ components:
                 status:
                     type: integer
                     format: enum
+        eas_api.v1.CreateSalePaperData:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                sales_paper_name:
+                    type: string
+                recommend_time_lim:
+                    type: string
+                max_score:
+                    type: number
+                    format: double
+                min_score:
+                    type: number
+                    format: double
+                is_enabled:
+                    type: boolean
+                mark:
+                    type: string
+                expression:
+                    type: string
+                rounding:
+                    type: integer
+                    format: int32
+                is_sum_score:
+                    type: boolean
         eas_api.v1.CreateSalesPaperDimensionData:
             type: object
             properties:
@@ -709,27 +840,8 @@ components:
         eas_api.v1.CreateSalesPaperRequest:
             type: object
             properties:
-                paper_name:
-                    type: string
-                recommend_time_lim:
-                    type: string
-                max_score:
-                    type: number
-                    format: double
-                min_score:
-                    type: number
-                    format: double
-                is_enabled:
-                    type: boolean
-                mark:
-                    type: string
-                expression:
-                    type: string
-                rounding:
-                    type: integer
-                    format: int32
-                is_sum_score:
-                    type: boolean
+                sales_paper_data:
+                    $ref: '#/components/schemas/eas_api.v1.CreateSalePaperData'
             description: ===============================试卷模块=========================================
         eas_api.v1.CreateSalesPaperResponse:
             type: object
@@ -748,10 +860,15 @@ components:
                 user_status:
                     type: integer
                     format: enum
-                user_type:
-                    type: integer
-                    format: enum
         eas_api.v1.CreateUserResponse:
+            type: object
+            properties: {}
+        eas_api.v1.DeleteExamineeRequest:
+            type: object
+            properties:
+                examinee_id:
+                    type: string
+        eas_api.v1.DeleteExamineeResponse:
             type: object
             properties: {}
         eas_api.v1.DeleteSalesPaperDimensionQuestionRequest:
@@ -790,6 +907,38 @@ components:
         eas_api.v1.DeleteUserResponse:
             type: object
             properties: {}
+        eas_api.v1.ExamineeData:
+            type: object
+            properties:
+                examinee_id:
+                    type: string
+                user_name:
+                    type: string
+                status:
+                    type: integer
+                    format: enum
+                email:
+                    type: string
+                phone:
+                    type: string
+                updated_at:
+                    type: string
+                updated_by:
+                    type: string
+        eas_api.v1.GetExamineeDetailResponse:
+            type: object
+            properties:
+                examinee_data:
+                    $ref: '#/components/schemas/eas_api.v1.ExamineeData'
+        eas_api.v1.GetExamineePageListResponse:
+            type: object
+            properties:
+                examinee_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.ExamineeData'
+                total:
+                    type: string
         eas_api.v1.GetPageListResponse:
             type: object
             properties:
@@ -1043,6 +1192,27 @@ components:
                     type: string
                 updated_by:
                     type: string
+        eas_api.v1.SaveExamineeData:
+            type: object
+            properties:
+                examinee_id:
+                    type: string
+                user_name:
+                    type: string
+                email:
+                    type: string
+                phone:
+                    type: string
+        eas_api.v1.SaveExamineeRequest:
+            type: object
+            properties:
+                examinee_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.SaveExamineeData'
+        eas_api.v1.SaveExamineeResponse:
+            type: object
+            properties: {}
         eas_api.v1.SaveQuestionData:
             type: object
             properties:
@@ -1162,6 +1332,14 @@ components:
         eas_api.v1.SetUserStatusResponse:
             type: object
             properties: {}
+        eas_api.v1.UpdateExamineeRequest:
+            type: object
+            properties:
+                examinee_data:
+                    $ref: '#/components/schemas/eas_api.v1.SaveExamineeData'
+        eas_api.v1.UpdateExamineeResponse:
+            type: object
+            properties: {}
         eas_api.v1.UpdateSalesPaperDimensionRequest:
             type: object
             properties:
@@ -1177,29 +1355,8 @@ components:
         eas_api.v1.UpdateSalesPaperRequest:
             type: object
             properties:
-                sales_paper_id:
-                    type: string
-                sales_paper_name:
-                    type: string
-                recommend_time_lim:
-                    type: string
-                max_score:
-                    type: number
-                    format: double
-                min_score:
-                    type: number
-                    format: double
-                is_enabled:
-                    type: boolean
-                mark:
-                    type: string
-                expression:
-                    type: string
-                rounding:
-                    type: integer
-                    format: int32
-                is_sum_score:
-                    type: boolean
+                sales_paper_data:
+                    $ref: '#/components/schemas/eas_api.v1.CreateSalePaperData'
         eas_api.v1.UpdateSalesPaperResponse:
             type: object
             properties: {}
@@ -1225,9 +1382,6 @@ components:
                 email:
                     type: string
                 user_status:
-                    type: integer
-                    format: enum
-                user_type:
                     type: integer
                     format: enum
         eas_api.v1.UpdateUserResponse:
@@ -1267,5 +1421,6 @@ components:
                 updated_by:
                     type: string
 tags:
+    - name: EasExamineeService
     - name: EasSalesPaperService
     - name: EasService

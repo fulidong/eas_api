@@ -83,9 +83,10 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 		HashPassword: hashed,
 		Status:       int32(req.UserStatus),
 		Email:        req.Email,
-		UserType:     int32(req.UserType),
-		CreatedBy:    curUserId,
-		UpdatedBy:    curUserId,
+		//UserType:     int32(req.UserType),
+		UserType:  1,
+		CreatedBy: curUserId,
+		UpdatedBy: curUserId,
 	}
 	err = uc.repo.Create(ctx, administrator)
 	if err != nil {
@@ -202,7 +203,6 @@ func (uc *UserUseCase) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest
 		LoginAccount: req.LoginAccount,
 		Status:       int32(req.UserStatus),
 		Email:        req.Email,
-		UserType:     int32(req.UserType),
 		UpdatedBy:    curUserId,
 	}, false)
 	if err != nil {

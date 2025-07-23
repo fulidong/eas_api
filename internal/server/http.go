@@ -18,7 +18,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, eas *service.EasService, easSalesPaper *service.EasSalesPaperService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, eas *service.EasService, easSalesPaper *service.EasSalesPaperService, easExaminee *service.EasExamineeService, logger log.Logger) *http.Server {
 	serviceName := env.GetServiceName()
 	var opts = []http.ServerOption{
 		http.Filter(middleware.CORS(), ilog.LoggingHandler(serviceName, ilog.WithAccessLog())),
@@ -44,6 +44,7 @@ func NewHTTPServer(c *conf.Server, eas *service.EasService, easSalesPaper *servi
 	srv := http.NewServer(opts...)
 	v1.RegisterEasServiceHTTPServer(srv, eas)
 	v1.RegisterEasSalesPaperServiceHTTPServer(srv, easSalesPaper)
+	v1.RegisterEasExamineeServiceHTTPServer(srv, easExaminee)
 	openAPIHandler := openapiv2.NewHandler(openapiv2.WithGeneratorOptions(
 		generator.UseJSONNamesForFields(false),
 		generator.EnumsAsInts(true),

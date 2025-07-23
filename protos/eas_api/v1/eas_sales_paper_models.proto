@@ -8,18 +8,24 @@ option go_package = "eas_api/api/v1;v1";
 
 //===============================试卷模块=========================================
 message CreateSalesPaperRequest {
-  string sales_paper_name=1 [json_name="paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称",required:["paper_name"], max_length:20, min_length:1}];
-  int64 recommend_time_lim=2 [json_name="recommend_time_lim",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"推荐作答时长：分钟",required:["recommend_time_lim"]}];
-  double max_score=3 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限",required:["max_score"]}];
-  double min_score=4 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限",required:["min_score"]}];
-  bool is_enabled=5 [json_name="is_enabled",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否启用,1.启用;0.禁用",required:["is_enabled"]}];
-  string mark=6 [json_name="mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"备注"}];
-  string expression=7 [json_name="expression",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"标准分计算公式"}];
-  int32 rounding=8 [json_name="rounding",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"保留小数位"}];
-  bool is_sum_score=9 [json_name="is_sum_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否存在总分",required:["is_enabled"]}];
+  CreateSalePaperData sales_paper_data=1 [json_name="sales_paper_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷信息",required:["sales_paper_data"]}];
 }
 message CreateSalesPaperResponse {
 
+}
+
+
+message CreateSalePaperData {
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id",required:["sales_paper_id"]}];
+  string sales_paper_name=2 [json_name="sales_paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称",required:["sales_paper_name"], max_length:20, min_length:1}];
+  int64 recommend_time_lim=3 [json_name="recommend_time_lim",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"推荐作答时长：分钟",required:["recommend_time_lim"]}];
+  double max_score=4 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限",required:["max_score"]}];
+  double min_score=5 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限",required:["min_score"]}];
+  bool is_enabled=6 [json_name="is_enabled",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否启用,1.启用;0.禁用",required:["is_enabled"]}];
+  string mark=7 [json_name="mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"备注"}];
+  string expression=8 [json_name="expression",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"标准分计算公式"}];
+  int32 rounding=9 [json_name="rounding",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"保留小数位"}];
+  bool is_sum_score=10 [json_name="is_sum_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否存在总分"}];
 }
 
 message SalesPaperData {
@@ -75,16 +81,7 @@ message SetSalesPaperStatusResponse {
 }
 
 message UpdateSalesPaperRequest {
-  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id",required:["sales_paper_id"]}];
-  string sales_paper_name=2 [json_name="sales_paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称",required:["sales_paper_name"], max_length:20, min_length:1}];
-  int64 recommend_time_lim=3 [json_name="recommend_time_lim",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"推荐作答时长：分钟",required:["recommend_time_lim"]}];
-  double max_score=4 [json_name="max_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最高分数上限",required:["max_score"]}];
-  double min_score=5 [json_name="min_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最低分数下限",required:["min_score"]}];
-  bool is_enabled=6 [json_name="is_enabled",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否启用,1.启用;0.禁用",required:["is_enabled"]}];
-  string mark=7 [json_name="mark",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"备注"}];
-  string expression=8 [json_name="expression",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"标准分计算公式"}];
-  int32 rounding=9 [json_name="rounding",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"保留小数位"}];
-  bool is_sum_score=10 [json_name="is_sum_score",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否存在总分"}];
+  CreateSalePaperData sales_paper_data=1 [json_name="sales_paper_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷信息",required:["sales_paper_data"]}];
 }
 message UpdateSalesPaperResponse {
 }
@@ -96,7 +93,6 @@ message DeleteSalesPaperRequest {
 message DeleteSalesPaperResponse {
 
 }
-
 
 
 //===============================试卷评语模块=========================================

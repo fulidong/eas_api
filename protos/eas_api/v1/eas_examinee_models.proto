@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package eas_api.v1;
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "eas_api/v1/eas_models.proto";
+
+option go_package = "eas_api/api/v1;v1";
+
+
+message SaveExamineeRequest {
+    repeated SaveExamineeData examinee_data=1 [json_name="examinee_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_data"}];
+}
+
+message SaveExamineeResponse {
+
+}
+
+message SaveExamineeData {
+  string examinee_id=1 [json_name="examinee_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_id"}];
+  string user_name=2 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名",required:["user_name"]}];
+  string email=3 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮件",required:["email"]}];
+  string phone=4 [json_name="phone",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"电话",required:["phone"]}];
+}
+
+message ExamineeData {
+  string examinee_id=1 [json_name="examinee_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_id"}];
+  string user_name=2 [json_name="user_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户名",required:["user_name"]}];
+  ExamineeStatus status=3 [json_name="status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"状态：0未激活，1已激活",required:["status"]}];
+  string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮件",required:["email"]}];
+  string phone=5 [json_name="phone",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"电话",required:["phone"]}];
+  string updated_at=6 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
+  string updated_by=7 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
+}
+
+message GetExamineePageListRequest {
+  string key_word=1 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱搜索"}];
+  int32 page_index=2 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
+  int32 page_size=3 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
+}
+
+message GetExamineePageListResponse {
+  repeated ExamineeData examinee_data=1 [json_name="examinee_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"考生信息"}];
+  int64 total=2 [json_name="total",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"总数"}];
+}
+
+
+message GetExamineeDetailRequest {
+  string examinee_id=1 [json_name="examinee_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_id"}];
+}
+
+message GetExamineeDetailResponse {
+  ExamineeData examinee_data=1 [json_name="examinee_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"考生信息"}];
+}
+
+
+
+message UpdateExamineeRequest {
+  SaveExamineeData examinee_data=1 [json_name="examinee_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_data"}];
+}
+
+message UpdateExamineeResponse {
+
+}
+
+message DeleteExamineeRequest {
+  string examinee_id=1 [json_name="examinee_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_id"}];
+}
+
+message DeleteExamineeResponse {
+
+}
+
+
+enum ExamineeStatus {
+  ExamineeNotActive=0;  // 未激活
+  ExamineeActive=1;     // 已激活
+}

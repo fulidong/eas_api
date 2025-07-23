@@ -105,7 +105,7 @@ func (r *AdministratorRepo) Update(ctx context.Context, user *entity.Administrat
 	}
 	if !isOwn {
 		updates["status"] = user.Status
-		updates["user_type"] = user.UserType
+		//updates["user_type"] = user.UserType
 	}
 	// 执行更新
 	err := r.data.db.WithContext(ctx).Model(&entity.Administrator{}).

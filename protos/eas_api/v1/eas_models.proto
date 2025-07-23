@@ -25,7 +25,7 @@ message CreateUserRequest {
   string pass_word=3 [json_name="pass_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"密码",required:["pass_word"], max_length:10, min_length:6}];
   string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱",required:["email"]}];
   AccountStatus user_status=5 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活",required:["user_status"]}];
-  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户",required:["user_type"]}];
+//  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户",required:["user_type"]}];
 }
 message CreateUserResponse {
 
@@ -81,7 +81,7 @@ message UpdateUserRequest {
   string login_account=3 [json_name="login_account",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"登录名",required:["login_account"], max_length:10, min_length:6}];
   string email=4 [json_name="email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮箱",required:["email"]}];
   AccountStatus user_status=5 [json_name="user_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"是否激活,1.已激活;0.未激活",required:["user_status"]}];
-  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户",required:["user_type"]}];
+//  UserType user_type=6 [json_name="user_type",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"用户类型,0.管理员;1.普通用户",required:["user_type"]}];
 }
 message UpdateUserResponse {
 }

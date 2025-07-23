@@ -44,8 +44,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	questionRepo := data.NewQuestionRepo(dataData, logger)
 	questionUseCase := biz.NewQuestionUseCase(questionRepo, salesPaperUseCase, userUseCase, logger)
 	easSalesPaperService := service.NewEasSalesPaperService(userUseCase, salesPaperUseCase, salesPaperCommentUseCase, salesPaperDimensionUseCase, salesPaperDimensionCommentUseCase, questionUseCase)
-	grpcServer := server.NewGRPCServer(confServer, easService, easSalesPaperService, logger)
-	httpServer := server.NewHTTPServer(confServer, easService, easSalesPaperService, logger)
+	examineeRepo := data.ExamineRepo(dataData, logger)
+	examineeUseCase := biz.NewExamineeUseCase(examineeRepo, userUseCase, logger)
+	easExamineeService := service.NewEasExamineeService(userUseCase, examineeUseCase)
+	grpcServer := server.NewGRPCServer(confServer, easService, easSalesPaperService, easExamineeService, logger)
+	httpServer := server.NewHTTPServer(confServer, easService, easSalesPaperService, easExamineeService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

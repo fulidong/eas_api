@@ -10,16 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
-const TableNameExaminee = "examinee"
+const TableNameExamineeSalesPaperAssociation = "examinee_sales_paper_association"
 
-// Examinee 正式参加测评的考生
-type Examinee struct {
+// ExamineeSalesPaperAssociation 正式参加测评的考生
+type ExamineeSalesPaperAssociation struct {
 	ID           string         `gorm:"column:id;primaryKey;comment:主键（Guid）" json:"id"`                                     // 主键（Guid）
-	UserName     string         `gorm:"column:user_name;not null;comment:用户名" json:"user_name"`                              // 用户名
-	HashPassword string         `gorm:"column:hash_password;not null;comment:密码" json:"hash_password"`                       // 密码
-	Status       int32          `gorm:"column:status;not null;comment:状态：1.已激活;0.未激活" json:"status"`                         // 状态：1.已激活;0.未激活
-	Email        string         `gorm:"column:email;not null;comment:邮箱" json:"email"`                                       // 邮箱
-	Phone        string         `gorm:"column:phone;not null;comment:电话" json:"phone"`                                       // 电话
+	SalesPaperID string         `gorm:"column:sales_paper_id;not null;comment:SalesPaper表的外键" json:"sales_paper_id"`         // SalesPaper表的外键
+	ExamName     string         `gorm:"column:exam_name;not null;comment:考试名称" json:"exam_name"`                             // 考试名称
+	ExamineeID   string         `gorm:"column:examinee_id;not null;comment:关联考生ID" json:"examinee_id"`                       // 关联考生ID
+	EmailStatus  int32          `gorm:"column:email_status;not null;default:1;comment:邮件状态：1.未发送，2.已发送" json:"email_status"` // 邮件状态：1.未发送，2.已发送
 	CreatedAt    time.Time      `gorm:"column:created_at;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"` // 创建时间
 	UpdatedAt    time.Time      `gorm:"column:updated_at;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"` // 更新时间
 	CreatedBy    string         `gorm:"column:created_by;not null;comment:创建人标识" json:"created_by"`                          // 创建人标识
@@ -27,7 +26,7 @@ type Examinee struct {
 	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;comment:逻辑删除时间" json:"deleted_at"`                                  // 逻辑删除时间
 }
 
-// TableName Examinee's table name
-func (*Examinee) TableName() string {
-	return TableNameExaminee
+// TableName ExamineeSalesPaperAssociation's table name
+func (*ExamineeSalesPaperAssociation) TableName() string {
+	return TableNameExamineeSalesPaperAssociation
 }
