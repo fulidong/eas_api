@@ -19,7 +19,7 @@ import (
 )
 
 type ExamineeSalesPaperAssociationRepo interface {
-	GetProvidePageList(ctx context.Context, in *v1.GetProvidePageListRequest) (res []*model.ExamineeSalesPaperAssociation, total int64, err error)
+	GetProvidePageList(ctx context.Context, in *v1.GetProvidePageListRequest, createdBy string) (res []*model.ExamineeSalesPaperAssociation, total int64, err error)
 	GetBySalesPaperIds(ctx context.Context, salesPaperIds []string) (list []*entity.ExamineeSalesPaperAssociation, err error)
 	GetByExamineeIds(ctx context.Context, examineeIds []string) (list []*entity.ExamineeSalesPaperAssociation, err error)
 	Provide(ctx context.Context, associationEntities []*entity.ExamineeSalesPaperAssociation, examineeEmailRecords []*entity.ExamineeEmailRecord) (err error)
@@ -158,7 +158,8 @@ func (uc *ExamineeSalesPaperAssociationUseCase) GetProvidePageList(ctx context.C
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	res, total, err := uc.repo.GetProvidePageList(ctx, req)
+	userId, _ := icontext.UserIdFrom(ctx)
+	res, total, err := uc.repo.GetProvidePageList(ctx, req, userId)
 	if err != nil {
 		l.Errorf("GetProvidePageList.repo.GetProvidePageList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer

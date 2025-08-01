@@ -26,12 +26,12 @@ func NewExamineeSalesPaperAssociationRepo(data *Data, logger log.Logger) biz.Exa
 }
 
 // 获取发放试卷列表
-func (r *ExamineeSalesPaperAssociationRepo) GetProvidePageList(ctx context.Context, in *v1.GetProvidePageListRequest) (res []*model.ExamineeSalesPaperAssociation, total int64, err error) {
+func (r *ExamineeSalesPaperAssociationRepo) GetProvidePageList(ctx context.Context, in *v1.GetProvidePageListRequest, createdBy string) (res []*model.ExamineeSalesPaperAssociation, total int64, err error) {
 	session := r.data.db.WithContext(ctx)
 	session = session.Table((&entity.ExamineeSalesPaperAssociation{}).TableName() + " as assoc").
 		Select("assoc.*, examinee.user_name as examinee_name, examinee.email as examinee_email, examinee.phone as examinee_phone ").
 		Joins(" inner join examinee on examinee.id = assoc.examinee_id ")
-	q, v := r.buildConditions(in)
+	q, v := r.buildConditions(in, createdBy)
 	if q != "" {
 		session.Where(q, v...)
 	}
@@ -138,7 +138,7 @@ func (r *ExamineeSalesPaperAssociationRepo) Delete(ctx context.Context, examinee
 	return err
 }
 
-func (r *ExamineeSalesPaperAssociationRepo) buildConditions(in *v1.GetProvidePageListRequest) (string, []interface{}) {
+func (r *ExamineeSalesPaperAssociationRepo) buildConditions(in *v1.GetProvidePageListRequest, createdBy string) (string, []interface{}) {
 	var (
 		query strings.Builder
 		value []interface{}
@@ -157,11 +157,12 @@ func (r *ExamineeSalesPaperAssociationRepo) buildConditions(in *v1.GetProvidePag
 	if in.KeyWord != "" {
 		query.WriteString(" (examinee.user_name like ? or examinee.email like ? or examinee.phone like ?)")
 		keyWord := fmt.Sprintf("%%%s%%", strings.TrimSpace(in.KeyWord))
-		value = append(value, keyWord, keyWord, keyWord, keyWord)
+		value = append(value, keyWord, keyWord, keyWord)
 		query.WriteString(" AND")
 	}
 	// 过滤已删除
-	query.WriteString(" assoc.deleted_at is NULL ")
+	query.WriteString(" assoc.created_by = ? and assoc.deleted_at is NULL ")
+	value = append(value, createdBy)
 	query.WriteString(" AND")
 
 	if query.String() != "" {

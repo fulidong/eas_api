@@ -1,8 +1,6 @@
 module eas_api
 
-go 1.23.0
-
-toolchain go1.23.8
+go 1.23.8
 
 require (
 	github.com/airunny/copier v0.0.0-20230213055356-e2bee624c0ab
