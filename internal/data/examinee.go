@@ -17,7 +17,7 @@ type ExamineeRepo struct {
 	log  *log.Helper
 }
 
-func ExamineRepo(data *Data, logger log.Logger) biz.ExamineeRepo {
+func NewExamineeRepo(data *Data, logger log.Logger) biz.ExamineeRepo {
 	return &ExamineeRepo{
 		data: data,
 		log:  log.NewHelper(logger),
@@ -180,7 +180,7 @@ func (r *ExamineeRepo) buildConditions(in *v1.GetExamineePageListRequest) (strin
 		q     string
 	)
 	if in.KeyWord != "" {
-		query.WriteString(" email like ? ")
+		query.WriteString(" (user_name like ? or email like ? or phone like ?) ")
 		keyWord := fmt.Sprintf("%%%s%%", strings.TrimSpace(in.KeyWord))
 		value = append(value, keyWord)
 		query.WriteString(" AND")

@@ -10,6 +10,11 @@ const (
 	SalesPaperDimensionQuestionPrefix       = "SPDQP"
 	SalesPaperDimensionQuestionOptionPrefix = "SPDQOP"
 	ExamineePrefix                          = "EP"
+	ExamineeSalesPaperAssociationPrefix     = "ESPA"
+	ExamineeEmailRecordPrefix               = "EER"
+	ExamineeAnswerPrefix                    = "EA"
+	ExamineeAnswerDimensionScorePrefix      = "EADS"
+	ExamineeAnswerQuestionAnswerPrefix      = "EAQAP"
 )
 
 var AllowedVars = map[string]interface{}{

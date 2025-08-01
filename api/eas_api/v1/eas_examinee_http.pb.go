@@ -22,6 +22,8 @@ const _ = http.SupportPackageIsVersion1
 const OperationEasExamineeServiceDeleteExaminee = "/eas_api.v1.EasExamineeService/DeleteExaminee"
 const OperationEasExamineeServiceGetExamineeDetail = "/eas_api.v1.EasExamineeService/GetExamineeDetail"
 const OperationEasExamineeServiceGetExamineePageList = "/eas_api.v1.EasExamineeService/GetExamineePageList"
+const OperationEasExamineeServiceGetProvidePageList = "/eas_api.v1.EasExamineeService/GetProvidePageList"
+const OperationEasExamineeServiceProvide = "/eas_api.v1.EasExamineeService/Provide"
 const OperationEasExamineeServiceSaveExaminee = "/eas_api.v1.EasExamineeService/SaveExaminee"
 const OperationEasExamineeServiceUpdateExaminee = "/eas_api.v1.EasExamineeService/UpdateExaminee"
 
@@ -32,6 +34,11 @@ type EasExamineeServiceHTTPServer interface {
 	GetExamineeDetail(context.Context, *GetExamineeDetailRequest) (*GetExamineeDetailResponse, error)
 	// GetExamineePageList查询考生列表
 	GetExamineePageList(context.Context, *GetExamineePageListRequest) (*GetExamineePageListResponse, error)
+	// GetProvidePageList发放试卷列表
+	GetProvidePageList(context.Context, *GetProvidePageListRequest) (*GetProvidePageListResponse, error)
+	// Provide===============================发放试卷模块=========================================
+	//发放试卷
+	Provide(context.Context, *ProvideRequest) (*ProvideResponse, error)
 	// SaveExaminee===============================考生模块=========================================
 	//创建考生
 	SaveExaminee(context.Context, *SaveExamineeRequest) (*SaveExamineeResponse, error)
@@ -46,6 +53,8 @@ func RegisterEasExamineeServiceHTTPServer(s *http.Server, srv EasExamineeService
 	r.GET("/v1/examinee/detail", _EasExamineeService_GetExamineeDetail0_HTTP_Handler(srv))
 	r.PUT("/v1/examinee/update", _EasExamineeService_UpdateExaminee0_HTTP_Handler(srv))
 	r.PUT("/v1/examinee/delete", _EasExamineeService_DeleteExaminee0_HTTP_Handler(srv))
+	r.POST("/v1/provide/create", _EasExamineeService_Provide0_HTTP_Handler(srv))
+	r.GET("/v1/provide/page_list", _EasExamineeService_GetProvidePageList0_HTTP_Handler(srv))
 }
 
 func _EasExamineeService_SaveExaminee0_HTTP_Handler(srv EasExamineeServiceHTTPServer) func(ctx http.Context) error {
@@ -152,10 +161,53 @@ func _EasExamineeService_DeleteExaminee0_HTTP_Handler(srv EasExamineeServiceHTTP
 	}
 }
 
+func _EasExamineeService_Provide0_HTTP_Handler(srv EasExamineeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ProvideRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasExamineeServiceProvide)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Provide(ctx, req.(*ProvideRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ProvideResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _EasExamineeService_GetProvidePageList0_HTTP_Handler(srv EasExamineeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetProvidePageListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEasExamineeServiceGetProvidePageList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetProvidePageList(ctx, req.(*GetProvidePageListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetProvidePageListResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EasExamineeServiceHTTPClient interface {
 	DeleteExaminee(ctx context.Context, req *DeleteExamineeRequest, opts ...http.CallOption) (rsp *DeleteExamineeResponse, err error)
 	GetExamineeDetail(ctx context.Context, req *GetExamineeDetailRequest, opts ...http.CallOption) (rsp *GetExamineeDetailResponse, err error)
 	GetExamineePageList(ctx context.Context, req *GetExamineePageListRequest, opts ...http.CallOption) (rsp *GetExamineePageListResponse, err error)
+	GetProvidePageList(ctx context.Context, req *GetProvidePageListRequest, opts ...http.CallOption) (rsp *GetProvidePageListResponse, err error)
+	Provide(ctx context.Context, req *ProvideRequest, opts ...http.CallOption) (rsp *ProvideResponse, err error)
 	SaveExaminee(ctx context.Context, req *SaveExamineeRequest, opts ...http.CallOption) (rsp *SaveExamineeResponse, err error)
 	UpdateExaminee(ctx context.Context, req *UpdateExamineeRequest, opts ...http.CallOption) (rsp *UpdateExamineeResponse, err error)
 }
@@ -201,6 +253,32 @@ func (c *EasExamineeServiceHTTPClientImpl) GetExamineePageList(ctx context.Conte
 	opts = append(opts, http.Operation(OperationEasExamineeServiceGetExamineePageList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *EasExamineeServiceHTTPClientImpl) GetProvidePageList(ctx context.Context, in *GetProvidePageListRequest, opts ...http.CallOption) (*GetProvidePageListResponse, error) {
+	var out GetProvidePageListResponse
+	pattern := "/v1/provide/page_list"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationEasExamineeServiceGetProvidePageList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *EasExamineeServiceHTTPClientImpl) Provide(ctx context.Context, in *ProvideRequest, opts ...http.CallOption) (*ProvideResponse, error) {
+	var out ProvideResponse
+	pattern := "/v1/provide/create"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEasExamineeServiceProvide))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

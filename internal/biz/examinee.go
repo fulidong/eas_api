@@ -46,6 +46,10 @@ func (uc *ExamineeUseCase) SaveExaminee(ctx context.Context, req *v1.SaveExamine
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
+	if len(req.ExamineeData) == 0 {
+		err = innErr.ErrBadRequest
+		return
+	}
 	emails := make([]string, 0, len(req.ExamineeData))
 	for _, datum := range req.ExamineeData {
 		if !iregexp.IsValidEmail(datum.Email) {
@@ -114,6 +118,12 @@ func (uc *ExamineeUseCase) SaveExaminee(ctx context.Context, req *v1.SaveExamine
 }
 
 func (uc *ExamineeUseCase) GetExamineePageList(ctx context.Context, req *v1.GetExamineePageListRequest) (resp *v1.GetExamineePageListResponse, err error) {
+	if req.PageIndex == 0 {
+		req.PageIndex = 1
+	}
+	if req.PageSize == 0 {
+		req.PageSize = 10
+	}
 	resp = &v1.GetExamineePageListResponse{ExamineeData: make([]*v1.ExamineeData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
 	if _, err = adminPermission(ctx); err != nil {
@@ -189,9 +199,28 @@ func (uc *ExamineeUseCase) GetExamineeDetail(ctx context.Context, req *v1.GetExa
 	return
 }
 
+func (uc *ExamineeUseCase) GetExamineeByIds(ctx context.Context, examineeIds []string) (resp []*entity.Examinee, err error) {
+	resp = make([]*entity.Examinee, 0, len(examineeIds))
+	l := uc.log.WithContext(ctx)
+	if _, err = adminPermission(ctx); err != nil {
+		return
+	}
+	resp, err = uc.repo.GetByIDs(ctx, examineeIds)
+	if err != nil {
+		l.Errorf("GetExamineeByIds.repo.GetByIDs Failed, examineeIds:%v, err:%v", examineeIds, err.Error())
+		err = innErr.ErrInternalServer
+		return
+	}
+	return
+}
+
 func (uc *ExamineeUseCase) UpdateExaminee(ctx context.Context, req *v1.UpdateExamineeRequest) (resp *v1.UpdateExamineeResponse, err error) {
 	resp = &v1.UpdateExamineeResponse{}
 	l := uc.log.WithContext(ctx)
+	if req.ExamineeData == nil {
+		err = innErr.ErrBadRequest
+		return
+	}
 	if strings.Trim(req.ExamineeData.ExamineeId, " ") == "" {
 		err = errors.New("参数无效")
 		return

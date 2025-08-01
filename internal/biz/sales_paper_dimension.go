@@ -40,6 +40,10 @@ func (uc *SalesPaperDimensionUseCase) CreateSalesPaperDimension(ctx context.Cont
 		return
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
+	if len(req.DimensionData) == 0 {
+		err = innErr.ErrBadRequest
+		return
+	}
 	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if err != nil {
 		return
@@ -160,14 +164,14 @@ func (uc *SalesPaperDimensionUseCase) GetSalesPaperDimensionDetail(ctx context.C
 func (uc *SalesPaperDimensionUseCase) UpdateSalesPaperDimension(ctx context.Context, req *v1.UpdateSalesPaperDimensionRequest) (resp *v1.UpdateSalesPaperDimensionResponse, err error) {
 	resp = &v1.UpdateSalesPaperDimensionResponse{}
 	l := uc.log.WithContext(ctx)
-	if req.DimensionData == nil {
-		err = errors.New("参数无效")
-		return
-	}
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
+	if len(req.DimensionData) == 0 {
+		err = innErr.ErrBadRequest
+		return
+	}
 	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if err != nil {
 		return

@@ -33,6 +33,11 @@ type EasExamineeServiceClient interface {
 	UpdateExaminee(ctx context.Context, in *UpdateExamineeRequest, opts ...grpc.CallOption) (*UpdateExamineeResponse, error)
 	// 删除考生信息
 	DeleteExaminee(ctx context.Context, in *DeleteExamineeRequest, opts ...grpc.CallOption) (*DeleteExamineeResponse, error)
+	// ===============================发放试卷模块=========================================
+	// 发放试卷
+	Provide(ctx context.Context, in *ProvideRequest, opts ...grpc.CallOption) (*ProvideResponse, error)
+	// 发放试卷列表
+	GetProvidePageList(ctx context.Context, in *GetProvidePageListRequest, opts ...grpc.CallOption) (*GetProvidePageListResponse, error)
 }
 
 type easExamineeServiceClient struct {
@@ -88,6 +93,24 @@ func (c *easExamineeServiceClient) DeleteExaminee(ctx context.Context, in *Delet
 	return out, nil
 }
 
+func (c *easExamineeServiceClient) Provide(ctx context.Context, in *ProvideRequest, opts ...grpc.CallOption) (*ProvideResponse, error) {
+	out := new(ProvideResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasExamineeService/Provide", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *easExamineeServiceClient) GetProvidePageList(ctx context.Context, in *GetProvidePageListRequest, opts ...grpc.CallOption) (*GetProvidePageListResponse, error) {
+	out := new(GetProvidePageListResponse)
+	err := c.cc.Invoke(ctx, "/eas_api.v1.EasExamineeService/GetProvidePageList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EasExamineeServiceServer is the server API for EasExamineeService service.
 // All implementations must embed UnimplementedEasExamineeServiceServer
 // for forward compatibility
@@ -103,6 +126,11 @@ type EasExamineeServiceServer interface {
 	UpdateExaminee(context.Context, *UpdateExamineeRequest) (*UpdateExamineeResponse, error)
 	// 删除考生信息
 	DeleteExaminee(context.Context, *DeleteExamineeRequest) (*DeleteExamineeResponse, error)
+	// ===============================发放试卷模块=========================================
+	// 发放试卷
+	Provide(context.Context, *ProvideRequest) (*ProvideResponse, error)
+	// 发放试卷列表
+	GetProvidePageList(context.Context, *GetProvidePageListRequest) (*GetProvidePageListResponse, error)
 	mustEmbedUnimplementedEasExamineeServiceServer()
 }
 
@@ -124,6 +152,12 @@ func (UnimplementedEasExamineeServiceServer) UpdateExaminee(context.Context, *Up
 }
 func (UnimplementedEasExamineeServiceServer) DeleteExaminee(context.Context, *DeleteExamineeRequest) (*DeleteExamineeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteExaminee not implemented")
+}
+func (UnimplementedEasExamineeServiceServer) Provide(context.Context, *ProvideRequest) (*ProvideResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Provide not implemented")
+}
+func (UnimplementedEasExamineeServiceServer) GetProvidePageList(context.Context, *GetProvidePageListRequest) (*GetProvidePageListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProvidePageList not implemented")
 }
 func (UnimplementedEasExamineeServiceServer) mustEmbedUnimplementedEasExamineeServiceServer() {}
 
@@ -228,6 +262,42 @@ func _EasExamineeService_DeleteExaminee_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EasExamineeService_Provide_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProvideRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasExamineeServiceServer).Provide(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasExamineeService/Provide",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasExamineeServiceServer).Provide(ctx, req.(*ProvideRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EasExamineeService_GetProvidePageList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProvidePageListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EasExamineeServiceServer).GetProvidePageList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/eas_api.v1.EasExamineeService/GetProvidePageList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EasExamineeServiceServer).GetProvidePageList(ctx, req.(*GetProvidePageListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EasExamineeService_ServiceDesc is the grpc.ServiceDesc for EasExamineeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -254,6 +324,14 @@ var EasExamineeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteExaminee",
 			Handler:    _EasExamineeService_DeleteExaminee_Handler,
+		},
+		{
+			MethodName: "Provide",
+			Handler:    _EasExamineeService_Provide_Handler,
+		},
+		{
+			MethodName: "GetProvidePageList",
+			Handler:    _EasExamineeService_GetProvidePageList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

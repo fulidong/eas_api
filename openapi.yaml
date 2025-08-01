@@ -142,6 +142,64 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/eas_api.v1.UpdateExamineeResponse'
+    /v1/provide/create:
+        post:
+            tags:
+                - EasExamineeService
+            description: |-
+                ===============================发放试卷模块=========================================
+                发放试卷
+            operationId: EasExamineeService_Provide
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/eas_api.v1.ProvideRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.ProvideResponse'
+    /v1/provide/page_list:
+        get:
+            tags:
+                - EasExamineeService
+            description: 发放试卷列表
+            operationId: EasExamineeService_GetProvidePageList
+            parameters:
+                - name: sales_paper_id
+                  in: query
+                  schema:
+                    type: string
+                - name: stage_number
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: key_word
+                  in: query
+                  schema:
+                    type: string
+                - name: page_index
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/eas_api.v1.GetProvidePageListResponse'
     /v1/sales_pager/create:
         post:
             tags:
@@ -948,6 +1006,15 @@ components:
                         $ref: '#/components/schemas/eas_api.v1.UserData'
                 total:
                     type: string
+        eas_api.v1.GetProvidePageListResponse:
+            type: object
+            properties:
+                provide_data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/eas_api.v1.ProvideData'
+                total:
+                    type: string
         eas_api.v1.GetSalesPaperCommentListResponse:
             type: object
             properties:
@@ -1043,6 +1110,47 @@ components:
                     format: enum
                 token=:
                     type: string
+        eas_api.v1.ProvideData:
+            type: object
+            properties:
+                provide_id:
+                    type: string
+                examinee_id:
+                    type: string
+                examinee_name:
+                    type: string
+                examinee_email:
+                    type: string
+                examinee_phone:
+                    type: string
+                sales_paper_id:
+                    type: string
+                sales_paper_name:
+                    type: string
+                email_status:
+                    type: integer
+                    format: enum
+                stage_number:
+                    type: integer
+                    format: enum
+                report_path:
+                    type: string
+                updated_at:
+                    type: string
+                updated_by:
+                    type: string
+        eas_api.v1.ProvideRequest:
+            type: object
+            properties:
+                sales_paper_id:
+                    type: string
+                examinee_ids:
+                    type: array
+                    items:
+                        type: string
+        eas_api.v1.ProvideResponse:
+            type: object
+            properties: {}
         eas_api.v1.QuestionData:
             type: object
             properties:

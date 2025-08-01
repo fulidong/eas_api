@@ -70,8 +70,59 @@ message DeleteExamineeResponse {
 
 }
 
+message ProvideRequest {
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id", required:["sales_paper_id"]}];
+  repeated string examinee_ids=2 [json_name="examinee_ids",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"examinee_ids", required:["examinee_ids"]}];
+}
+
+message ProvideResponse {
+
+}
+
+message GetProvidePageListRequest {
+  string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id"}];
+  int32 stage_number=2 [json_name="stage_number",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"当前阶段：-1全部、未开始、1未提交、2已提交、3已算分、4已出报告"}];
+  string key_word=3 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:""}];
+  int32 page_index=4 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
+  int32 page_size=5 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
+}
+
+message GetProvidePageListResponse {
+  repeated ProvideData provide_data=1 [json_name="provide_data",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"发放列表"}];
+  int64 total=2 [json_name="total",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"总数"}];
+}
+
+message ProvideData {
+  string provide_id=1 [json_name="provide_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"关联id"}];
+  string examinee_id=2 [json_name="examinee_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"考生id"}];
+  string examinee_name=3 [json_name="examinee_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"考生名名称"}];
+  string examinee_email=4 [json_name="examinee_email",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"考生名邮箱"}];
+  string examinee_phone=5 [json_name="examinee_phone",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"考生名电话"}];
+  string sales_paper_id=6 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id"}];
+  string sales_paper_name=7 [json_name="sales_paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称"}];
+  EmailStatus email_status=8 [json_name="email_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮件状态：1未发送，2已发送"}];
+  StageNumber stage_number=9 [json_name="stage_number",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"当前阶段：0未开始、1未提交、2已提交、3已算分、4已出报告"}];
+  string ReportPath=10 [json_name="report_path",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"报告地址"}];
+  string updated_at=11 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
+  string updated_by=12 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
+}
 
 enum ExamineeStatus {
   ExamineeNotActive=0;  // 未激活
   ExamineeActive=1;     // 已激活
+}
+
+enum EmailStatus {
+  EmailStatusNoKnow = 0;
+  NotSend = 1;
+  Send = 2;
+  SendFail = 3;
+}
+
+enum StageNumber {
+  NoStart = 0;// 未开始
+  NoSubmit = 1;// 未提交
+  Submit = 2;// 已提交
+  CalculatePoints = 3;// 已算分
+  Report = 4;// 已出报告
 }

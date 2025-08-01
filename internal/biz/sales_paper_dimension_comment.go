@@ -35,6 +35,10 @@ func (uc *SalesPaperDimensionCommentUseCase) SaveSalesPaperDimensionComment(ctx 
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
+	if len(req.DimensionCommentData) == 0 {
+		err = innErr.ErrBadRequest
+		return
+	}
 	salesPaperDimensionComments, err := uc.repo.GetList(ctx, req.SalesPaperDimensionId)
 	if err != nil {
 		l.Errorf("SaveSalesPaperDimensionComment.repo.GetList Failed, req:%v, err:%v", req, err.Error())

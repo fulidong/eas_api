@@ -24,3 +24,11 @@ func (s *EasExamineeService) UpdateExaminee(ctx context.Context, in *v1.UpdateEx
 func (s *EasExamineeService) DeleteExaminee(ctx context.Context, in *v1.DeleteExamineeRequest) (*v1.DeleteExamineeResponse, error) {
 	return s.examineeUc.DeleteExaminee(ctx, in)
 }
+
+func (s *EasExamineeService) Provide(ctx context.Context, in *v1.ProvideRequest) (*v1.ProvideResponse, error) {
+	return s.examineeSalesPaperAssociationUc.Provide(ctx, in)
+}
+
+func (s *EasExamineeService) GetProvidePageList(ctx context.Context, in *v1.GetProvidePageListRequest) (*v1.GetProvidePageListResponse, error) {
+	return s.examineeSalesPaperAssociationUc.GetProvidePageList(ctx, in)
+}

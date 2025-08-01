@@ -35,6 +35,10 @@ func (uc *SalesPaperCommentUseCase) SaveSalesPaperComment(ctx context.Context, r
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
+	if len(req.CommentData) == 0 {
+		err = innErr.ErrBadRequest
+		return
+	}
 	salesPaperComments, err := uc.repo.GetList(ctx, req.SalesPaperId)
 	if err != nil {
 		l.Errorf("GetSalesPaperCommentList.repo.GetSalesPaperCommentList Failed, req:%v, err:%v", req, err.Error())

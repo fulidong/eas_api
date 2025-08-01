@@ -97,6 +97,12 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, req *v1.CreateUserRequest
 }
 
 func (uc *UserUseCase) GetPageList(ctx context.Context, req *v1.GetPageListRequest) (resp *v1.GetPageListResponse, err error) {
+	if req.PageIndex == 0 {
+		req.PageIndex = 1
+	}
+	if req.PageSize == 0 {
+		req.PageSize = 10
+	}
 	resp = &v1.GetPageListResponse{UserList: make([]*v1.UserData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
 	if _, err = adminPermission(ctx); err != nil {

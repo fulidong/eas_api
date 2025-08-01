@@ -44,6 +44,10 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 		return
 	}
 	curUserId, _ := icontext.UserIdFrom(ctx)
+	if req.SalesPaperData == nil {
+		err = innErr.ErrBadRequest
+		return
+	}
 	//判断试卷是否存在
 	salesPaperList, err := uc.repo.GetBySalesPaperName(ctx, req.SalesPaperData.SalesPaperName)
 	if err != nil {
@@ -143,6 +147,12 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 }
 
 func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, req *v1.GetUsableSalesPaperPageListRequest) (resp *v1.GetUsableSalesPaperPageListResponse, err error) {
+	if req.PageIndex == 0 {
+		req.PageIndex = 1
+	}
+	if req.PageSize == 0 {
+		req.PageSize = 10
+	}
 	resp = &v1.GetUsableSalesPaperPageListResponse{SalesPaperList: make([]*v1.SalesPaperData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
 	if _, err = adminPermission(ctx); err != nil {
@@ -214,6 +224,10 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	if _, err = adminPermission(ctx); err != nil {
+		return
+	}
+	if req.SalesPaperData == nil {
+		err = innErr.ErrBadRequest
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)

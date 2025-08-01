@@ -69,19 +69,19 @@ service EasExamineeService {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "删除考生信息",tags: ["考生模块"]};
   };
 
-//
-//  //===============================试卷评语模块=========================================
-//  //保存试卷评语
-//  rpc SaveSalesPaperComment(SaveSalesPaperCommentRequest) returns (SaveSalesPaperCommentResponse){
-//    option (google.api.http)={post:"/v1/sales_pager_comment/save", body:"*"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "创建试卷评语",tags: ["试卷评语模块"]};
-//  };
-//
-//  //试卷评语列表
-//  rpc GetSalesPaperCommentList(GetSalesPaperCommentListRequest) returns (GetSalesPaperCommentListResponse){
-//    option (google.api.http)={get:"/v1/sales_pager_comment/list"};
-//    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "试卷评语列表",tags: ["试卷评语模块"]};
-//  };
+
+  //===============================发放试卷模块=========================================
+  //发放试卷
+  rpc Provide(ProvideRequest) returns (ProvideResponse){
+    option (google.api.http)={post:"/v1/provide/create", body:"*"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "发放试卷",tags: ["发放试卷模块"]};
+  };
+
+  //发放试卷列表
+  rpc GetProvidePageList(GetProvidePageListRequest) returns (GetProvidePageListResponse){
+    option (google.api.http)={get:"/v1/provide/page_list"};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {summary: "发放试卷列表",tags: ["发放试卷模块"]};
+  };
 //
 //
 //  //===============================试卷维度模块=========================================

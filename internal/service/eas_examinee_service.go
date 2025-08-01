@@ -7,15 +7,18 @@ import (
 
 type EasExamineeService struct {
 	v1.UnimplementedEasExamineeServiceServer
-	userUc     *biz.UserUseCase
-	examineeUc *biz.ExamineeUseCase
+	userUc                          *biz.UserUseCase
+	examineeUc                      *biz.ExamineeUseCase
+	examineeSalesPaperAssociationUc *biz.ExamineeSalesPaperAssociationUseCase
 }
 
 func NewEasExamineeService(
 	userUc *biz.UserUseCase,
-	examineeUc *biz.ExamineeUseCase) *EasExamineeService {
+	examineeUc *biz.ExamineeUseCase,
+	examineeSalesPaperAssociationUc *biz.ExamineeSalesPaperAssociationUseCase) *EasExamineeService {
 	return &EasExamineeService{
-		userUc:     userUc,
-		examineeUc: examineeUc,
+		userUc:                          userUc,
+		examineeUc:                      examineeUc,
+		examineeSalesPaperAssociationUc: examineeSalesPaperAssociationUc,
 	}
 }

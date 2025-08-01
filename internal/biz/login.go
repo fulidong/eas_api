@@ -61,6 +61,7 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 		// 处理错误
 	}
 	resp.UserName = user.UserName
+	resp.UserType = v1.UserType(user.UserType)
 	resp.Token = accessJWT
 	return resp, nil
 }

@@ -23,7 +23,8 @@ var ProviderSet = wire.NewSet(NewData,
 	NewSalesPaperDimensionRepo,
 	NewSalesPaperDimensionCommentRepo,
 	NewQuestionRepo,
-	ExamineRepo)
+	NewExamineeRepo,
+	NewExamineeSalesPaperAssociationRepo)
 
 type Data struct {
 	db *gorm.DB
