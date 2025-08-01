@@ -7,6 +7,7 @@ import (
 	"eas_api/internal/data/entity"
 	"eas_api/internal/model"
 	"eas_api/internal/pkg/icontext"
+	"eas_api/internal/pkg/iemail"
 	innErr "eas_api/internal/pkg/ierrors"
 	"eas_api/internal/pkg/isnowflake"
 	"eas_api/internal/pkg/iutils"
@@ -53,20 +54,34 @@ func (uc *ExamineeSalesPaperAssociationUseCase) Provide(ctx context.Context, req
 	resp = &v1.ProvideResponse{}
 	l := uc.log.WithContext(ctx)
 	if _, err = adminPermission(ctx); err != nil {
+		err = innErr.ErrBadRequest
+		return
+	}
+	if len(req.ExamineeIds) == 0 {
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
 	salesPaper, err := uc.salesPaperCase.GetSalesPaperDetail(ctx, &v1.GetSalesPaperDetailRequest{SalesPaperId: req.SalesPaperId})
 	if err != nil {
+		l.Errorf("Provide.salesPaperCase.GetSalesPaperDetail Failed, req:%v, err:%v", req, err.Error())
 		return
 	}
 	if salesPaper == nil || salesPaper.SalesPaper == nil || !salesPaper.SalesPaper.IsEnabled {
 		return resp, errors.New("该试卷不存在或未启用！")
 	}
+	examineeMap, err := uc.examineeUserCase.GetExamineeByIds(ctx, req.ExamineeIds)
+	if err != nil {
+		l.Errorf("Provide.examineeUserCase.GetExamineeByIds Failed, req:%v, err:%v", req, err.Error())
+		return
+	}
 	//组装数据
 	examineeSalesPaperAssociations := make([]*entity.ExamineeSalesPaperAssociation, 0, len(req.ExamineeIds))
 	examineeEmailRecords := make([]*entity.ExamineeEmailRecord, 0, len(req.ExamineeIds))
 	for _, examineeId := range req.ExamineeIds {
+		examinee, ok := examineeMap[examineeId]
+		if !ok {
+			continue
+		}
 		id, e := isnowflake.SnowFlake.NextID(_const.SalesPaperDimensionQuestionPrefix)
 		if e != nil {
 			err = e
@@ -88,16 +103,33 @@ func (uc *ExamineeSalesPaperAssociationUseCase) Provide(ctx context.Context, req
 			err = e
 			return
 		}
+		emailContent, e := iemail.RenderEmail(iemail.EmailData{
+			Name:         examinee.UserName,
+			CompanyName:  "团智",
+			ExamName:     salesPaper.SalesPaper.SalesPaperName,
+			ExamURL:      "",
+			Username:     examinee.Email,
+			Password:     "邮箱用户名后六位，如不满六位前面补0",
+			Duration:     fmt.Sprintf("%d", salesPaper.SalesPaper.RecommendTimeLim),
+			ContactName:  "团智HR",
+			ContactEmail: "hr@tuanzhi.com",
+			ContactPhone: "18612894185",
+			SendDate:     time.Now().Format(time.DateOnly),
+		})
+		if e != nil {
+			err = e
+			return
+		}
 		examineeEmailRecords = append(examineeEmailRecords, &entity.ExamineeEmailRecord{
 			ID:                              id,
 			SalesPaperID:                    req.SalesPaperId,
 			ExamineeID:                      examineeId,
 			ExamineeSalesPaperAssociationID: id,
-			Title:                           "测验提醒-团智",
-			Content:                         "",
-			ReceiverEmail:                   "",
+			Title:                           "【重要】请尽快完成[团智]招聘测评 – 考试账号已生成",
+			Content:                         emailContent,
+			ReceiverEmail:                   examinee.Email,
 			EmailStatus:                     int32(v1.EmailStatus_EmailStatusNoKnow),
-			SenderEmail:                     "",
+			SenderEmail:                     "970259505@qq.com",
 			CopyReceiverEmail:               "",
 			Attachment:                      "",
 			IsFalseAddress:                  false,

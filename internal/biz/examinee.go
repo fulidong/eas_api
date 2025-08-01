@@ -199,17 +199,18 @@ func (uc *ExamineeUseCase) GetExamineeDetail(ctx context.Context, req *v1.GetExa
 	return
 }
 
-func (uc *ExamineeUseCase) GetExamineeByIds(ctx context.Context, examineeIds []string) (resp []*entity.Examinee, err error) {
-	resp = make([]*entity.Examinee, 0, len(examineeIds))
+func (uc *ExamineeUseCase) GetExamineeByIds(ctx context.Context, examineeIds []string) (resp map[string]*entity.Examinee, err error) {
+	resp = make(map[string]*entity.Examinee, len(examineeIds))
+	list := make([]*entity.Examinee, 0, len(examineeIds))
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
-	resp, err = uc.repo.GetByIDs(ctx, examineeIds)
+	list, err = uc.repo.GetByIDs(ctx, examineeIds)
 	if err != nil {
 		l.Errorf("GetExamineeByIds.repo.GetByIDs Failed, examineeIds:%v, err:%v", examineeIds, err.Error())
 		err = innErr.ErrInternalServer
 		return
+	}
+	for _, examinee := range list {
+		resp[examinee.ID] = examinee
 	}
 	return
 }
