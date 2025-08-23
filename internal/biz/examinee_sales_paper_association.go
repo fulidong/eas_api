@@ -53,10 +53,6 @@ func NewExamineeSalesPaperAssociationUseCase(repo ExamineeSalesPaperAssociationR
 func (uc *ExamineeSalesPaperAssociationUseCase) Provide(ctx context.Context, req *v1.ProvideRequest) (resp *v1.ProvideResponse, err error) {
 	resp = &v1.ProvideResponse{}
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		err = innErr.ErrBadRequest
-		return
-	}
 	if len(req.ExamineeIds) == 0 {
 		return
 	}
@@ -66,7 +62,7 @@ func (uc *ExamineeSalesPaperAssociationUseCase) Provide(ctx context.Context, req
 		l.Errorf("Provide.salesPaperCase.GetSalesPaperDetail Failed, req:%v, err:%v", req, err.Error())
 		return
 	}
-	if salesPaper == nil || salesPaper.SalesPaper == nil || !salesPaper.SalesPaper.IsEnabled {
+	if salesPaper == nil || salesPaper.SalesPaper == nil || salesPaper.SalesPaper.IsEnabled != 1 {
 		return resp, errors.New("该试卷不存在或未启用！")
 	}
 	examineeMap, err := uc.examineeUserCase.GetExamineeByIds(ctx, req.ExamineeIds)
@@ -94,7 +90,6 @@ func (uc *ExamineeSalesPaperAssociationUseCase) Provide(ctx context.Context, req
 			ExamineeID:     examineeId,
 			EmailStatus:    int32(v1.EmailStatus_NotSend),
 			StageNumber:    int32(v1.StageNumber_NoStart),
-			ReportPath:     "",
 			CreatedBy:      userId,
 			UpdatedBy:      userId,
 		})
@@ -155,9 +150,6 @@ func (uc *ExamineeSalesPaperAssociationUseCase) GetProvidePageList(ctx context.C
 	}
 	resp = &v1.GetProvidePageListResponse{ProvideData: make([]*v1.ProvideData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
 	userId, _ := icontext.UserIdFrom(ctx)
 	res, total, err := uc.repo.GetProvidePageList(ctx, req, userId)
 	if err != nil {

@@ -20,9 +20,9 @@ type ExamineeAnswer struct {
 	ExamineeSalesPaperAssociationID string         `gorm:"column:examinee_sales_paper_association_id;not null;comment:考生试卷关联idID" json:"examinee_sales_paper_association_id"` // 考生试卷关联idID
 	Score                           float64        `gorm:"column:score;not null;default:0.00;comment:答题标准分" json:"score"`                                                     // 答题标准分
 	BeginTestTime                   time.Time      `gorm:"column:begin_test_time;not null;default:CURRENT_TIMESTAMP;comment:答题开始时刻" json:"begin_test_time"`                   // 答题开始时刻
-	SubmitTime                      time.Time      `gorm:"column:submit_time;comment:答题提交时刻" json:"submit_time"`                                                              // 答题提交时刻
+	SubmitTime                      *time.Time     `gorm:"column:submit_time;comment:答题提交时刻" json:"submit_time"`                                                              // 答题提交时刻
 	CompleteQuestionNum             int32          `gorm:"column:complete_question_num;not null;comment:完成题目个数" json:"complete_question_num"`                                 // 完成题目个数
-	LastActionTime                  time.Time      `gorm:"column:last_action_time;comment:最后活动时刻" json:"last_action_time"`                                                    // 最后活动时刻
+	LastActionTime                  *time.Time     `gorm:"column:last_action_time;comment:最后活动时刻" json:"last_action_time"`                                                    // 最后活动时刻
 	Comparability                   int32          `gorm:"column:comparability;not null;comment:匹配度" json:"comparability"`                                                    // 匹配度
 	Deadline                        time.Time      `gorm:"column:deadline;not null;comment:试卷截止时刻" json:"deadline"`                                                           // 试卷截止时刻
 	Usability                       int32          `gorm:"column:usability;not null;default:1;comment:试卷有效性（1~4）" json:"usability"`                                           // 试卷有效性（1~4）

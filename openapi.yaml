@@ -482,6 +482,10 @@ paths:
                   in: query
                   schema:
                     type: string
+                - name: sales_paper_dimension_id
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -849,7 +853,8 @@ components:
                     type: number
                     format: double
                 is_enabled:
-                    type: boolean
+                    type: integer
+                    format: int32
                 mark:
                     type: string
                 expression:
@@ -858,7 +863,8 @@ components:
                     type: integer
                     format: int32
                 is_sum_score:
-                    type: boolean
+                    type: integer
+                    format: int32
         eas_api.v1.CreateSalesPaperDimensionData:
             type: object
             properties:
@@ -881,7 +887,8 @@ components:
                     type: number
                     format: double
                 is_choose:
-                    type: boolean
+                    type: integer
+                    format: int32
         eas_api.v1.CreateSalesPaperDimensionRequest:
             type: object
             properties:
@@ -1168,7 +1175,7 @@ components:
                     format: int32
                 sale_paper_id:
                     type: string
-                sale_paper_dimension_id:
+                sales_paper_dimension_id:
                     type: string
                 updated_at:
                     type: string
@@ -1245,13 +1252,16 @@ components:
                     type: integer
                     format: int32
                 is_enabled:
-                    type: boolean
+                    type: integer
+                    format: int32
                 is_used:
-                    type: boolean
+                    type: integer
+                    format: int32
                 mark:
                     type: string
                 is_sum_score:
-                    type: boolean
+                    type: integer
+                    format: int32
                 updated_at:
                     type: string
                 updated_by:
@@ -1295,7 +1305,8 @@ components:
                     type: number
                     format: double
                 is_choose:
-                    type: boolean
+                    type: integer
+                    format: int32
                 updated_at:
                     type: string
                 updated_by:

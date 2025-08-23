@@ -149,7 +149,7 @@ func (r *ExamineeSalesPaperAssociationRepo) buildConditions(in *v1.GetProvidePag
 		value = append(value, in.SalesPaperId)
 		query.WriteString(" AND")
 	}
-	if in.StageNumber >= 0 && in.StageNumber <= int32(v1.StageNumber_Report) {
+	if in.StageNumber >= 0 && in.StageNumber <= int32(v1.StageNumber_Failed) {
 		query.WriteString("  assoc.stage_number = ?")
 		value = append(value, in.StageNumber)
 		query.WriteString(" AND")

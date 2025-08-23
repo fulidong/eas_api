@@ -11,6 +11,7 @@ import (
 	"eas_api/internal/pkg/iutils"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"strings"
 	"time"
 )
 
@@ -44,13 +45,17 @@ func (uc *SalesPaperDimensionUseCase) CreateSalesPaperDimension(ctx context.Cont
 		err = innErr.ErrBadRequest
 		return
 	}
+
 	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if err != nil {
 		return
 	}
 	entities := make([]*entity.SalesPaperDimension, 0, len(req.DimensionData))
 	for _, datum := range req.DimensionData {
-
+		if strings.Trim(datum.DimensionName, " ") == "" {
+			err = errors.New("维度名称不能为空")
+			return
+		}
 		id, e := isnowflake.SnowFlake.NextID(_const.SalesPaperDimensionPrefix)
 		if e != nil {
 			err = e
@@ -66,7 +71,7 @@ func (uc *SalesPaperDimensionUseCase) CreateSalesPaperDimension(ctx context.Cont
 			Description:  datum.Description,
 			MaxScore:     datum.MaxScore,
 			MinScore:     datum.MinScore,
-			IsChoose:     datum.IsChoose,
+			IsChoose:     datum.IsChoose == 1,
 			CreatedBy:    curUserId,
 			UpdatedBy:    curUserId,
 		}
@@ -122,7 +127,7 @@ func (uc *SalesPaperDimensionUseCase) GetSalesPaperDimensionList(ctx context.Con
 			Description:   re.Description,
 			MaxScore:      re.MaxScore,
 			MinScore:      re.MinScore,
-			IsChoose:      re.IsChoose,
+			IsChoose:      iutils.ConvInt(re.IsChoose),
 			UpdatedAt:     re.UpdatedAt.Format(time.DateTime),
 			UpdatedBy:     updatedBy,
 		}
@@ -155,7 +160,7 @@ func (uc *SalesPaperDimensionUseCase) GetSalesPaperDimensionDetail(ctx context.C
 		Description:   res.Description,
 		MaxScore:      res.MaxScore,
 		MinScore:      res.MinScore,
-		IsChoose:      res.IsChoose,
+		IsChoose:      iutils.ConvInt(res.IsChoose),
 		UpdatedAt:     res.UpdatedAt.Format(time.DateTime),
 	}
 	return
@@ -187,7 +192,7 @@ func (uc *SalesPaperDimensionUseCase) UpdateSalesPaperDimension(ctx context.Cont
 			Description:  datum.Description,
 			MaxScore:     datum.MaxScore,
 			MinScore:     datum.MinScore,
-			IsChoose:     datum.IsChoose,
+			IsChoose:     datum.IsChoose == 1,
 			UpdatedBy:    userId,
 		})
 	}

@@ -27,7 +27,29 @@ func TestGen(t *testing.T) {
 
 	// 使用数据库连接
 	g.UseDB(db)
-	g.GenerateAllTable()
+	g.ApplyBasic(g.GenerateAllTable(
+		gen.FieldModify(func(field gen.Field) gen.Field {
+
+			// 统一处理时间类型字段
+			timeTypes := map[string]bool{
+				"time.Time": true,
+			}
+
+			if timeTypes[field.Type] {
+				// 版本兼容的 NULL 检查
+				isNullable := false
+
+				if _, ok := field.GORMTag["not null"]; !ok {
+					isNullable = true
+				}
+
+				if isNullable {
+					field.Type = "*time.Time"
+				}
+			}
+			return field
+		}),
+	)...)
 	// 执行生成
 	g.Execute()
 }

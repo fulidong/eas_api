@@ -21,7 +21,7 @@ type ExamineeEmailRecord struct {
 	Title                           string         `gorm:"column:title;not null;comment:邮件标题" json:"title"`                                                                   // 邮件标题
 	Content                         string         `gorm:"column:content;comment:邮件内容" json:"content"`                                                                        // 邮件内容
 	ReceiverEmail                   string         `gorm:"column:receiver_email;not null;comment:接收人邮箱" json:"receiver_email"`                                                // 接收人邮箱
-	SendTime                        time.Time      `gorm:"column:send_time;comment:发送时刻" json:"send_time"`                                                                    // 发送时刻
+	SendTime                        *time.Time     `gorm:"column:send_time;comment:发送时刻" json:"send_time"`                                                                    // 发送时刻
 	EmailStatus                     int32          `gorm:"column:email_status;not null;default:1;comment:邮件状态：1.未发送，2.已发送，3.发送失败" json:"email_status"`                        // 邮件状态：1.未发送，2.已发送，3.发送失败
 	SenderEmail                     string         `gorm:"column:sender_email;not null;comment:发件人邮箱" json:"sender_email"`                                                    // 发件人邮箱
 	CopyReceiverEmail               string         `gorm:"column:copy_receiver_email;not null;comment:抄送人邮箱" json:"copy_receiver_email"`                                      // 抄送人邮箱

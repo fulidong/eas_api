@@ -65,7 +65,6 @@ func (r *SalesPaperCommentRepo) Save(ctx context.Context, addComments []*entity.
 	return nil
 }
 
-// 更新方法
 func (r *SalesPaperCommentRepo) update(tx *gorm.DB, updateSalesPaperComments []*entity.SalesPaperComment) error {
 	ids := make([]string, 0, len(updateSalesPaperComments))
 	for _, comment := range updateSalesPaperComments {
@@ -115,3 +114,5 @@ func (r *SalesPaperCommentRepo) delete(tx *gorm.DB, salesPaperCommentId []string
 
 	return err
 }
+
+// 更新方法

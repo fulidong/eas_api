@@ -90,12 +90,12 @@ func FindCreateAndUpdate[T1, T2 any](
 	return toCreate, toUpdate
 }
 
-// OrderToLetter 将从 0 开始的整数转换为 A/B/C/D...
+// OrderToLetter 将从 1 开始的整数转换为 A/B/C/D...
 func OrderToLetter(order int32) string {
-	if order < 0 {
+	if order < 1 {
 		return ""
 	}
-	return string(rune('A' + order))
+	return string(rune('A' + order - 1))
 }
 
 // LetterToOrder 将 A/B/C/D... 转换为从 0 开始的整数
@@ -109,4 +109,10 @@ func LetterToOrder(letter string) int32 {
 		return -1
 	}
 	return int32(r - 'A')
+}
+func ConvInt(a bool) int32 {
+	if a {
+		return 1
+	}
+	return 0
 }

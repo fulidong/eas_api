@@ -42,9 +42,9 @@ func NewExamineeUseCase(repo ExamineeRepo, userUseCase *UserUseCase, logger log.
 func (uc *ExamineeUseCase) SaveExaminee(ctx context.Context, req *v1.SaveExamineeRequest) (resp *v1.SaveExamineeResponse, err error) {
 	resp = &v1.SaveExamineeResponse{}
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
+	//if _, err = adminPermission(ctx); err != nil {
+	//	return
+	//}
 	userId, _ := icontext.UserIdFrom(ctx)
 	if len(req.ExamineeData) == 0 {
 		err = innErr.ErrBadRequest
@@ -126,9 +126,9 @@ func (uc *ExamineeUseCase) GetExamineePageList(ctx context.Context, req *v1.GetE
 	}
 	resp = &v1.GetExamineePageListResponse{ExamineeData: make([]*v1.ExamineeData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
+	//if _, err = adminPermission(ctx); err != nil {
+	//	return
+	//}
 	res, total, err := uc.repo.GetPageList(ctx, req)
 	if err != nil {
 		l.Errorf("GetExamineePageList.repo.GetPageList Failed, req:%v, err:%v", req, err.Error())
@@ -226,9 +226,7 @@ func (uc *ExamineeUseCase) UpdateExaminee(ctx context.Context, req *v1.UpdateExa
 		err = errors.New("参数无效")
 		return
 	}
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
+
 	userId, _ := icontext.UserIdFrom(ctx)
 	if !iregexp.IsValidPhoneNumberWithCountryCode(req.ExamineeData.Phone) {
 		err = innErr.WithMessage(innErr.ErrInternalServer, "手机号格式不正确")
@@ -244,6 +242,13 @@ func (uc *ExamineeUseCase) UpdateExaminee(ctx context.Context, req *v1.UpdateExa
 		err = errors.New("考生不存在")
 		return
 	}
+	if _, err = adminPermission(ctx); err != nil {
+		if examinee.CreatedBy != userId {
+			err = errors.New("无权限")
+			return
+		}
+	}
+
 	if examinee.Email != req.ExamineeData.Email {
 		err = errors.New("邮箱不可更改")
 		return

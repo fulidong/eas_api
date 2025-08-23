@@ -21,9 +21,21 @@ func NewQuestionRepo(data *Data, logger log.Logger) biz.QuestionRepo {
 	}
 }
 
-func (r *QuestionRepo) GetList(ctx context.Context, salesPaperId string) (res []*entity.Question, err error) {
+func (r *QuestionRepo) GetList(ctx context.Context, salesPaperId, dimensionId string) (res []*entity.Question, err error) {
 	err = r.data.db.WithContext(ctx).Model(&entity.Question{}).
-		Where(" sales_paper_id = ?", salesPaperId).
+		Where(" sales_paper_id = ? and dimension_id = ? ", salesPaperId, dimensionId).
+		Order(" `order` asc").
+		Find(&res).Error
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (r *QuestionRepo) GetListBySalesPaperId(ctx context.Context, salesPaperId string) (res []*entity.Question, err error) {
+	err = r.data.db.WithContext(ctx).Model(&entity.Question{}).
+		Where(" sales_paper_id = ? ", salesPaperId).
 		Order(" `order` asc").
 		Find(&res).Error
 	if err != nil {
@@ -130,15 +142,10 @@ func (r *QuestionRepo) updateQuestionOptions(tx *gorm.DB, updateQuestions []*ent
 	err := tx.Model(&entity.QuestionOption{}).
 		Where(" id in ? ", ids).
 		Updates(map[string]interface{}{
-			"dimension_id": buildCaseExpr[*entity.QuestionOption](updateQuestions, func(comment *entity.QuestionOption) interface{} {
+			"order": buildCaseExpr[*entity.QuestionOption](updateQuestions, func(comment *entity.QuestionOption) interface{} {
 				return comment.ID
 			}, func(comment *entity.QuestionOption) interface{} {
-				return comment.DimensionID
-			}),
-			"question_id": buildCaseExpr[*entity.QuestionOption](updateQuestions, func(comment *entity.QuestionOption) interface{} {
-				return comment.ID
-			}, func(comment *entity.QuestionOption) interface{} {
-				return comment.QuestionID
+				return comment.Order_
 			}),
 			"score": buildCaseExpr[*entity.QuestionOption](updateQuestions, func(comment *entity.QuestionOption) interface{} {
 				return comment.ID

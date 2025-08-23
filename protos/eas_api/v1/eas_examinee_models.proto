@@ -81,7 +81,7 @@ message ProvideResponse {
 
 message GetProvidePageListRequest {
   string sales_paper_id=1 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"sales_paper_id"}];
-  int32 stage_number=2 [json_name="stage_number",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"当前阶段：-1全部、0未开始、1未提交、2已提交、3已算分、4已出报告、5处理失败"}];
+  int32 stage_number=2 [json_name="stage_number",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"当前阶段：-1全部、0未开始、1未提交、2已提交、3已算分、4处理失败"}];
   string key_word=3 [json_name="key_word",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:""}];
   int32 page_index=4 [json_name="page_index",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"页码", default:"1"}];
   int32 page_size=5 [json_name="page_size",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"每页数", default:"10"}];
@@ -101,7 +101,7 @@ message ProvideData {
   string sales_paper_id=6 [json_name="sales_paper_id",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷id"}];
   string sales_paper_name=7 [json_name="sales_paper_name",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"试卷名称"}];
   EmailStatus email_status=8 [json_name="email_status",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"邮件状态：1未发送，2已发送，3发送失败"}];
-  StageNumber stage_number=9 [json_name="stage_number",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"当前阶段：0未开始、1未提交、2已提交、3已算分、4已出报告、5处理失败"}];
+  StageNumber stage_number=9 [json_name="stage_number",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"当前阶段：0未开始、1未提交、2已提交、3已算分、4处理失败"}];
   string ReportPath=10 [json_name="report_path",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"报告地址"}];
   string updated_at=11 [json_name="updated_at",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新时间"}];
   string updated_by=12 [json_name="updated_by",(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={title:"最后更新人"}];
@@ -124,6 +124,5 @@ enum StageNumber {
   NoSubmit = 1;// 未提交
   Submit = 2;// 已提交
   CalculatePoints = 3;// 已算分
-  Report = 4;// 已出报告
-  Fail = 5;// 失败
+  Failed = 4;// 处理失败
 }

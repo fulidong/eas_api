@@ -36,8 +36,7 @@ func (uc *SalesPaperDimensionCommentUseCase) SaveSalesPaperDimensionComment(ctx 
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
 	if len(req.DimensionCommentData) == 0 {
-		err = innErr.ErrBadRequest
-		return
+		req.DimensionCommentData = make([]*v1.SaveSalesPaperDimensionCommentData, 0)
 	}
 	salesPaperDimensionComments, err := uc.repo.GetList(ctx, req.SalesPaperDimensionId)
 	if err != nil {

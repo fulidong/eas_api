@@ -40,6 +40,7 @@ func NewSalesPaperUseCase(repo SalesPaperRepo, userUseCase *UserUseCase, logger 
 func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.CreateSalesPaperRequest) (resp *v1.CreateSalesPaperResponse, err error) {
 	resp = &v1.CreateSalesPaperResponse{}
 	l := uc.log.WithContext(ctx)
+	// 验证是否是管理员权限
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
@@ -76,11 +77,11 @@ func (uc *SalesPaperUseCase) CreateSalesPaper(ctx context.Context, req *v1.Creat
 		RecommendTimeLim: int32(req.SalesPaperData.RecommendTimeLim),
 		MaxScore:         req.SalesPaperData.MaxScore,
 		MinScore:         req.SalesPaperData.MinScore,
-		IsEnabled:        req.SalesPaperData.IsEnabled,
+		IsEnabled:        req.SalesPaperData.IsEnabled == 1,
 		Mark:             req.SalesPaperData.Mark,
 		Expression:       req.SalesPaperData.Expression,
 		Rounding:         req.SalesPaperData.Rounding,
-		IsSumScore:       req.SalesPaperData.IsSumScore,
+		IsSumScore:       req.SalesPaperData.IsSumScore == 1,
 		CreatedBy:        curUserId,
 		UpdatedBy:        curUserId,
 	}
@@ -132,12 +133,12 @@ func (uc *SalesPaperUseCase) GetSalesPaperPageList(ctx context.Context, req *v1.
 			RecommendTimeLim: int64(re.RecommendTimeLim),
 			MaxScore:         re.MaxScore,
 			MinScore:         re.MinScore,
-			IsEnabled:        re.IsEnabled,
-			IsUsed:           re.IsUsed,
+			IsEnabled:        iutils.ConvInt(re.IsEnabled),
+			IsUsed:           iutils.ConvInt(re.IsUsed),
 			Mark:             re.Mark,
 			Expression:       re.Expression,
 			Rounding:         re.Rounding,
-			IsSumScore:       re.IsSumScore,
+			IsSumScore:       iutils.ConvInt(re.IsSumScore),
 			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
 			UpdatedBy:        updatedBy,
 		}
@@ -155,9 +156,9 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 	}
 	resp = &v1.GetUsableSalesPaperPageListResponse{SalesPaperList: make([]*v1.SalesPaperData, 0, req.PageSize)}
 	l := uc.log.WithContext(ctx)
-	if _, err = adminPermission(ctx); err != nil {
-		return
-	}
+	//if _, err = adminPermission(ctx); err != nil {
+	//	return
+	//}
 	res, total, err := uc.repo.GetUsablePageList(ctx, req)
 	if err != nil {
 		l.Errorf("GetSalesPaperPageList.repo.GetPageList Failed, req:%v, err:%v", req, err.Error())
@@ -172,10 +173,10 @@ func (uc *SalesPaperUseCase) GetUsableSalesPaperPageList(ctx context.Context, re
 			RecommendTimeLim: int64(re.RecommendTimeLim),
 			MaxScore:         re.MaxScore,
 			MinScore:         re.MinScore,
-			IsEnabled:        re.IsEnabled,
-			IsUsed:           re.IsUsed,
+			IsEnabled:        iutils.ConvInt(re.IsEnabled),
+			IsUsed:           iutils.ConvInt(re.IsUsed),
 			Mark:             re.Mark,
-			IsSumScore:       re.IsSumScore,
+			IsSumScore:       iutils.ConvInt(re.IsSumScore),
 			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
 		}
 		resp.SalesPaperList = append(resp.SalesPaperList, cur)
@@ -205,12 +206,12 @@ func (uc *SalesPaperUseCase) GetSalesPaperDetail(ctx context.Context, req *v1.Ge
 		RecommendTimeLim: int64(res.RecommendTimeLim),
 		MaxScore:         res.MaxScore,
 		MinScore:         res.MinScore,
-		IsEnabled:        res.IsEnabled,
-		IsUsed:           res.IsUsed,
+		IsEnabled:        iutils.ConvInt(res.IsEnabled),
+		IsUsed:           iutils.ConvInt(res.IsUsed),
 		Mark:             res.Mark,
 		Expression:       res.Expression,
 		Rounding:         res.Rounding,
-		IsSumScore:       res.IsSumScore,
+		IsSumScore:       iutils.ConvInt(res.IsSumScore),
 		UpdatedAt:        res.UpdatedAt.Format(time.DateTime),
 	}
 	return
@@ -258,11 +259,11 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		RecommendTimeLim: int32(req.SalesPaperData.RecommendTimeLim),
 		MaxScore:         req.SalesPaperData.MaxScore,
 		MinScore:         req.SalesPaperData.MinScore,
-		IsEnabled:        req.SalesPaperData.IsEnabled,
+		IsEnabled:        req.SalesPaperData.IsEnabled == 1,
 		Mark:             req.SalesPaperData.Mark,
 		Expression:       req.SalesPaperData.Expression,
 		Rounding:         req.SalesPaperData.Rounding,
-		IsSumScore:       req.SalesPaperData.IsSumScore,
+		IsSumScore:       req.SalesPaperData.IsSumScore == 1,
 		UpdatedBy:        userId,
 	})
 	if err != nil {
@@ -316,7 +317,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (err error) {
 	salesPaper, err := uc.repo.GetByID(ctx, iSalesPaperId)
 	if err != nil {
-		l.Errorf("UpdateSalesPaper.repo.GetByID Failed, req:%v, err:%v", err, err.Error())
+		l.Errorf("CheckSalesPaper.repo.GetByID Failed, req:%v, err:%v", err, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}

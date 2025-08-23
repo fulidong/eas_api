@@ -48,6 +48,7 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 	}
 	if user.Status != int32(v1.AccountStatus_Active) {
 		err = errors.New("用户未激活")
+		return
 	}
 	id, _ := isnowflake.SnowFlake.NextID(_const.SysLoginRecordPrefix)
 	uc.sysLogin.Create(ctx, &entity.SysLoginRecord{
@@ -59,6 +60,8 @@ func (uc *LoginUseCase) Login(ctx context.Context, req *v1.LoginRequest) (resp *
 	accessJWT, err := middleware.JWT.GenerateAccessToken(user.ID, user.UserName, fmt.Sprintf("%d", user.UserType))
 	if err != nil {
 		// 处理错误
+		err = errors.New("登录失败")
+		return
 	}
 	resp.UserName = user.UserName
 	resp.UserType = v1.UserType(user.UserType)

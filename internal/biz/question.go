@@ -16,7 +16,8 @@ import (
 )
 
 type QuestionRepo interface {
-	GetList(ctx context.Context, salesPaperId string) (res []*entity.Question, err error)
+	GetList(ctx context.Context, salesPaperId, dimensionId string) (res []*entity.Question, err error)
+	GetListBySalesPaperId(ctx context.Context, salesPaperId string) (res []*entity.Question, err error)
 	GetOptionList(ctx context.Context, questionId string) (res []*entity.QuestionOption, err error)
 	GetOptionListByQuestionIds(ctx context.Context, questionIds []string) (res map[string][]*entity.QuestionOption, err error)
 	GetById(ctx context.Context, questionId string) (qEntity *entity.Question, qOptionsEntities []*entity.QuestionOption, err error)
@@ -38,14 +39,17 @@ func NewQuestionUseCase(repo QuestionRepo, salesPaperUseCase *SalesPaperUseCase,
 func (uc *QuestionUseCase) SaveSalesPaperDimensionQuestion(ctx context.Context, req *v1.SaveSalesPaperDimensionQuestionRequest) (resp *v1.SaveSalesPaperDimensionQuestionResponse, err error) {
 	resp = &v1.SaveSalesPaperDimensionQuestionResponse{}
 	l := uc.log.WithContext(ctx)
+	// 验证是否是管理员权限
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
+	// 检查试卷状态：是否存在，是否被使用
 	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
 	if err != nil {
 		return
 	}
+	// 获取数据库当前选项
 	qOptionsEntities, err := uc.repo.GetOptionList(ctx, req.QuestionData.QuestionId)
 	if err != nil {
 		l.Errorf("SaveSalesPaperDimensionQuestion.repo.GetOptionList Failed, req:%v, err:%v", req, err.Error())
@@ -67,10 +71,11 @@ func (uc *QuestionUseCase) SaveSalesPaperDimensionQuestion(ctx context.Context, 
 		Title:          req.QuestionData.Title,
 		Remark:         req.QuestionData.Remark,
 		QuestionTypeID: int32(req.QuestionData.QuestionTypeId),
-		Order:          req.QuestionData.Order,
+		Order_:         req.QuestionData.Order,
 		CreatedBy:      userId,
 		UpdatedBy:      userId,
 	}
+	// 数据库内数据和request中数据对比，筛选出需要新增、修改和删除的集合
 	addOptions, updateOptions, delOptions := iutils.DiffEntities[*entity.QuestionOption, *v1.SaveQuestionOptionData, string](
 		qOptionsEntities,
 		req.QuestionData.Options,
@@ -88,11 +93,11 @@ func (uc *QuestionUseCase) SaveSalesPaperDimensionQuestion(ctx context.Context, 
 			qOption.QuestionID = id
 			qOption.Score = data.Score
 			qOption.Description = data.Description
-			qOption.Order = data.Order
+			qOption.Order_ = data.Order
 			qOption.UpdatedBy = userId
 			return qOption
 		})
-
+	// 如果存在新增的选项，则生成主键
 	if len(addOptions) > 0 {
 		for _, option := range addOptions {
 			id, err := isnowflake.SnowFlake.NextID(_const.SalesPaperDimensionQuestionOptionPrefix)
@@ -102,7 +107,7 @@ func (uc *QuestionUseCase) SaveSalesPaperDimensionQuestion(ctx context.Context, 
 			option.ID = id
 		}
 	}
-
+	// 事务保存
 	err = uc.repo.Save(ctx, qEntity, addOptions, updateOptions, delOptions, userId)
 	if err != nil {
 		l.Errorf("SaveSalesPaperDimensionQuestion.repo.Save Failed, req:%v, err:%v", req, err.Error())
@@ -118,7 +123,7 @@ func (uc *QuestionUseCase) GetSalesPaperDimensionQuestionList(ctx context.Contex
 		return
 	}
 
-	res, err := uc.repo.GetList(ctx, req.SalesPaperId)
+	res, err := uc.repo.GetList(ctx, req.SalesPaperId, req.SalePaperDimensionId)
 	if err != nil {
 		l.Errorf("GetSalesPaperDimensionQuestionList.repo.GetList Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
@@ -146,15 +151,15 @@ func (uc *QuestionUseCase) GetSalesPaperDimensionQuestionList(ctx context.Contex
 			updatedBy = userMap[re.UpdatedBy].UserName
 		}
 		cur := &v1.QuestionData{
-			QuestionId:           re.ID,
-			Title:                re.Title,
-			Remark:               re.Remark,
-			QuestionTypeId:       v1.QuestionType(re.QuestionTypeID),
-			Order:                re.Order,
-			SalePaperId:          re.SalesPaperID,
-			SalePaperDimensionId: re.DimensionID,
-			UpdatedAt:            re.UpdatedAt.Format(time.DateTime),
-			UpdatedBy:            updatedBy,
+			QuestionId:            re.ID,
+			Title:                 re.Title,
+			Remark:                re.Remark,
+			QuestionTypeId:        v1.QuestionType(re.QuestionTypeID),
+			Order:                 re.Order_,
+			SalePaperId:           re.SalesPaperID,
+			SalesPaperDimensionId: re.DimensionID,
+			UpdatedAt:             re.UpdatedAt.Format(time.DateTime),
+			UpdatedBy:             updatedBy,
 		}
 
 		resp.QuestionData = append(resp.QuestionData, cur)
@@ -201,16 +206,16 @@ func (uc *QuestionUseCase) GetSalesPaperDimensionQuestionDetail(ctx context.Cont
 		updatedBy = userMap[qEntity.UpdatedBy].UserName
 	}
 	resp.QuestionData = &v1.QuestionData{
-		QuestionId:           qEntity.ID,
-		Title:                qEntity.Title,
-		Remark:               qEntity.Remark,
-		QuestionTypeId:       v1.QuestionType(qEntity.QuestionTypeID),
-		Order:                qEntity.Order,
-		SalePaperId:          qEntity.SalesPaperID,
-		SalePaperDimensionId: qEntity.DimensionID,
-		UpdatedAt:            qEntity.UpdatedAt.Format(time.DateTime),
-		UpdatedBy:            updatedBy,
-		QuestionOptionsData:  make([]*v1.QuestionOptionData, 0, 5),
+		QuestionId:            qEntity.ID,
+		Title:                 qEntity.Title,
+		Remark:                qEntity.Remark,
+		QuestionTypeId:        v1.QuestionType(qEntity.QuestionTypeID),
+		Order:                 qEntity.Order_,
+		SalePaperId:           qEntity.SalesPaperID,
+		SalesPaperDimensionId: qEntity.DimensionID,
+		UpdatedAt:             qEntity.UpdatedAt.Format(time.DateTime),
+		UpdatedBy:             updatedBy,
+		QuestionOptionsData:   make([]*v1.QuestionOptionData, 0, 5),
 	}
 	for _, re := range qOptionEntities {
 		updatedBy := ""
@@ -221,7 +226,7 @@ func (uc *QuestionUseCase) GetSalesPaperDimensionQuestionDetail(ctx context.Cont
 			QuestionOptionId: re.ID,
 			Description:      re.Description,
 			Score:            re.Score,
-			Order:            re.Order,
+			Order:            re.Order_,
 			UpdatedAt:        re.UpdatedAt.Format(time.DateTime),
 			UpdatedBy:        updatedBy,
 		}
@@ -237,9 +242,9 @@ func (uc *QuestionUseCase) GetSalesPaperDimensionQuestionPreView(ctx context.Con
 		return
 	}
 
-	res, err := uc.repo.GetList(ctx, req.SalesPaperId)
+	res, err := uc.repo.GetListBySalesPaperId(ctx, req.SalesPaperId)
 	if err != nil {
-		l.Errorf("GetSalesPaperDimensionQuestionPreView.repo.GetList Failed, req:%v, err:%v", req, err.Error())
+		l.Errorf("GetSalesPaperDimensionQuestionPreView.repo.GetListBySalesPaperId Failed, req:%v, err:%v", req, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -253,26 +258,29 @@ func (uc *QuestionUseCase) GetSalesPaperDimensionQuestionPreView(ctx context.Con
 		err = innErr.ErrInternalServer
 		return
 	}
+	var order int32 = 1
 	for _, re := range res {
 		cur := &v1.QuestionData{
-			QuestionId:           re.ID,
-			Title:                re.Title,
-			Remark:               re.Remark,
-			QuestionTypeId:       v1.QuestionType(re.QuestionTypeID),
-			Order:                re.Order,
-			SalePaperId:          re.SalesPaperID,
-			SalePaperDimensionId: re.DimensionID,
+			QuestionId:            re.ID,
+			Title:                 re.Title,
+			Remark:                re.Remark,
+			QuestionTypeId:        v1.QuestionType(re.QuestionTypeID),
+			Order:                 order,
+			SalePaperId:           re.SalesPaperID,
+			SalesPaperDimensionId: re.DimensionID,
 		}
-		if v, ok := mQuestionOptions[cur.QuestionId]; ok {
-			for _, option := range v {
-				cur.QuestionOptionsData = append(cur.QuestionOptionsData, &v1.QuestionOptionData{
-					QuestionOptionId: option.ID,
-					Description:      option.Description,
-					Score:            option.Score,
-					Order:            option.Order,
-					SerialNumber:     iutils.OrderToLetter(option.Order),
-				})
-			}
+		if _, ok := mQuestionOptions[cur.QuestionId]; !ok {
+			continue
+		}
+		order++
+		for _, option := range mQuestionOptions[cur.QuestionId] {
+			cur.QuestionOptionsData = append(cur.QuestionOptionsData, &v1.QuestionOptionData{
+				QuestionOptionId: option.ID,
+				Description:      option.Description,
+				Score:            option.Score,
+				Order:            option.Order_,
+				SerialNumber:     iutils.OrderToLetter(option.Order_),
+			})
 		}
 		resp.QuestionData = append(resp.QuestionData, cur)
 	}
