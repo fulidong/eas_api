@@ -1,0 +1,13 @@
+# docker-compose.yml
+version: '3'
+services:
+  eas_api:
+    build: .
+    container_name: eas_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - /opt/api/configs/eas_api:/home/appuser/configs
+    environment:
+      - ENV=prod
+    restart: unless-stopped
