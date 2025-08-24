@@ -138,6 +138,12 @@ func (uc *ExamineeSalesPaperAssociationUseCase) Provide(ctx context.Context, req
 		l.Errorf("Provide.repo.Provide Failed, req:%v, err:%v", req, err.Error())
 		return resp, err
 	}
+	//发放成功之后将试卷置为已使用
+	_, err = uc.salesPaperCase.SetSalesPaperUseStatus(ctx, req.SalesPaperId)
+	if err != nil {
+		l.Errorf("Provide.salesPaperCase.SetSalesPaperUseStatus Failed, req:%v, err:%v", req, err.Error())
+		return resp, err
+	}
 	return resp, nil
 }
 

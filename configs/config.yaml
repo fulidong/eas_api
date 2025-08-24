@@ -8,9 +8,9 @@ server:
 data:
   database:
     driver: mysql
-    source: wikifx:Wikifx2023@tcp(testdb-mysql.fxeyeinterface.com:3306)/cp_test?charset=utf8mb4&collation=utf8mb4_general_ci&parseTime=true&loc=Local
+    source: root:Eas123!@tcp(115.190.122.151:3306)/cp_test?charset=utf8mb4&collation=utf8mb4_general_ci&parseTime=true&loc=Local
   redis:
-    addr: 127.0.0.1:6379
+    addr: 115.190.122.151:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
   jwt:

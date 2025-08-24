@@ -46,7 +46,7 @@ func (uc *SalesPaperDimensionUseCase) CreateSalesPaperDimension(ctx context.Cont
 		return
 	}
 
-	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}
@@ -177,7 +177,7 @@ func (uc *SalesPaperDimensionUseCase) UpdateSalesPaperDimension(ctx context.Cont
 		err = innErr.ErrBadRequest
 		return
 	}
-	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}
@@ -212,7 +212,7 @@ func (uc *SalesPaperDimensionUseCase) DeleteSalesPaperDimension(ctx context.Cont
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}

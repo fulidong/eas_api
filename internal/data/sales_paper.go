@@ -123,6 +123,22 @@ func (r *SalesPaperRepo) SetSalesPaperStatus(ctx context.Context, salesPaperId s
 	return err
 }
 
+// 更新是否使用状态
+func (r *SalesPaperRepo) SetSalesPaperUseStatus(ctx context.Context, salesPaperId string, useStatus int32, updatedBy string) error {
+	// 准备更新字段
+	updates := map[string]interface{}{
+		"is_used":    useStatus,
+		"updated_by": updatedBy,
+	}
+
+	// 执行更新
+	err := r.data.db.WithContext(ctx).Model(&entity.SalesPaper{}).
+		Where(" id = ? ", salesPaperId).
+		Updates(updates).Error
+
+	return err
+}
+
 // 删除用户
 func (r *SalesPaperRepo) DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy string) error {
 	// 准备更新字段

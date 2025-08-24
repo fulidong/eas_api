@@ -24,6 +24,7 @@ type SalesPaperRepo interface {
 	GetByID(ctx context.Context, salesPaperId string) (resEntity *entity.SalesPaper, err error)
 	Update(ctx context.Context, salesPaper *entity.SalesPaper) error
 	SetSalesPaperStatus(ctx context.Context, salesPaperId string, salesPaperStatus v1.SalesPaperStatus, updatedBy string) error
+	SetSalesPaperUseStatus(ctx context.Context, salesPaperId string, useStatus int32, updatedBy string) error
 	DeleteSalesPaper(ctx context.Context, salesPaperId, updatedBy string) error
 }
 
@@ -232,7 +233,7 @@ func (uc *SalesPaperUseCase) UpdateSalesPaper(ctx context.Context, req *v1.Updat
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err = uc.CheckSalesPaper(ctx, req.SalesPaperData.SalesPaperId, l)
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperData.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}
@@ -281,13 +282,33 @@ func (uc *SalesPaperUseCase) SetSalesPaperStatus(ctx context.Context, req *v1.Se
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}
 	err = uc.repo.SetSalesPaperStatus(ctx, req.SalesPaperId, req.SalesPaperStatus, userId)
 	if err != nil {
 		l.Errorf("SetUserStatus.repo.SetUserStatus Failed, req:%v, err:%v", req, err.Error())
+		err = innErr.ErrInternalServer
+		return
+	}
+	return
+}
+
+func (uc *SalesPaperUseCase) SetSalesPaperUseStatus(ctx context.Context, salesPaperId string) (resp *v1.SetSalesPaperStatusResponse, err error) {
+	resp = &v1.SetSalesPaperStatusResponse{}
+	l := uc.log.WithContext(ctx)
+	if _, err = adminPermission(ctx); err != nil {
+		return
+	}
+	userId, _ := icontext.UserIdFrom(ctx)
+	err = uc.CheckSalesPaper(ctx, salesPaperId, false, l)
+	if err != nil {
+		return
+	}
+	err = uc.repo.SetSalesPaperUseStatus(ctx, salesPaperId, 1, userId)
+	if err != nil {
+		l.Errorf("SetSalesPaperUseStatus.repo.SetUserStatus Failed, salesPaperId:%v, err:%v", salesPaperId, err.Error())
 		err = innErr.ErrInternalServer
 		return
 	}
@@ -301,7 +322,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 		return
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
-	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}
@@ -314,7 +335,7 @@ func (uc *SalesPaperUseCase) DeleteSalesPaper(ctx context.Context, req *v1.Delet
 	return
 }
 
-func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId string, l *log.Helper) (err error) {
+func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId string, isCheckUse bool, l *log.Helper) (err error) {
 	salesPaper, err := uc.repo.GetByID(ctx, iSalesPaperId)
 	if err != nil {
 		l.Errorf("CheckSalesPaper.repo.GetByID Failed, req:%v, err:%v", err, err.Error())
@@ -325,7 +346,7 @@ func (uc *SalesPaperUseCase) CheckSalesPaper(ctx context.Context, iSalesPaperId 
 		err = errors.New("试卷不存在")
 		return
 	}
-	if salesPaper.IsUsed {
+	if isCheckUse && salesPaper.IsUsed {
 		err = errors.New("试卷已被使用，不可更新")
 		return
 	}

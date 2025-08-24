@@ -45,7 +45,7 @@ func (uc *QuestionUseCase) SaveSalesPaperDimensionQuestion(ctx context.Context, 
 	}
 	userId, _ := icontext.UserIdFrom(ctx)
 	// 检查试卷状态：是否存在，是否被使用
-	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}
@@ -293,7 +293,7 @@ func (uc *QuestionUseCase) DeleteSalesPaperDimensionQuestion(ctx context.Context
 	if _, err = adminPermission(ctx); err != nil {
 		return
 	}
-	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, l)
+	err = uc.salesPaperUseCase.CheckSalesPaper(ctx, req.SalesPaperId, true, l)
 	if err != nil {
 		return
 	}

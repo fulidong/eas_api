@@ -1,10 +1,14 @@
 module eas_api
 
-go 1.23.8
+go 1.23.0
+
+toolchain go1.23.8
 
 require (
 	github.com/airunny/copier v0.0.0-20230213055356-e2bee624c0ab
 	github.com/airunny/wiki-go-tools v1.0.1
+	github.com/expr-lang/expr v1.17.5
+	github.com/go-kratos/grpc-gateway/v2 v2.5.1-0.20210811062259-c92d36e434b1
 	github.com/go-kratos/kratos/v2 v2.8.4
 	github.com/go-kratos/swagger-api v1.0.1
 	github.com/google/uuid v1.6.0
@@ -22,7 +26,6 @@ require (
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gen v0.3.27
 	gorm.io/gorm v1.30.0
-	gorm.io/plugin/dbresolver v1.6.0
 )
 
 require (
@@ -30,12 +33,10 @@ require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/expr-lang/expr v1.17.5 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
-	github.com/go-kratos/grpc-gateway/v2 v2.5.1-0.20210811062259-c92d36e434b1 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/form/v4 v4.2.1 // indirect
@@ -65,4 +66,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/datatypes v1.2.4 // indirect
 	gorm.io/hints v1.1.0 // indirect
+	gorm.io/plugin/dbresolver v1.6.0 // indirect
 )
