@@ -1,13 +1,18 @@
 #!/bin/bash
-# /opt/你的项目名/deploy.sh
 
 cd /opt/api/eas_api || exit
 
 echo "📥 正在拉取最新代码..."
-git pull origin main
+git fetch origin
+git reset --hard origin/main
+
+# 确保 DOCKER_HOST 不会干扰
+unset DOCKER_HOST
 
 echo "🐳 正在构建并启动 Docker 容器..."
-docker-compose down
-docker-compose up -d --build
+
+# 使用 V2 命令：docker compose（中间有空格）
+docker compose down --remove-orphans
+docker compose up -d --build --force-recreate
 
 echo "✅ 部署完成！"
