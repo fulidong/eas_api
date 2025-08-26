@@ -124,5 +124,6 @@ enum StageNumber {
   NoSubmit = 1;// 未提交
   Submit = 2;// 已提交
   CalculatePoints = 3;// 已算分
-  Failed = 4;// 处理失败
+  Expire = 4;// 已过期
+  Failed = 5;// 处理失败
 }
